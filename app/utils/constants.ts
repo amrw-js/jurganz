@@ -24,3 +24,22 @@ export const NAVBAR_ITEMS = [
     href: '/production-line',
   },
 ]
+
+export const SERVICES = [
+  {
+    i18nKey: 'service_installation',
+    href: '#',
+  },
+  {
+    i18nKey: 'service_relocation',
+    href: '#',
+  },
+  {
+    i18nKey: 'service_support',
+    href: '#',
+  },
+  {
+    i18nKey: 'service_consultation',
+    href: '#',
+  },
+]
