@@ -2,9 +2,10 @@ import { FC } from 'react'
 
 import { initTranslations } from '@/i18n'
 
-import { Hero } from '../sections/Hero/Hero'
-import { Logos } from '../sections/Logos/Logos'
-import { Services } from '../sections/Services/Services'
+import { Hero } from '../sections/home/Hero/Hero'
+import { Logos } from '../sections/home/Logos/Logos'
+import { Projects } from '../sections/home/Projects/Projects'
+import { Services } from '../sections/home/Services/Services'
 
 const namespaces = ['default', 'home']
 
@@ -25,6 +26,7 @@ const Home: FC<IHome> = async (props) => {
       <Hero t={t} />
       <Logos t={t} />
       <Services t={t} />
+      <Projects />
     </div>
   )
 }

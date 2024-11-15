@@ -43,3 +43,48 @@ export const SERVICES = [
     href: '#',
   },
 ]
+
+export const PROJECTS = [
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+  {
+    i18n_scope: 'Scope Name',
+    i18n_line_type: 'Line Type',
+    i18n_line_speed: 'Line Speed',
+    i18n_location: 'Location',
+  },
+]
