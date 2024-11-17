@@ -2,6 +2,7 @@
 
 import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/outline'
 import cn from 'clsx'
+import AutoScroll from 'embla-carousel-auto-scroll'
 import useEmblaCarousel from 'embla-carousel-react'
 
 import '../../../embla.css'
@@ -12,6 +13,7 @@ type ScrollableCardsProps<T> = {
   slides: T[]
   slideClassName?: string
   arrows?: boolean
+  autoPlay?: boolean
   renderItem: (item: T, index: number) => JSX.Element
   renderLeftContent?: () => JSX.Element
 }
@@ -19,11 +21,12 @@ type ScrollableCardsProps<T> = {
 const EMBLA_OPTS = {
   slidesToScroll: 1,
   loop: true,
+  autoScroll: true,
 }
 
 export const ScrollableCards = <T,>(props: ScrollableCardsProps<T>) => {
-  const { slides, slideClassName, arrows = true, renderItem, renderLeftContent } = props
-  const [emblaRef, emblaApi] = useEmblaCarousel(EMBLA_OPTS)
+  const { slides, slideClassName, arrows = true, autoPlay, renderItem, renderLeftContent } = props
+  const [emblaRef, emblaApi] = useEmblaCarousel(EMBLA_OPTS, [AutoScroll({ playOnInit: autoPlay })])
 
   const { onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
 

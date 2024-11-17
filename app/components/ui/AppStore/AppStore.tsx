@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next'
 import { FC } from 'react'
 
-import { AppStoreIcon } from '../ui/icons/AppStoreIcon'
+import { AppStoreIcon } from '../icons/AppStoreIcon'
 
 interface IAppStore {
   t: TFunction

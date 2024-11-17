@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 
-import { AppStore } from '@/app/components/AppStore/AppStore'
-import { PlayStore } from '@/app/components/PlayStore/PlayStore'
+import { AppStore } from '@/app/components/ui/AppStore/AppStore'
+import { PlayStore } from '@/app/components/ui/PlayStore/PlayStore'
 
 interface IHero {
   t: TFunction

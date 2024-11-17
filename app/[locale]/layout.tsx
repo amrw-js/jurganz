@@ -29,7 +29,7 @@ export function generateStaticParams() {
 
 const RootLayout: FC<IRootLayout> = async ({ children, params }) => {
   const { locale } = await params
-  const { resources } = await initTranslations({ locale, namespaces })
+  const { resources, t } = await initTranslations({ locale, namespaces })
 
   return (
     <html lang={locale} dir={dir(locale)} className={inter.className}>
@@ -37,7 +37,7 @@ const RootLayout: FC<IRootLayout> = async ({ children, params }) => {
         <Providers namespaces={namespaces} locale={locale} resources={resources}>
           <Header />
           <main>{children}</main>
-          <Footer />
+          <Footer t={t} />
         </Providers>
       </body>
     </html>

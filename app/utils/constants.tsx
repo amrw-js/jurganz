@@ -1,3 +1,9 @@
+import { AquafinaIcon } from '../components/ui/icons/logos/AquafinaIcon'
+import { CocaColaIcon } from '../components/ui/icons/logos/CocaColaIcon'
+import { DasaniIcon } from '../components/ui/icons/logos/DasaniIcon'
+import { PepsiIcon } from '../components/ui/icons/logos/PepsiIcon'
+import { ILogo } from '../global.interface'
+
 export const NAVBAR_ITEMS = [
   {
     i18nKey: 'navbar_home',
@@ -95,4 +101,43 @@ export const GOALS = [
   { i18n_heading: 'goals_localized', i18n_desc: 'goals_localized_desc' },
   { i18n_heading: 'goals_after_care', i18n_desc: 'goals_after_care_desc' },
   { i18n_heading: 'goals_tailored', i18n_desc: 'goals_tailored_desc' },
+]
+
+export const LOGOS: ILogo[] = [
+  {
+    src: '/images/logos/aquafina.png',
+    alt: 'Aquafina',
+    width: 802,
+    height: 360,
+  },
+  {
+    src: '/images/logos/blu.png',
+    alt: 'Blu',
+    width: 225,
+    height: 225,
+  },
+  {
+    src: '/images/logos/coca-cola.png',
+    alt: 'CocaCola',
+    width: 3500,
+    height: 3500,
+  },
+  {
+    src: '/images/logos/dasani.png',
+    alt: 'Dasani',
+    width: 2000,
+    height: 637,
+  },
+  {
+    src: '/images/logos/pepsi.png',
+    alt: 'Pepsi',
+    width: 800,
+    height: 797,
+  },
+  {
+    src: '/images/logos/rani.png',
+    alt: 'Rani float',
+    width: 582,
+    height: 582,
+  },
 ]

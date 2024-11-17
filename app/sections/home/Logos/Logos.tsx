@@ -1,11 +1,16 @@
-import { TFunction } from 'i18next'
-import { FC } from 'react'
+'use client'
 
-interface ILogos {
-  t: TFunction
-}
+import Image from 'next/image'
+import { FC, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 
-export const Logos: FC<ILogos> = ({ t }) => {
+import { ScrollableCards } from '@/app/components/ui/ScrollableCards/ScrollableCards'
+import { ILogo } from '@/app/global.interface'
+import { LOGOS } from '@/app/utils/constants'
+
+export const Logos: FC = () => {
+  const { t } = useTranslation()
+
   const Transparency = `<span class="text-primary font-bold">Transparency</span>`
   const Obligation = `<span class="text-primary font-bold">Obligation</span>`
   const Development = `<span class="text-primary font-bold">Development</span>`
@@ -14,8 +19,12 @@ export const Logos: FC<ILogos> = ({ t }) => {
     Transparency,
     Obligation,
     Development,
-    interpolation: { escapeValue: false },
+    interpolation: { escapeValue: false }, // Prevent escaping HTML
   })
+
+  const renderItem = useCallback(({ src, alt, width, height }: ILogo) => {
+    return <Image src={src} alt={alt} width={width} height={height} className='max-w-40' />
+  }, [])
 
   return (
     <div className='mt-10 px-[0.875rem] sm:px-10 lg:mt-[3.375rem]'>
@@ -23,7 +32,16 @@ export const Logos: FC<ILogos> = ({ t }) => {
         className='text-xl font-semibold leading-7 text-gray-400 sm:text-4xl sm:leading-10 lg:w-2/3'
         dangerouslySetInnerHTML={{ __html: objectiveText }}
       />
-      <div>!TODO: LOGOS should be listed here</div>
+
+      <div className='mt-5 lg:mt-[3.313rem]'>
+        <ScrollableCards
+          arrows={false}
+          slides={LOGOS}
+          autoPlay
+          renderItem={renderItem}
+          slideClassName='flex-shrink-0 justify-center !pl-0 flex-grow-0 items-center flex basis-[100%] sm:basis-[50%] lg:basis-[25%]'
+        />
+      </div>
     </div>
   )
 }

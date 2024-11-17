@@ -26,7 +26,7 @@ const Home: FC<IHome> = async (props) => {
   return (
     <div>
       <Hero t={t} />
-      <Logos t={t} />
+      <Logos />
       <Services t={t} />
       <Projects />
       <Goals t={t} />
