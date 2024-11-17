@@ -9,7 +9,11 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        factory: "url('/images/factory.jpg')",
+      },
+    },
   },
   darkMode: 'class',
   plugins: [

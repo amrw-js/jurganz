@@ -11,6 +11,7 @@ import { usePrevNextButtons } from './usePrevNextButtons'
 type ScrollableCardsProps<T> = {
   slides: T[]
   slideClassName?: string
+  arrows?: boolean
   renderItem: (item: T, index: number) => JSX.Element
   renderLeftContent?: () => JSX.Element
 }
@@ -21,7 +22,7 @@ const EMBLA_OPTS = {
 }
 
 export const ScrollableCards = <T,>(props: ScrollableCardsProps<T>) => {
-  const { slides, slideClassName, renderItem, renderLeftContent } = props
+  const { slides, slideClassName, arrows = true, renderItem, renderLeftContent } = props
   const [emblaRef, emblaApi] = useEmblaCarousel(EMBLA_OPTS)
 
   const { onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
@@ -38,19 +39,21 @@ export const ScrollableCards = <T,>(props: ScrollableCardsProps<T>) => {
         </div>
       </div>
 
-      <div className='mt-5 flex items-center justify-between lg:mt-[1.875rem]'>
-        {renderLeftContent?.()}
-        <div className='flex items-center'>
-          <ArrowLeftCircleIcon
-            className='size-8 cursor-pointer transition-all hover:text-gray-500 md:size-10'
-            onClick={onPrevButtonClick}
-          />
-          <ArrowRightCircleIcon
-            className='size-8 cursor-pointer transition-all hover:text-gray-500 md:size-10'
-            onClick={onNextButtonClick}
-          />
+      {arrows && (
+        <div className='mt-5 flex items-center justify-between lg:mt-[1.875rem]'>
+          {renderLeftContent?.()}
+          <div className='flex items-center'>
+            <ArrowLeftCircleIcon
+              className='size-8 cursor-pointer transition-all hover:text-gray-500 md:size-10'
+              onClick={onPrevButtonClick}
+            />
+            <ArrowRightCircleIcon
+              className='size-8 cursor-pointer transition-all hover:text-gray-500 md:size-10'
+              onClick={onNextButtonClick}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </section>
   )
 }
