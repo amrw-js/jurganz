@@ -1,0 +1,13 @@
+name: linter workflow
+on: 
+  push:
+    branches: 
+      - main
+jobs: 
+  lint-code:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: lint
+      run: echo 'start linting'
+      shell: bash
