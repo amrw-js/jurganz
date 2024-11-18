@@ -18,18 +18,22 @@ export const Hero: FC<IHero> = (props) => {
     <div className='flex items-center justify-center px-[0.875rem] sm:px-10'>
       <div className='relative h-full w-full'>
         <div className='absolute inset-0 z-10 rounded-xl bg-black/45'></div>
-        <div className='absolute left-0 z-20 flex h-full w-full flex-col justify-center gap-5 p-6 text-white md:justify-center lg:flex-row lg:items-center lg:justify-between lg:p-[2.625rem]'>
-          <div className='flex flex-col gap-1 font-semibold lg:w-2/3 lg:gap-4'>
-            <p className='text-md underline'>#GBS</p>
-            <p className='text-2xl md:text-6xl lg:text-7xl'>{t('hero_heading')}</p>
-            <Link className='flex items-center gap-1 lg:gap-2' href='#'>
-              <span className='underline underline-offset-4 lg:text-xl'>{t('hero_heading_production_line')}</span>
+        <div className='absolute left-0 z-20 flex h-full w-full flex-col justify-center p-5 text-white lg:flex-row lg:items-center lg:p-[2.625rem]'>
+          <div className='flex flex-col lg:basis-[70%]'>
+            <p className='mb-3 text-sm font-semibold underline lg:text-lg'>#GBS</p>
+            <p className='mb-5 text-3xl font-semibold leading-9 lg:mb-10 lg:text-7xl lg:leading-none'>
+              {t('hero_heading')}
+            </p>
+            <Link className='mb-5 flex items-center gap-1 font-semibold lg:gap-2' href='#'>
+              <span className='text-base underline underline-offset-4 lg:text-xl'>
+                {t('hero_heading_production_line')}
+              </span>
               <ArrowUpRightIcon className='h-4 w-4 lg:h-6 lg:w-6' />
             </Link>
           </div>
-          <div className='flex h-fit max-w-[26.438rem] flex-col gap-2 self-end rounded-xl bg-[#FFFFFF12] p-5 shadow-lg backdrop-blur-xl md:gap-7 lg:self-auto'>
-            <p className='text-lg font-semibold leading-9 lg:text-3xl'>{t('hero_apps_title')}</p>
-            <div className='flex gap-2 lg:gap-8'>
+          <div className='flex flex-col gap-5 rounded-lg p-3 backdrop-blur lg:p-5'>
+            <p className='text-lg font-semibold leading-7 lg:text-3xl lg:leading-9'>{t('hero_apps_title')}</p>
+            <div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
               <PlayStore t={t} />
               <AppStore t={t} />
             </div>

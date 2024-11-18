@@ -11,10 +11,11 @@ interface IGoals {
 
 export const Goals: FC<IGoals> = (props) => {
   const { t } = props
-
   return (
     <div className='flex flex-col items-start gap-y-5 px-[0.875rem] pb-10 sm:px-10 lg:gap-y-10 lg:pb-[12.5rem]'>
-      <h3 className='text-center text-3xl font-semibold leading-9 lg:text-left'>{t('goals_heading')}</h3>
+      <h3 className='text-center text-2xl font-semibold leading-8 lg:text-left lg:text-3xl lg:leading-9'>
+        {t('goals_heading')}
+      </h3>
       <div className='grid grid-cols-1 gap-5 lg:grid-cols-2'>
         {GOALS.map(({ i18n_heading, i18n_desc }) => (
           <div key={i18n_heading} className='flex items-start gap-3'>

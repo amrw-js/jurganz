@@ -10,7 +10,7 @@ export const ContactUsForm = () => {
 
   // Hook to observe when the form is in view
   const { ref, inView } = useInView({
-    triggerOnce: true,
+    triggerOnce: false,
     threshold: 0.25,
   })
 
