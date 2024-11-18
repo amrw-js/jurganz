@@ -23,7 +23,15 @@ export const Logos: FC = () => {
   })
 
   const renderItem = useCallback(({ src, alt, width, height }: ILogo) => {
-    return <Image src={src} alt={alt} width={width} height={height} className='max-w-40' />
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className='max-w-40 opacity-40 transition-all hover:opacity-100'
+      />
+    )
   }, [])
 
   return (
@@ -33,7 +41,7 @@ export const Logos: FC = () => {
         dangerouslySetInnerHTML={{ __html: objectiveText }}
       />
 
-      <div className='mt-5 lg:mt-[3.313rem]'>
+      <div className='mt-5 lg:mt-[3.375rem]'>
         <ScrollableCards
           arrows={false}
           slides={LOGOS}

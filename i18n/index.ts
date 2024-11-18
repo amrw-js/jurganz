@@ -1,4 +1,4 @@
-import { createInstance } from 'i18next'
+import { createInstance, i18n } from 'i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
 import { initReactI18next } from 'react-i18next/initReactI18next'
 
@@ -8,7 +8,7 @@ interface IInitTranslations {
   locale: string
   namespaces: string[] | string
   i18nInstance?: any
-  resources?: any
+  resources?: i18n['reloadResources']
 }
 export const initTranslations = async ({ locale, namespaces, i18nInstance, resources }: IInitTranslations) => {
   i18nInstance = i18nInstance || createInstance()

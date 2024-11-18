@@ -1,0 +1,22 @@
+name: Continuous Integration
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    name: 'Run linter'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout actions repository'
+        uses: actions/checkout@v3
+      - name: 'Run linter'
+        run: 'yarn lint'

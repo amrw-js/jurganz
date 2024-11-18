@@ -1,7 +1,3 @@
-import { AquafinaIcon } from '../components/ui/icons/logos/AquafinaIcon'
-import { CocaColaIcon } from '../components/ui/icons/logos/CocaColaIcon'
-import { DasaniIcon } from '../components/ui/icons/logos/DasaniIcon'
-import { PepsiIcon } from '../components/ui/icons/logos/PepsiIcon'
 import { ILogo } from '../global.interface'
 
 export const NAVBAR_ITEMS = [

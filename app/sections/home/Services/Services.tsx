@@ -13,7 +13,7 @@ interface IServices {
 export const Services: FC<IServices> = (props) => {
   const { t } = props
   return (
-    <div className='mt-10 flex flex-col-reverse gap-7 bg-zinc-50 px-[0.875rem] py-10 sm:px-10 sm:py-20 lg:mt-[3.375rem] lg:gap-[11.25rem] xl:flex-row'>
+    <div className='mt-10 flex flex-col-reverse gap-7 bg-zinc-50 px-[0.875rem] py-10 sm:px-10 sm:py-20 lg:mt-[7.5rem] lg:gap-[11.25rem] xl:flex-row'>
       <div className='flex-1'>
         <div className='mb-5 flex flex-col items-center justify-center gap-y-4 lg:mb-28 lg:items-start lg:gap-y-5'>
           <p className='text-center text-2xl font-semibold leading-10 sm:text-4xl lg:!text-left'>

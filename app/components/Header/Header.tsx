@@ -19,6 +19,9 @@ import { useTranslation } from 'react-i18next'
 
 import { NAVBAR_ITEMS } from '@/app/utils/constants'
 
+import { FacebookIcon } from '../ui/icons/FacebookIcon'
+import { LinkedInIcon } from '../ui/icons/LinkedInIcon'
+
 export const Header = () => {
   const { t } = useTranslation()
   const pathname = usePathname()
@@ -28,8 +31,8 @@ export const Header = () => {
   return (
     <Navbar
       maxWidth='full'
-      classNames={{ wrapper: 'px-[0.875rem] sm:px-10 w-full' }}
-      className='w-full justify-start px-0'
+      classNames={{ wrapper: 'px-[0.875rem] sm:px-10 w-full h-[4.75rem] lg:h-20' }}
+      className='w-full justify-start px-0 lg:mb-6'
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarContent className='flex flex-row-reverse'>
@@ -62,12 +65,12 @@ export const Header = () => {
           </Button>
         </NavbarItem>
       </NavbarContent>
-      <NavbarMenu className='gap-5 py-10'>
+      <NavbarMenu className='gap-0 py-4'>
         {NAVBAR_ITEMS.map(({ i18nKey, href }) => (
           <NavbarMenuItem key={i18nKey}>
             <Link
               className={cn(
-                'w-full text-2xl font-semibold text-black transition-all hover:text-zinc-500',
+                'w-full border-b border-[#E6E6E3] py-6 text-lg font-semibold text-black transition-all hover:text-zinc-500',
                 isActiveLink(href) && 'text-primary',
               )}
               href={href}
@@ -77,6 +80,26 @@ export const Header = () => {
             </Link>
           </NavbarMenuItem>
         ))}
+        <li className='mt-1 w-full self-start'>
+          <Button className='h-10 w-full' color='primary'>
+            {t('contact_us')}
+          </Button>
+        </li>
+
+        <li className='mt-5 flex justify-center gap-5 lg:justify-start'>
+          <Link
+            href='#'
+            className='flex size-10 items-center justify-center rounded-full bg-white transition-all hover:bg-gray-100'
+          >
+            <FacebookIcon className='size-3 text-black' />
+          </Link>
+          <Link
+            href='#'
+            className='flex size-10 items-center justify-center rounded-full bg-white transition-all hover:bg-gray-100'
+          >
+            <LinkedInIcon className='size-3 text-black' />
+          </Link>
+        </li>
       </NavbarMenu>
     </Navbar>
   )

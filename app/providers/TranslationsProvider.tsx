@@ -1,6 +1,6 @@
 'use client'
 
-import { createInstance } from 'i18next'
+import { createInstance, i18n } from 'i18next'
 import { ReactNode } from 'react'
 import { I18nextProvider } from 'react-i18next'
 
@@ -10,7 +10,7 @@ interface ITranslationsProvider {
   children: ReactNode
   locale: string
   namespaces: string[] | string
-  resources?: any
+  resources?: i18n['reloadResources']
 }
 export default function TranslationsProvider({ children, locale, namespaces, resources }: ITranslationsProvider) {
   const i18nInstance = createInstance()
