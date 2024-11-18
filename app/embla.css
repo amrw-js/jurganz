@@ -4,8 +4,10 @@
   --slide-spacing: 1rem;
 }
 .embla__viewport {
-  overflow: hidden;
+  overflow-x: hidden;
+  border-radius: 10px;
 }
+
 .embla__container {
   display: flex;
   touch-action: pan-y pinch-zoom;
@@ -24,7 +26,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--slide-height);
   user-select: none;
 }
 

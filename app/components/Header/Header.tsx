@@ -47,9 +47,9 @@ export const Header = () => {
           <NavbarItem key={i18nKey}>
             <Link
               className={cn(
-                'hover:text-primary focus:text-primary relative font-medium text-black transition-all',
+                'relative font-medium text-black transition-all hover:text-primary focus:text-primary',
                 isActiveLink(href) &&
-                  'text-primary after:border-primary after:border-b-1 after:absolute after:inset-0 after:top-6 after:w-1/2',
+                  'text-primary after:absolute after:inset-0 after:top-6 after:w-1/2 after:border-b-1 after:border-primary',
               )}
               href={href}
             >
@@ -66,12 +66,13 @@ export const Header = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarMenu className='gap-0 py-4'>
-        {NAVBAR_ITEMS.map(({ i18nKey, href }) => (
+        {NAVBAR_ITEMS.map(({ i18nKey, href }, index) => (
           <NavbarMenuItem key={i18nKey}>
             <Link
               className={cn(
                 'w-full border-b border-[#E6E6E3] py-6 text-lg font-semibold text-black transition-all hover:text-zinc-500',
                 isActiveLink(href) && 'text-primary',
+                index === NAVBAR_ITEMS.length - 1 && 'border-none',
               )}
               href={href}
               size='lg'
@@ -89,13 +90,13 @@ export const Header = () => {
         <li className='mt-5 flex justify-center gap-5 lg:justify-start'>
           <Link
             href='#'
-            className='flex size-10 items-center justify-center rounded-full bg-white transition-all hover:bg-gray-100'
+            className='flex size-10 items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
             <FacebookIcon className='size-3 text-black' />
           </Link>
           <Link
             href='#'
-            className='flex size-10 items-center justify-center rounded-full bg-white transition-all hover:bg-gray-100'
+            className='flex size-10 items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
             <LinkedInIcon className='size-3 text-black' />
           </Link>

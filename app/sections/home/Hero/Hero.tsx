@@ -27,7 +27,7 @@ export const Hero: FC<IHero> = (props) => {
               <ArrowUpRightIcon className='h-4 w-4 lg:h-6 lg:w-6' />
             </Link>
           </div>
-          <div className='flex h-fit max-w-[26.438rem] flex-col gap-2 self-end rounded-xl bg-[#FFFFFF12] p-5 backdrop-blur-xl md:gap-7 lg:self-auto'>
+          <div className='flex h-fit max-w-[26.438rem] flex-col gap-2 self-end rounded-xl bg-[#FFFFFF12] p-5 shadow-lg backdrop-blur-xl md:gap-7 lg:self-auto'>
             <p className='text-lg font-semibold leading-9 lg:text-3xl'>{t('hero_apps_title')}</p>
             <div className='flex gap-2 lg:gap-8'>
               <PlayStore t={t} />

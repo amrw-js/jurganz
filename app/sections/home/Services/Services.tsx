@@ -43,7 +43,7 @@ export const Services: FC<IServices> = (props) => {
           alt='welding'
           width={1960}
           height={2213}
-          className='max-h-[18rem] w-full rounded-lg object-cover sm:max-h-[22rem] md:max-h-[28rem] lg:max-h-[40rem]'
+          className='max-h-[18rem] w-full rounded-lg object-cover shadow-lg sm:max-h-[22rem] md:max-h-[28rem] lg:max-h-[40rem]'
         />
       </div>
     </div>

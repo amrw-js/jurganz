@@ -29,7 +29,7 @@ export const Footer: FC<IFooter> = (props) => {
             <Link
               key={i18nKey}
               href={href}
-              className='hover:text-primary text-base font-medium leading-6 transition-all'
+              className='text-base font-medium leading-6 transition-all hover:text-primary'
             >
               {t(i18nKey)}
             </Link>
@@ -38,13 +38,13 @@ export const Footer: FC<IFooter> = (props) => {
         <div className='flex justify-center gap-5 lg:justify-start'>
           <Link
             href='#'
-            className='flex size-[3.125rem] items-center justify-center rounded-full bg-white transition-all hover:bg-gray-100'
+            className='flex size-[3.125rem] items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
             <FacebookIcon className='size-4 text-black' />
           </Link>
           <Link
             href='#'
-            className='flex size-[3.125rem] items-center justify-center rounded-full bg-white transition-all hover:bg-gray-100'
+            className='flex size-[3.125rem] items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
             <LinkedInIcon className='size-4 text-black' />
           </Link>
