@@ -28,18 +28,30 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const isActiveLink = (path: string): boolean => pathname.includes(path)
+
   return (
     <Navbar
       maxWidth='full'
       classNames={{ wrapper: 'px-[0.875rem] sm:px-10 w-full h-[4.75rem] lg:h-20' }}
-      className='w-full justify-start px-0 lg:mb-6'
+      className={cn(
+        'w-full justify-start px-0 transition-all duration-300 lg:mb-6',
+        isMenuOpen ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent',
+      )}
       onMenuOpenChange={setIsMenuOpen}
     >
-      <NavbarContent className='flex flex-row-reverse'>
-        <NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className='font-bold lg:hidden' />
-        <NavbarBrand className='shrink-0 basis-auto'>
-          <Image className='shrink-0' src='/images/logo.png' alt='gbs logo' width={154} height={40} />
-        </NavbarBrand>
+      <NavbarContent className='flex w-full flex-row-reverse !justify-between'>
+        <li className='shrink-0'>
+          <NavbarMenuToggle
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            className='h-6 w-full shrink-0 p-2 font-bold lg:hidden'
+          />
+        </li>
+
+        <li className='shrink-0 basis-auto'>
+          <NavbarBrand>
+            <Image className='shrink-0' src='/images/logo.png' alt='gbs logo' width={154} height={40} />
+          </NavbarBrand>
+        </li>
       </NavbarContent>
 
       <NavbarContent className='hidden gap-10 lg:flex'>
@@ -92,13 +104,13 @@ export const Header = () => {
             href='#'
             className='flex size-10 items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
-            <FacebookIcon className='size-3 text-black' />
+            <FacebookIcon aria-label='Facebook' className='size-3 text-black' />
           </Link>
           <Link
             href='#'
             className='flex size-10 items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
-            <LinkedInIcon className='size-3 text-black' />
+            <LinkedInIcon aria-label='LinkedIn' className='size-3 text-black' />
           </Link>
         </li>
       </NavbarMenu>

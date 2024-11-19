@@ -38,12 +38,14 @@ export const Footer: FC<IFooter> = (props) => {
         <div className='flex justify-center gap-5 lg:justify-start'>
           <Link
             href='#'
+            aria-label='Facebook'
             className='flex size-[3.125rem] items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
             <FacebookIcon className='size-4 text-black' />
           </Link>
           <Link
             href='#'
+            aria-label='LinkedIn'
             className='flex size-[3.125rem] items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-gray-100'
           >
             <LinkedInIcon className='size-4 text-black' />

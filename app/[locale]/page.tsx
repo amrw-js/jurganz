@@ -1,3 +1,4 @@
+import { Metadata } from 'next'
 import { FC } from 'react'
 
 import { initTranslations } from '@/i18n'
@@ -15,6 +16,12 @@ interface IHome {
   params: Promise<{
     locale: string
   }>
+}
+
+export const metadata: Metadata = {
+  title: 'GBS | Global Beverage Services',
+  description:
+    'GBS Agency offers industrial services and consultancy specializing in plumbing and project management across the Middle East and Africa. With a strong team from Egypt and Algeria, GBS delivers high-quality, cost-effective solutions for businesses in various industries. Trusted by top brands, they provide expert services to ensure project success.',
 }
 
 const Home: FC<IHome> = async (props) => {

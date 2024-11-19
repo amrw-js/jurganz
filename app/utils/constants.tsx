@@ -115,8 +115,8 @@ export const LOGOS: ILogo[] = [
   {
     src: '/images/logos/coca-cola.png',
     alt: 'CocaCola',
-    width: 3500,
-    height: 3500,
+    width: 600,
+    height: 600,
   },
   {
     src: '/images/logos/dasani.png',

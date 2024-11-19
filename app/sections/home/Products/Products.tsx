@@ -17,7 +17,7 @@ export const Products: FC = () => {
   const { t } = useTranslation()
   const MotionDiv = motion.div as FC<HTMLAttributes<HTMLDivElement> & MotionProps>
   const MotionH3 = motion.h3 as FC<HTMLAttributes<HTMLHeadingElement> & MotionProps>
-  const MotionH5 = motion.h5 as FC<HTMLAttributes<HTMLHeadingElement> & MotionProps>
+  const MotionP = motion.p as FC<HTMLAttributes<HTMLHeadingElement> & MotionProps>
 
   const renderItem = useCallback(
     (item: IProject) => {
@@ -66,7 +66,7 @@ export const Products: FC = () => {
         >
           {t('products_heading')}
         </MotionH3>
-        <MotionH5
+        <MotionP
           className='text-sm font-medium leading-5 sm:text-lg sm:leading-7'
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -74,7 +74,7 @@ export const Products: FC = () => {
           transition={{ delay: 0.2, duration: 0.6, ease: 'easeInOut' }}
         >
           {t('products_desc')}
-        </MotionH5>
+        </MotionP>
       </div>
       <div className='relative z-10'>
         <ScrollableCards
