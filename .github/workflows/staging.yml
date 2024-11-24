@@ -1,0 +1,35 @@
+name: Staging deployment
+
+defaults:
+  run:
+    shell: bash
+on:
+  workflow_dispatch:
+    inputs:
+      PR_number:
+        description: 'Pull request number'
+        required: true
+jobs:
+  create:
+    name: 'Create staging deployment'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Verfiy Pull request'
+        uses: actions/github-script@v6
+        id: verify-pr-number
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const response = await github.rest.pulls.get({owner: context.repo.owner, repo: context.repo.repo, pull_number: ${{ github.event.inputs.PR_number }}});
+
+            if (response.data.number !== ${{github.event.inputs.PR_number}}) {
+              throw new Error('Pull request does not exist')
+            } else {
+              console.log("PR ref:"  + response.data.head.ref)
+
+              return response.data.head.ref
+            }
+      - name: 'Checkout repository and infra branch'
+        uses: actions/checkout@v3
+        with:
+          ref: infra

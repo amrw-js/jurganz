@@ -13,6 +13,8 @@ import { PROJECTS } from '@/app/utils/constants'
 
 import { IProject } from '../Projects/projects.interface'
 
+import { ProductsPlaceholder } from './ProductsPlaceholder'
+
 export const Products: FC = () => {
   const { t } = useTranslation()
   const MotionDiv = motion.div as FC<HTMLAttributes<HTMLDivElement> & MotionProps>
@@ -77,24 +79,30 @@ export const Products: FC = () => {
         </MotionP>
       </div>
       <div className='relative z-10'>
-        <ScrollableCards
-          arrows={false}
-          slides={PROJECTS}
-          renderItem={renderItem}
-          slideClassName='flex-shrink-0 flex-grow-0 basis-[100%] sm:basis-[50%] lg:basis-[25%]'
-          renderLeftContent={() => (
-            <Link href='#' className='text-lg font-semibold underline hover:text-gray-500'>
-              {t('see_all_projects')}
+        {true ? (
+          <ProductsPlaceholder />
+        ) : (
+          <>
+            <ScrollableCards
+              arrows={false}
+              slides={PROJECTS}
+              renderItem={renderItem}
+              slideClassName='flex-shrink-0 flex-grow-0 basis-[100%] sm:basis-[50%] lg:basis-[25%]'
+              renderLeftContent={() => (
+                <Link href='#' className='text-lg font-semibold underline hover:text-gray-500'>
+                  {t('see_all_projects')}
+                </Link>
+              )}
+            />
+            <Link
+              href='#'
+              className='relative z-10 mt-5 block text-white underline transition-all hover:text-gray-300 lg:mt-10'
+            >
+              {t('see_all_items')}
             </Link>
-          )}
-        />
+          </>
+        )}
       </div>
-      <Link
-        href='#'
-        className='relative z-10 mt-5 block text-white underline transition-all hover:text-gray-300 lg:mt-10'
-      >
-        {t('see_all_items')}
-      </Link>
     </div>
   )
 }

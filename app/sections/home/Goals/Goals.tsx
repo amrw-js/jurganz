@@ -12,7 +12,7 @@ interface IGoals {
 export const Goals: FC<IGoals> = (props) => {
   const { t } = props
   return (
-    <div className='flex flex-col items-start gap-y-5 px-[0.875rem] pb-10 sm:px-10 lg:gap-y-10 lg:pb-[12.5rem]'>
+    <div className='flex flex-col items-start gap-y-5 px-[0.875rem] pb-10 sm:px-10 lg:gap-y-10 lg:pb-20'>
       <h3 className='text-center text-2xl font-semibold leading-8 lg:text-left lg:text-3xl lg:leading-9'>
         {t('goals_heading')}
       </h3>
