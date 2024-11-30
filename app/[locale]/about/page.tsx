@@ -6,6 +6,7 @@ import { Hero } from '@/app/sections/about/Hero/Hero'
 import { Intro } from '@/app/sections/about/Intro/Intro'
 import { MissionVision } from '@/app/sections/about/MissionVision/MissionVision'
 import { Services } from '@/app/sections/about/Services/Services'
+import { Projects } from '@/app/sections/home/Projects/Projects'
 import { initTranslations } from '@/i18n'
 
 const namespaces = ['default', 'about']
@@ -22,6 +23,9 @@ const About: FC<IPage> = async (props) => {
         <Intro t={t} />
         <MissionVision t={t} />
         <Services t={t} />
+        <div className='bg-zinc-50'>
+          <Projects />
+        </div>
       </div>
     </Providers>
   )
