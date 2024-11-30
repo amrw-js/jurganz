@@ -2,7 +2,6 @@
 
 import {
   Button,
-  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
@@ -13,6 +12,7 @@ import {
 } from '@nextui-org/react'
 import cn from 'clsx'
 import Image from 'next/image'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -87,7 +87,6 @@ export const Header = () => {
                 index === NAVBAR_ITEMS.length - 1 && 'border-none',
               )}
               href={href}
-              size='lg'
             >
               {t(i18nKey)}
             </Link>

@@ -12,6 +12,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         factory: "url('/images/factory.jpg')",
+        aboutHero: "url('/images/factory.jpg')",
       },
     },
   },
