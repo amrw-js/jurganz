@@ -3,5 +3,6 @@
     "Dasani",
     "languagedetector",
     "turbopack"
-  ]
+  ],
+  "editor.formatOnSave": true
 }

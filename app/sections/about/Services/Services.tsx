@@ -8,7 +8,7 @@ import { SERVICES } from '@/app/utils/constants'
 export const Services: FC<IComponent> = (props) => {
   const { t } = props
   return (
-    <Section className='flex flex-col gap-5 lg:gap-10'>
+    <Section className='flex flex-col gap-5 bg-slate-50 lg:gap-10'>
       <p className='text-2xl font-semibold leading-9 lg:text-4xl lg:leading-none'>{t('services_title')}</p>
       <div className='flex w-full flex-wrap gap-2 lg:gap-5'>
         {SERVICES.map(({ i18nKey, href }, index) => (

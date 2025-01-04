@@ -99,6 +99,25 @@ export const GOALS = [
   { i18n_heading: 'goals_tailored', i18n_desc: 'goals_tailored_desc' },
 ]
 
+export const PROJECTS_SECTION = [
+  {
+    i18n_heading: 'projects_section_initial',
+    i18n_desc: 'projects_section_desc_initial',
+  },
+  {
+    i18n_heading: 'projects_section_design',
+    i18n_desc: 'projects_section_desc_design',
+  },
+  {
+    i18n_heading: 'projects_section_installation',
+    i18n_desc: 'projects_section_desc_installation',
+  },
+  {
+    i18n_heading: 'projects_section_maintenance',
+    i18n_desc: 'projects_section_desc_maintenance',
+  },
+]
+
 export const LOGOS: ILogo[] = [
   {
     src: '/images/logos/aquafina.png',
@@ -135,5 +154,24 @@ export const LOGOS: ILogo[] = [
     alt: 'Rani float',
     width: 582,
     height: 582,
+  },
+]
+
+export const SERVICES_SECTION = [
+  {
+    i18n_heading: 'services_installation',
+    i18n_desc: 'services_installation_desc',
+  },
+  {
+    i18n_heading: 'services_relocation',
+    i18n_desc: 'services_relocation_desc',
+  },
+  {
+    i18n_heading: 'services_support',
+    i18n_desc: 'services_support_desc',
+  },
+  {
+    i18n_heading: 'services_consultation',
+    i18n_desc: 'services_consultation_desc',
   },
 ]

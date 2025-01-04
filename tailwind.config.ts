@@ -12,7 +12,9 @@ module.exports = {
     extend: {
       backgroundImage: {
         factory: "url('/images/factory.jpg')",
-        aboutHero: "url('/images/factory.jpg')",
+        aboutHero: "url('/images/interior-factory.jpg')",
+        servicesHero: "url('/images/worker-image.jpg')",
+        ourProcess: "url('/images/our-process.jpg')",
       },
     },
   },

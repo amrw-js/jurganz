@@ -23,9 +23,7 @@ const About: FC<IPage> = async (props) => {
         <Intro t={t} />
         <MissionVision t={t} />
         <Services t={t} />
-        <div className='bg-zinc-50'>
-          <Projects />
-        </div>
+        <Projects />
       </div>
     </Providers>
   )
