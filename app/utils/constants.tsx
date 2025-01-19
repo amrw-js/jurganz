@@ -175,3 +175,34 @@ export const SERVICES_SECTION = [
     i18n_desc: 'services_consultation_desc',
   },
 ]
+
+export const OUR_PROJECTS = [
+  {
+    imageSrc: '/images/coca-cola.jpg',
+    i18nTitle: 'Title 1',
+    subTitle1: 'subtitle 11',
+    subTitle2: ' subtitle 12',
+    subTitle3: 'subtitle 13',
+  },
+  {
+    imageSrc: '/images/bottles.jpg',
+    i18nTitle: 'Title 2',
+    subTitle1: 'subtitle 21',
+    subTitle2: ' subtitle 22',
+    subTitle3: 'subtitle 23',
+  },
+  {
+    imageSrc: '/images/cat-machine.jpg',
+    i18nTitle: 'Title 3',
+    subTitle1: 'subtitle 31',
+    subTitle2: ' subtitle 32',
+    subTitle3: 'subtitle 33',
+  },
+  {
+    imageSrc: '/images/iron.jpg',
+    i18nTitle: 'Title 4',
+    subTitle1: 'subtitle 41',
+    subTitle2: ' subtitle 42',
+    subTitle3: 'subtitle 43',
+  },
+]
