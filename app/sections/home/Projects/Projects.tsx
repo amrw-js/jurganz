@@ -95,8 +95,8 @@ export const Projects: FC = () => {
   return (
     <div className='flex flex-col gap-7 px-[0.875rem] py-10 sm:px-10 lg:gap-10 lg:py-20' id='projects-section'>
       <div className='flex w-full flex-col items-center justify-center gap-3 text-center lg:text-left'>
-        <p className='text-2xl font-semibold leading-8 lg:text-4xl lg:leading-10'>{t('projects_heading')}</p>
-        <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>{t('projects_desc')}</p>
+        <p className='text-2xl font-semibold leading-8 lg:text-4xl lg:leading-10'>{t('home:projects_heading')}</p>
+        <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>{t('home:projects_desc')}</p>
       </div>
 
       {/* Projects container with slow animation */}

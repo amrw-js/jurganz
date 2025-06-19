@@ -1,16 +1,14 @@
+'use client'
+
 import { Button } from '@nextui-org/button'
-import { TFunction } from 'i18next'
-import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { FlashCircle } from '@/app/components/ui/icons/FlashCircle'
 import { GOALS } from '@/app/utils/constants'
 
-interface IGoals {
-  t: TFunction
-}
+export const Goals = () => {
+  const { t } = useTranslation()
 
-export const Goals: FC<IGoals> = (props) => {
-  const { t } = props
   return (
     <div className='flex flex-col items-start gap-y-5 px-[0.875rem] pb-10 sm:px-10 lg:gap-y-10 lg:pb-20'>
       <h3 className='text-center text-2xl font-semibold leading-8 lg:text-left lg:text-3xl lg:leading-9'>

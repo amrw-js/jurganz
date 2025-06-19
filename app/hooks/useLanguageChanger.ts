@@ -1,35 +1,69 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import i18nConfig from '@/i18nConfig'
+export type Locale = 'en' | 'ar'
 
-export default function LanguageChanger() {
-  const { i18n } = useTranslation()
-  const currentLocale = i18n.language
+export const locales: Locale[] = ['en', 'ar']
+
+export const useLanguageChanger = () => {
   const router = useRouter()
-  const currentPathname = usePathname()
+  const pathname = usePathname()
+  const { i18n } = useTranslation()
+  const [currentLocale, setCurrentLocale] = useState<Locale>('en')
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLocale = event.target.value
+  // Extract current locale from pathname
+  useEffect(() => {
+    const pathLocale = pathname.split('/')[1] as Locale
+    if (locales.includes(pathLocale)) {
+      setCurrentLocale(pathLocale)
+      if (i18n.language !== pathLocale) {
+        i18n.changeLanguage(pathLocale)
+      }
 
-    // set cookie for next-i18n-router
-    const days = 30
-    const date = new Date()
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
-    const expires = date.toUTCString()
-    document.cookie = `NEXT_LOCALE=${newLocale};expires=${expires};path=/`
+      // Update document direction and language
+      document.documentElement.lang = pathLocale
+      document.documentElement.dir = pathLocale === 'ar' ? 'rtl' : 'ltr'
+    }
+  }, [pathname, i18n])
 
-    if (currentLocale === i18nConfig.defaultLocale && !i18nConfig.prefixDefault) {
-      router.push('/' + newLocale + currentPathname)
-    } else {
-      router.push(currentPathname.replace(`/${currentLocale}`, `/${newLocale}`))
+  const changeLanguage = (newLocale: Locale) => {
+    if (!locales.includes(newLocale)) {
+      console.error(`Locale ${newLocale} is not supported`)
+      return
     }
 
-    router.refresh()
+    // Extract the current path without locale
+    const pathWithoutLocale = pathname.replace(/^\/[^\/]+/, '') || '/'
+
+    // Construct new path with new locale
+    const newPath = `/${newLocale}${pathWithoutLocale}`
+
+    // Change i18n language
+    i18n.changeLanguage(newLocale)
+
+    // Update document direction immediately for smooth transition
+    document.documentElement.dir = newLocale === 'ar' ? 'rtl' : 'ltr'
+    document.documentElement.lang = newLocale
+
+    // Navigate to new path
+    router.push(newPath)
   }
 
-  return handleChange
+  const getLocalizedPath = (locale: Locale, path?: string) => {
+    const targetPath = path || pathname.replace(/^\/[^\/]+/, '') || '/'
+    return `/${locale}${targetPath}`
+  }
+
+  const isRTL = currentLocale === 'ar'
+
+  return {
+    currentLocale,
+    changeLanguage,
+    getLocalizedPath,
+    availableLocales: locales,
+    isRTL,
+  }
 }

@@ -1,6 +1,7 @@
-import { TFunction } from 'i18next'
+'use client'
+
 import Link from 'next/link'
-import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { NAVBAR_ITEMS } from '@/app/utils/constants'
 
@@ -8,11 +9,8 @@ import { ContactUsForm } from '../ContactUsForm/ContactUsForm'
 import { FacebookIcon } from '../ui/icons/FacebookIcon'
 import { LinkedInIcon } from '../ui/icons/LinkedInIcon'
 
-interface IFooter {
-  t: TFunction
-}
-export const Footer: FC<IFooter> = (props) => {
-  const { t } = props
+export const Footer = () => {
+  const { t } = useTranslation()
 
   return (
     <div className='bg-cyan-50 px-6 pb-10 pt-10 lg:px-[3.75rem] lg:pt-20'>

@@ -1,17 +1,15 @@
+'use client'
+
 import { Button } from '@nextui-org/button'
-import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { SERVICES } from '@/app/utils/constants'
 
-interface IServices {
-  t: TFunction
-}
+export const Services = () => {
+  const { t } = useTranslation()
 
-export const Services: FC<IServices> = (props) => {
-  const { t } = props
   return (
     <div className='mt-10 flex flex-col-reverse gap-7 bg-zinc-50 px-[0.875rem] py-10 sm:px-10 sm:py-20 lg:mt-[7.5rem] lg:gap-[11.25rem] xl:flex-row'>
       <div className='flex-1'>

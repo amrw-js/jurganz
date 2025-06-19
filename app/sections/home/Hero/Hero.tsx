@@ -1,18 +1,15 @@
+'use client'
+
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline'
-import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AppStore } from '@/app/components/ui/AppStore/AppStore'
 import { PlayStore } from '@/app/components/ui/PlayStore/PlayStore'
 
-interface IHero {
-  t: TFunction
-}
-
-export const Hero: FC<IHero> = (props) => {
-  const { t } = props
+export const Hero = () => {
+  const { t } = useTranslation()
 
   return (
     <div className='flex items-center justify-center px-[0.875rem] sm:px-10'>
@@ -22,17 +19,17 @@ export const Hero: FC<IHero> = (props) => {
           <div className='flex flex-col lg:basis-[70%]'>
             <p className='mb-3 text-sm font-semibold underline lg:text-lg'>#GBS</p>
             <p className='mb-5 text-3xl font-semibold leading-9 lg:mb-10 lg:text-7xl lg:leading-none'>
-              {t('hero_heading')}
+              {t('home:hero_heading')}
             </p>
             <Link className='mb-5 flex items-center gap-1 font-semibold lg:gap-2' href='#'>
               <span className='text-base underline underline-offset-4 lg:text-xl'>
-                {t('hero_heading_production_line')}
+                {t('home:hero_heading_production_line')}
               </span>
               <ArrowUpRightIcon className='h-4 w-4 lg:h-6 lg:w-6' />
             </Link>
           </div>
           <div className='flex flex-col gap-5 rounded-lg p-3 backdrop-blur lg:p-5'>
-            <p className='text-lg font-semibold leading-7 lg:text-3xl lg:leading-9'>{t('hero_apps_title')}</p>
+            <p className='text-lg font-semibold leading-7 lg:text-3xl lg:leading-9'>{t('home:hero_apps_title')}</p>
             <div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
               <PlayStore t={t} />
               <AppStore t={t} />
