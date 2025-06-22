@@ -1,15 +1,21 @@
 /** @type {import('tailwindcss').Config} */
-const { nextui } = require('@nextui-org/react')
+const { heroui } = require('@heroui/react')
 
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/dashboard/**/*.{js,ts,jsx,tsx,mdx}', // Add this for extra safety
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
+      colors: {
+        brand: {
+          DEFAULT: '#155E75',
+        },
+      },
       backgroundImage: {
         factory: "url('/images/factory.jpg')",
         aboutHero: "url('/images/interior-factory.jpg')",
@@ -20,7 +26,7 @@ module.exports = {
   },
   darkMode: 'class',
   plugins: [
-    nextui({
+    heroui({
       themes: {
         light: {
           colors: {

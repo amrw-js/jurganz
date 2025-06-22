@@ -9,7 +9,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
-} from '@nextui-org/react'
+} from '@heroui/react'
 import cn from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'

@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Input, Textarea } from '@nextui-org/react'
+import { Button, Input, Textarea } from '@heroui/react'
 import { animated, useSpring } from '@react-spring/web'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'

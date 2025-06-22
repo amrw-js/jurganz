@@ -52,7 +52,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
     pathname.includes('.') ||
-    pathname.startsWith('/favicon')
+    pathname.startsWith('/favicon') ||
+    pathname.includes('/dashboard')
   ) {
     return NextResponse.next()
   }
@@ -65,7 +66,7 @@ export function middleware(request: NextRequest) {
 
   // Set locale cookie for future requests
   response.cookies.set('locale', locale, {
-    maxAge: 60 * 60 * 24 * 365, // 1 year
+    maxAge: 60 * 60 * 24 * 365,
     path: '/',
   })
 
