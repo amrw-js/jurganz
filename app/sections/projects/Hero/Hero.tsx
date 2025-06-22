@@ -15,7 +15,7 @@ export const Hero: FC<IComponent> = (props) => {
           {t('projects_hero_desc')}
         </h3>
         <Link className='flex items-center gap-1 font-semibold lg:gap-2' href='#'>
-          <span className='text-base underline underline-offset-4 lg:text-xl'>{t('contact_us')}</span>
+          <span className='text-base underline underline-offset-4 lg:text-xl'>{t('default:contact_us')}</span>
           <ArrowUpRightIcon className='h-4 w-4 lg:h-6 lg:w-6' />
         </Link>
       </div>

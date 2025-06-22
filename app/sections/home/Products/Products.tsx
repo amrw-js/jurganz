@@ -45,7 +45,7 @@ export const Products: FC = () => {
                 {t('more_details')}
               </Button>
               <Button className='flex-1' color='primary'>
-                {t('contact_us')}
+                {t('default:contact_us')}
               </Button>
             </div>
           </div>

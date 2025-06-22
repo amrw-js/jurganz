@@ -17,7 +17,7 @@ export const Services = () => {
           <p className='text-center text-2xl font-semibold leading-10 sm:text-4xl lg:!text-left'>
             {t('services_heading')}
           </p>
-          <Button color='primary'>{t('contact_us')}</Button>
+          <Button color='primary'>{t('default:contact_us')}</Button>
         </div>
         <div className='flex flex-wrap gap-y-5 lg:gap-x-11 lg:gap-y-5'>
           {SERVICES.map(({ i18nKey, href }, index) => (
