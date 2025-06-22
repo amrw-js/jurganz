@@ -6,6 +6,7 @@ import { IComponent } from '@/app/global.interface'
 
 export const Hero: FC<IComponent> = (props) => {
   const { t } = props
+
   return (
     <div className='relative flex h-[35.625rem] items-center bg-white bg-aboutHero bg-cover bg-fixed bg-center bg-no-repeat px-10 lg:h-[34.5rem]'>
       <div className='absolute inset-0 z-0 bg-black/70' />

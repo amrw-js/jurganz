@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
 
-import { Providers } from '../providers/Providers'
 import { Goals } from '../sections/home/Goals/Goals'
 import { Hero } from '../sections/home/Hero/Hero'
 import { Logos } from '../sections/home/Logos/Logos'

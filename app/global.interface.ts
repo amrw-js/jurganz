@@ -1,5 +1,7 @@
 import { TFunction } from 'i18next'
 
+import { Locale } from '@/lib/i18n-server'
+
 export type ILogo = {
   src: string
   alt: string
@@ -9,7 +11,7 @@ export type ILogo = {
 
 export interface IPage {
   params: Promise<{
-    locale: string
+    locale: Locale
   }>
 }
 
