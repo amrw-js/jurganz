@@ -1,6 +1,6 @@
 'use client'
 
-import { NextUIProvider } from '@nextui-org/react'
+import { HeroUIProvider } from '@heroui/react'
 import { FC, ReactNode } from 'react'
 
 import I18nClientProvider from './TranslationsProvider'
@@ -11,8 +11,8 @@ interface IProviders {
 
 export const Providers: FC<IProviders> = ({ children }) => {
   return (
-    <NextUIProvider>
+    <HeroUIProvider>
       <I18nClientProvider>{children}</I18nClientProvider>
-    </NextUIProvider>
+    </HeroUIProvider>
   )
 }

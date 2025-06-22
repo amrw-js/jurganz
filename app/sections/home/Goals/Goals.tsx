@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@nextui-org/button'
+import { Button } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 
 import { FlashCircle } from '@/app/components/ui/icons/FlashCircle'
