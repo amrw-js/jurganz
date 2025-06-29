@@ -1,1 +1,26 @@
-{"add_new_line":"Add production line now","contact_us":"Contact us","contact_us_desc":"We’re here to answer any questions and explore how our expertise can support your next project.","contact_us_heading":"Let’s Connect and Bring Your Vision to Life","goals_after_care":"Comprehensive Aftercare","goals_after_care_desc":"We go beyond installation by providing long-term technical support and maintenance to ensure optimal performance ","goals_downtime":"⁠Minimal Downtime, Maximum Efficiency","goals_downtime_desc":"Our relocation and installation processes are designed to keep your production lines running with as little interruption as possible.","goals_heading":"Empowering Your Goals with Tailored Solutions That Deliver Excellence","goals_industry_knowledge":" ⁠Expertise and Industry Knowledge","goals_industry_knowledge_desc":"Years of experience in the beverage industry allow us to deliver precise, reliable solutions for every project","goals_localized":"⁠Global Reach, Localized Support","goals_localized_desc":"With operations across Egypt, Algeria, and the UAE, we offer both global expertise and localized service for all clients.","goals_tailored":"Tailored Solutions for every client ","goals_tailored_desc":"No two projects are the same. we take a customized approach to each clients needs. ensuring precision and efficiency. ","hero_apps_title":"GBS Mobile app for better experience","hero_heading":"Experts in Beverage\nProduction Line Sevices","hero_heading_production_line":"Production lines for sale","objective":"{{Transparency}} builds trust, {{Obligation}} ensures reliability, and {{Development}} drives progress.","products_desc":"Browse our curated selection of premium manufacturing items, designed for durability and precision. Whether you’re looking for reliable components or innovative solutions, our products are crafted to meet the highest industry standards and deliver exceptional performance in every application.","products_heading":"High-Quality Manufacturing Products","products_placeholder":"No Production lines added yet","projects_desc":"We deliver cutting-edge solutions with a focus on precision and innovation, ensuring every project exceeds expectations.","projects_heading":"Precision-Driven Projects, Unmatched Innovation"}
+{
+  "add_new_line": "Add production line now",
+  "contact_us": "Contact us",
+  "contact_us_desc": "We’re here to answer any questions and explore how our expertise can support your next project.",
+  "contact_us_heading": "Let’s Connect and Bring Your Vision to Life",
+  "goals_after_care": "Comprehensive Aftercare",
+  "goals_after_care_desc": "We go beyond installation by providing long-term technical support and maintenance to ensure optimal performance ",
+  "goals_downtime": "⁠Minimal Downtime, Maximum Efficiency",
+  "goals_downtime_desc": "Our relocation and installation processes are designed to keep your production lines running with as little interruption as possible.",
+  "goals_heading": "Empowering Your Goals with Tailored Solutions That Deliver Excellence",
+  "goals_industry_knowledge": " ⁠Expertise and Industry Knowledge",
+  "goals_industry_knowledge_desc": "Years of experience in the beverage industry allow us to deliver precise, reliable solutions for every project",
+  "goals_localized": "⁠Global Reach, Localized Support",
+  "goals_localized_desc": "With operations across Egypt, Algeria, and the UAE, we offer both global expertise and localized service for all clients.",
+  "goals_tailored": "Tailored Solutions for every client ",
+  "goals_tailored_desc": "No two projects are the same. we take a customized approach to each clients needs. ensuring precision and efficiency. ",
+  "hero_apps_title": "GBS Mobile app for better experience",
+  "hero_heading": "Experts in Beverage\nProduction Line Sevices",
+  "hero_heading_production_line": "Production lines for sale",
+  "home_products_desc": "Browse our curated selection of premium manufacturing items, designed for durability and precision. Whether you’re looking for reliable components or innovative solutions, our products are crafted to meet the highest industry standards and deliver exceptional performance in every application.",
+  "home_products_heading": "High-Quality Manufacturing Products",
+  "objective": "{{Transparency}} builds trust, {{Obligation}} ensures reliability, and {{Development}} drives progress.",
+  "products_placeholder": "No Production lines added yet",
+  "projects_desc": "We deliver cutting-edge solutions with a focus on precision and innovation, ensuring every project exceeds expectations.",
+  "projects_heading": "Precision-Driven Projects, Unmatched Innovation"
+}

@@ -97,12 +97,15 @@ export const useProductionLines = () => {
           negotiable: data.negotiable,
           isAvailableNow: data.isAvailableNow,
           expectedAvailableDate: data.expectedAvailableDate,
+          published: data.published, // Add this line
           photos: processedMedia,
           createdAt: new Date(),
           updatedAt: new Date(),
         }
 
         const updatedLines = [...productionLines, newLine]
+
+        console.log('new production line:', newLine)
         saveProductionLines(updatedLines)
         return newLine
       } catch (error) {
@@ -145,6 +148,7 @@ export const useProductionLines = () => {
               negotiable: data.negotiable,
               isAvailableNow: data.isAvailableNow,
               expectedAvailableDate: data.expectedAvailableDate,
+              published: data.published,
               photos: allPhotos,
               updatedAt: new Date(),
             }

@@ -174,6 +174,15 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
                     Not Available
                   </Chip>
                 )}
+                {productionLine.published ? (
+                  <Chip color='primary' variant='flat' size='sm'>
+                    Published
+                  </Chip>
+                ) : (
+                  <Chip color='default' variant='flat' size='sm'>
+                    Draft
+                  </Chip>
+                )}
               </div>
 
               <div className='space-y-1 text-sm text-default-500'>
@@ -321,6 +330,9 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
               <Badge color='secondary' variant='flat' size='sm'>
                 {productionLineMedia.length} files
               </Badge>
+              <Badge color={productionLine.published ? 'success' : 'default'} variant='flat' size='sm'>
+                {productionLine.published ? 'Published' : 'Draft'}
+              </Badge>
             </div>
             <Button
               size='sm'
@@ -337,6 +349,7 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
         </CardFooter>
       </Card>
 
+      {/* Edit Modal */}
       <ProductionLineModal
         productionLine={productionLine}
         isOpen={isEditModalOpen}

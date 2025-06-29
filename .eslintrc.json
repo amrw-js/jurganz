@@ -2,5 +2,15 @@
   "extends": ["next/core-web-vitals", "next/typescript", "prettier"],
   "rules": {
     "react-hooks/exhaustive-deps": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["locale/**/*.json", "locales/**/*.json"],
+      "extends": ["plugin:jsonc/recommended-with-json"],
+      "parser": "jsonc-eslint-parser",
+      "rules": {
+        "jsonc/sort-keys": "error"
+      }
+    }
+  ]
 }

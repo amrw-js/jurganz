@@ -71,6 +71,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
       negotiable: false,
       isAvailableNow: true,
       expectedAvailableDate: '',
+      published: false,
       photos: [],
     },
     mode: 'onChange',
@@ -99,6 +100,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
         negotiable: productionLine.negotiable,
         isAvailableNow: productionLine.isAvailableNow,
         expectedAvailableDate: productionLine.expectedAvailableDate || '',
+        published: productionLine.published,
         photos: [],
       })
     } else {
@@ -121,6 +123,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
         negotiable: false,
         isAvailableNow: true,
         expectedAvailableDate: '',
+        published: false,
         photos: [],
       })
     }
@@ -571,6 +574,21 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                           )}
                         />
                       )}
+
+                      <Controller
+                        name='published'
+                        control={control}
+                        render={({ field }) => (
+                          <Checkbox
+                            className='block'
+                            isSelected={field.value}
+                            onValueChange={field.onChange}
+                            color='success'
+                          >
+                            Publish this production line (make it visible to others)
+                          </Checkbox>
+                        )}
+                      />
                     </div>
                   </div>
 

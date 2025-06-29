@@ -20,6 +20,7 @@ export interface ProductionLine {
   negotiable: boolean
   isAvailableNow: boolean
   expectedAvailableDate?: string
+  published: boolean
   photos?: ProductionLineMedia[]
   createdAt: Date
   updatedAt: Date
@@ -28,7 +29,7 @@ export interface ProductionLine {
 export interface ProductionLineMedia {
   id: string
   url: string
-  type: "image" | "video"
+  type: 'image' | 'video'
   name: string
   size?: number
   createdAt?: Date
@@ -55,5 +56,6 @@ export interface ProductionLineFormData {
   negotiable: boolean
   isAvailableNow: boolean
   expectedAvailableDate?: string
+  published: boolean
   photos: File[]
 }

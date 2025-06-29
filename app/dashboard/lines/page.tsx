@@ -53,6 +53,7 @@ export default function ProductionLinesPage() {
   // Calculate stats
   const totalValue = productionLines.reduce((acc, line) => acc + line.price, 0)
   const availableLines = productionLines.filter((line) => line.isAvailableNow).length
+  const publishedLines = productionLines.filter((line) => line.published).length // Add this line
   const averageYear =
     productionLines.length > 0
       ? Math.round(productionLines.reduce((acc, line) => acc + line.yearOfManufacturing, 0) / productionLines.length)
@@ -105,8 +106,8 @@ export default function ProductionLinesPage() {
         <div className='rounded-xl border border-default-200 bg-content1 p-6 shadow-sm'>
           <div className='flex items-center justify-between'>
             <div>
-              <p className='text-sm font-medium text-default-600'>Average Year</p>
-              <p className='mt-2 text-3xl font-bold text-foreground'>{averageYear}</p>
+              <p className='text-sm font-medium text-default-600'>Published</p>
+              <p className='mt-2 text-3xl font-bold text-foreground'>{publishedLines}</p>
             </div>
             <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10'>
               <DollarSign className='h-6 w-6 text-secondary' />
