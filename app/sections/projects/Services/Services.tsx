@@ -1,31 +1,39 @@
+'use client'
+
 import { Divider } from '@heroui/react'
 import Image from 'next/image'
-import { FC, Fragment } from 'react'
+import { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Section } from '@/app/components/Section/Section'
-import { IComponent } from '@/app/global.interface'
-import { OUR_PROJECTS } from '@/app/utils/constants'
+import { useProjects } from '@/hooks/useProjects'
 import ArrowUpIcon from '@/public/images/icons/ArrowUpIcon'
 import ClientIcon from '@/public/images/icons/ClientIcon'
 import EgyptIcon from '@/public/images/icons/EgyptIcon'
 import LineTypeIcon from '@/public/images/icons/LineTypeIcon'
 import SpeedIcon from '@/public/images/icons/SpeedIcon'
 
-export const Services: FC<IComponent> = (props) => {
-  const { t } = props
+export const Services = () => {
+  const { data: projects } = useProjects()
+  const { t } = useTranslation(['default', 'projects'])
+
+  if (!projects || !projects.length) {
+    return null
+  }
+
   return (
     <Section className='flex flex-col !items-start gap-8 bg-slate-50 lg:gap-10'>
       <div className='flex flex-col gap-2 lg:gap-5'>
-        <p className='text-xl font-medium leading-7'>{t('projects_title')}</p>
-        <p className='text-4xl font-semibold leading-10'>{t('projects_subtitle')}</p>
+        <p className='text-xl font-medium leading-7'>{t('projects:projects_title')}</p>
+        <p className='text-4xl font-semibold leading-10'>{t('projects:projects_subtitle')}</p>
       </div>
       <div className='flex w-full flex-col flex-wrap gap-5 lg:gap-10'>
-        {OUR_PROJECTS.map(({ imageSrc, i18nTitle, subTitle1, subTitle2, subTitle3 }, index) => (
-          <Fragment key={index}>
+        {projects.map((project) => (
+          <Fragment key={project.id}>
             <div className='flex flex-col-reverse gap-5 lg:flex-row lg:gap-[60px]'>
               <Image
-                src={imageSrc}
-                alt='welding'
+                src={project.photos?.[0]?.url || '/images/logo.png'}
+                alt='gbs'
                 width={509}
                 height={243}
                 className='h-[157px] w-[375px] shrink-0 gap-5 rounded-[20px] object-cover lg:h-[243px] lg:w-[509px]'
@@ -33,23 +41,23 @@ export const Services: FC<IComponent> = (props) => {
               <div className='flex w-full max-w-[335px] lg:max-w-full'>
                 <div className='flex flex-col gap-5'>
                   <div className='flex items-center gap-3'>
-                    <p className='text-3xl font-semibold leading-9'>{t(i18nTitle)}</p>
+                    <p className='text-3xl font-semibold leading-9'>{project.name}</p>
                     <EgyptIcon />
                   </div>
 
                   <div className='flex items-center gap-2'>
                     <ClientIcon />
-                    <p className='text-xl font-medium leading-7'>{t(subTitle1)}</p>
+                    <p className='text-xl font-medium leading-7'>{project.companyName}</p>
                   </div>
 
                   <div className='flex items-center gap-2'>
                     <LineTypeIcon />
-                    <p className='text-xl font-medium leading-7'>{t(subTitle2)}</p>
+                    <p className='text-xl font-medium leading-7'>{project.capacity}</p>
                   </div>
 
                   <div className='flex items-center gap-2'>
                     <SpeedIcon />
-                    <p className='text-xl font-medium leading-7'>{t(subTitle3)}</p>
+                    <p className='text-xl font-medium leading-7'>{project.time}</p>
                   </div>
                 </div>
 

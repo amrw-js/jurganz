@@ -15,7 +15,7 @@ import {
   ModalContent,
   ModalHeader,
 } from '@heroui/react'
-import { Camera, Clock, Edit, FileX, ImageIcon, Play, Plus, Trash2, Users, Video } from 'lucide-react'
+import { Camera, Clock, Edit, Factory, FileX, ImageIcon, Play, Plus, Trash2, Users, Video } from 'lucide-react'
 import { useState } from 'react'
 
 import { ProjectModal } from '@/app/modals/ProjectModal'
@@ -158,10 +158,13 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
               <h3 className='text-lg font-semibold text-foreground transition-colors group-hover:text-primary'>
                 {project.name}
               </h3>
+              <h3 className='text-lg font-semibold text-foreground transition-colors group-hover:text-primary'>
+                {project.companyName}
+              </h3>
               <div className='mt-2 flex items-center gap-4'>
                 <div className='flex items-center gap-1 text-sm text-default-500'>
-                  <Users className='h-4 w-4' />
-                  <span className='whitespace-nowrap'>{project.capacity} people</span>
+                  <Factory className='h-4 w-4' />
+                  <span className='whitespace-nowrap'>{project.capacity}</span>
                 </div>
                 <div className='flex items-center gap-1 text-sm text-default-500'>
                   <Clock className='h-4 w-4' />

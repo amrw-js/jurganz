@@ -15,7 +15,7 @@ const Projects: FC<IPage> = async (props) => {
   return (
     <div>
       <Hero t={t} />
-      <Services t={t} />
+      <Services />
     </div>
   )
 }

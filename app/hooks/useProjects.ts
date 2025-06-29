@@ -81,6 +81,7 @@ export const useProjects = () => {
           id: Date.now().toString(),
           name: data.name,
           capacity: data.capacity,
+          companyName: data.companyName,
           time: data.time,
           photos: processedMedia,
           createdAt: new Date(),
