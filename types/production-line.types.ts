@@ -8,7 +8,7 @@ export interface ProductionLine {
   // Production Line Info
   productType: string
   containerType: string
-  capacity: number
+  capacity: string
   yearOfManufacturing: number
   fillingProcess: string
   fillingType: string
@@ -44,7 +44,7 @@ export interface ProductionLineFormData {
   // Production Line Info
   productType: string
   containerType: string
-  capacity: number
+  capacity: string
   yearOfManufacturing: number
   fillingProcess: string
   fillingType: string

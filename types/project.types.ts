@@ -1,7 +1,7 @@
 export interface Project {
   id: string
   name: string
-  capacity: number
+  capacity: string
   companyName: string
   time: string
   photos?: ProjectMedia[]
@@ -20,7 +20,7 @@ export interface ProjectMedia {
 
 export interface ProjectFormData {
   name: string
-  capacity: number
+  capacity: string
   companyName: string
   time: string
   photos: File[]
@@ -31,9 +31,10 @@ export type ProjectPhoto = ProjectMedia
 
 export interface CreateProject {
   name: string
-  capacity: number
+  capacity: string
   time: string
-  photoUrls?: string[]
+  companyName: string
+  photos?: File[]
 }
 
 export interface ProjectsResponse {

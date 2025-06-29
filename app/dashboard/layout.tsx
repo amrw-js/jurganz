@@ -1,8 +1,10 @@
 'use client'
 
 import { HeroUIProvider } from '@heroui/react'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { FC, ReactNode, useState } from 'react'
 
+import { queryClient } from '../clients/reactQuery.client'
 import { SideBar } from '../components/dashboard/SideBar'
 import { TopBar } from '../components/dashboard/TopBar'
 import '../globals.css'
@@ -22,9 +24,11 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
     <html>
       <body>
         <HeroUIProvider>
-          <TopBar onOpenChange={handleOpenChange} />
-          <SideBar isOpen={sideBarOpen} onOpenChange={handleOpenChange} />
-          <div className='px-6'>{children}</div>
+          <QueryClientProvider client={queryClient}>
+            <TopBar onOpenChange={handleOpenChange} />
+            <SideBar isOpen={sideBarOpen} onOpenChange={handleOpenChange} />
+            <div className='px-6'>{children}</div>
+          </QueryClientProvider>
         </HeroUIProvider>
       </body>
     </html>

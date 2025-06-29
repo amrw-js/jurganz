@@ -5,23 +5,25 @@ import { FolderOpen, ImageIcon, Plus, Search, Users } from 'lucide-react'
 import { useState } from 'react'
 
 import { ProjectList } from '@/app/components/dashboard/projects/ProjectList'
-import { useProjects } from '@/app/hooks/useProjects'
 import { ProjectModal } from '@/app/modals/ProjectModal'
+import { useCreateProject, useDeleteProject, useProjects, useUpdateProject } from '@/hooks/useProjects'
 import type { ProjectFormData } from '@/types/project.types'
 
 const ProjectsPage = () => {
-  const { projects, loading, addProject, updateProject, deleteProject } = useProjects()
-
+  const { data: projects, isLoading: loading } = useProjects()
+  const { mutate: createProject } = useCreateProject()
+  const { mutate: updateProject } = useUpdateProject()
+  const { mutate: deleteProject } = useDeleteProject()
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
 
-  console.log('Projects:', projects)
+  if (!projects) return <div>Loading...</div>
 
   const filteredProjects = projects.filter((project) => project.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
   const handleAddProject = async (data: ProjectFormData) => {
     try {
-      await addProject(data)
+      createProject(data)
       setIsAddModalOpen(false)
     } catch (error) {
       console.error('Failed to create project:', error)
@@ -30,7 +32,7 @@ const ProjectsPage = () => {
 
   const handleUpdateProject = async (id: string, data: ProjectFormData) => {
     try {
-      await updateProject(id, data)
+      updateProject({ id, data })
     } catch (error) {
       console.error('Failed to update project:', error)
     }
@@ -46,7 +48,6 @@ const ProjectsPage = () => {
 
   // Calculate stats
   const totalPhotos = projects.reduce((acc, project) => acc + (project.photos?.length || 0), 0)
-  const totalCapacity = projects.reduce((acc, project) => acc + project.capacity, 0)
 
   return (
     <div className='p-8'>
@@ -72,18 +73,6 @@ const ProjectsPage = () => {
             </div>
             <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10'>
               <ImageIcon className='h-6 w-6 text-secondary' />
-            </div>
-          </div>
-        </div>
-
-        <div className='rounded-xl border border-default-200 bg-content1 p-6 shadow-sm'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <p className='text-sm font-medium text-default-600'>Total Capacity</p>
-              <p className='mt-2 text-3xl font-bold text-foreground'>{totalCapacity}</p>
-            </div>
-            <div className='flex h-12 w-12 items-center justify-center rounded-lg bg-success/10'>
-              <Users className='h-6 w-6 text-success' />
             </div>
           </div>
         </div>

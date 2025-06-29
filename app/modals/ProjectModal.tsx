@@ -17,7 +17,7 @@ interface ProjectModalProps {
 
 type FormData = {
   name: string
-  capacity: number
+  capacity: string
   time: string
   companyName: string
   photos: File[]
@@ -32,7 +32,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
   } = useForm<FormData>({
     defaultValues: {
       name: '',
-      capacity: 1,
+      capacity: '',
       time: '',
       companyName: '',
       photos: [],
@@ -52,7 +52,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
     } else {
       reset({
         name: '',
-        capacity: 1,
+        capacity: '',
         companyName: '',
         time: '',
         photos: [],
@@ -149,18 +149,23 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
                   name='capacity'
                   control={control}
                   rules={{
-                    required: 'Team capacity is required',
-                    min: {
+                    required: 'Production capacity is required',
+                    minLength: {
                       value: 1,
-                      message: 'Capacity must be at least 1',
+                      message: 'Capacity cannot be empty',
                     },
-                    max: {
-                      value: 1000,
-                      message: 'Capacity cannot exceed 1000',
+                    maxLength: {
+                      value: 100,
+                      message: 'Capacity description is too long',
                     },
                     validate: (value) => {
-                      if (!Number.isInteger(Number(value))) {
-                        return 'Capacity must be a whole number'
+                      const trimmed = value?.trim()
+                      if (!trimmed) {
+                        return 'Capacity cannot be empty'
+                      }
+                      // Optional: Check if it contains at least one number
+                      if (!/\d/.test(trimmed)) {
+                        return 'Capacity should include numeric value'
                       }
                       return true
                     },
@@ -168,19 +173,21 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Team Capacity'
-                      placeholder='Number of team members'
-                      type='number'
-                      min='1'
-                      max='1000'
-                      value={field.value?.toString() || ''}
-                      onChange={(e) => field.onChange(Number(e.target.value) || 1)}
+                      label='Production Capacity'
+                      placeholder='e.g., 500 bottles/hour, 1000 L/day, 50 units/min'
+                      type='text'
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(e.target.value)}
                       isInvalid={!!errors.capacity}
                       errorMessage={errors.capacity?.message}
                       variant='bordered'
                       labelPlacement='outside'
-                      description='Maximum number of team members'
+                      description='Specify production capacity with units (e.g., bottles/hour, liters/day)'
                       isRequired
+                      classNames={{
+                        input: 'text-sm',
+                        description: 'text-xs text-gray-500',
+                      }}
                     />
                   )}
                 />
