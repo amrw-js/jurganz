@@ -13,7 +13,7 @@ import {
 import cn from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -23,11 +23,39 @@ import { FacebookIcon } from '../ui/icons/FacebookIcon'
 import { LinkedInIcon } from '../ui/icons/LinkedInIcon'
 
 export const Header = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const pathname = usePathname()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const isActiveLink = (path: string): boolean => pathname.includes(path)
+
+  const currentLanguage = i18n.language || 'en'
+
+  const handleLanguageToggle = () => {
+    const newLocale = currentLanguage === 'en' ? 'ar' : 'en'
+
+    // Change the language in i18next
+    i18n.changeLanguage(newLocale)
+
+    // Update the URL to include the locale
+    const currentPath = pathname
+    const newPath =
+      currentPath.startsWith('/en') || currentPath.startsWith('/ar')
+        ? currentPath.replace(/^\/(en|ar)/, `/${newLocale}`)
+        : `/${newLocale}${currentPath}`
+
+    router.push(newPath)
+  }
+
+  const languages = {
+    en: { name: 'English' },
+    ar: { name: 'العربية' },
+  }
+
+  // Show the opposite language (the one we'll switch to)
+  const nextLanguage = currentLanguage === 'en' ? 'ar' : 'en'
+  const nextLangData = languages[nextLanguage as keyof typeof languages]
 
   return (
     <Navbar
@@ -70,13 +98,26 @@ export const Header = () => {
           </NavbarItem>
         ))}
       </NavbarContent>
+
       <NavbarContent className='hidden lg:flex' justify='end'>
+        <NavbarItem>
+          {/* Language Toggle Button for Desktop */}
+          <Button
+            variant='bordered'
+            className='flex h-10 min-w-0 items-center gap-2 border-gray-300 px-3'
+            onClick={handleLanguageToggle}
+          >
+            <span className='text-sm'>{nextLangData.flag}</span>
+            <span className='text-sm font-medium'>{nextLanguage.toUpperCase()}</span>
+          </Button>
+        </NavbarItem>
         <NavbarItem>
           <Button className='w-[7.5rem]' color='primary'>
             {t('contact_us')}
           </Button>
         </NavbarItem>
       </NavbarContent>
+
       <NavbarMenu className='gap-0 py-4'>
         {NAVBAR_ITEMS.map(({ i18nKey, href }, index) => (
           <NavbarMenuItem key={i18nKey}>
@@ -92,6 +133,22 @@ export const Header = () => {
             </Link>
           </NavbarMenuItem>
         ))}
+
+        {/* Language Toggle for Mobile */}
+        <li className='border-b border-[#E6E6E3] py-6'>
+          <div className='flex items-center justify-between'>
+            <span className='text-lg font-semibold text-black'>{t('language') || 'Language'}</span>
+            <Button
+              variant='bordered'
+              className='flex h-10 min-w-0 items-center gap-2 border-gray-300 px-3'
+              onClick={handleLanguageToggle}
+            >
+              <span className='text-sm'>{nextLangData.flag}</span>
+              <span className='text-sm font-medium'>{nextLanguage.toUpperCase()}</span>
+            </Button>
+          </div>
+        </li>
+
         <li className='mt-1 w-full self-start'>
           <Button className='h-10 w-full' color='primary'>
             {t('contact_us')}
