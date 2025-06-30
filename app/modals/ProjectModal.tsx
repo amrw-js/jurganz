@@ -4,7 +4,7 @@ import { Button, Divider, Input, Modal, ModalBody, ModalContent, ModalFooter, Mo
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import type { Project, ProjectFormData } from '@/types/project.types'
+import type { MediaItem, Project, ProjectFormData } from '@/types/project.types'
 
 import { ImageUploader } from '../components/ImageUploader'
 
@@ -20,7 +20,7 @@ type FormData = {
   capacity: string
   time: string
   companyName: string
-  photos: File[]
+  photos: MediaItem[]
 }
 
 export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModalProps) {
@@ -47,7 +47,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
         capacity: project.capacity,
         companyName: project.companyName,
         time: project.time,
-        photos: [], // Reset photos for existing projects
+        photos: project.photos, // Reset photos for existing projects
       })
     } else {
       reset({
@@ -279,7 +279,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
 
                       const invalidFiles = files.filter((file) => {
                         const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/')
-                        const isValidSize = file.size <= 10 * 1024 * 1024 // 10MB
+                        const isValidSize = file.size && file.size <= 10 * 1024 * 1024 // 10MB
                         return !isValidType || !isValidSize
                       })
 

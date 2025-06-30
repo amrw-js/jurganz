@@ -18,12 +18,14 @@ export interface ProjectMedia {
   createdAt?: Date
 }
 
+export type MediaItem = File | ProjectMedia
+
 export interface ProjectFormData {
   name: string
   capacity: string
   companyName: string
   time: string
-  photos: File[]
+  photos: MediaItem[]
 }
 
 // Legacy support - can be removed if not needed elsewhere

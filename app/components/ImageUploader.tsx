@@ -5,9 +5,11 @@ import { FileImage, Play, Upload, Video, X } from 'lucide-react'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
+import { MediaItem, ProjectMedia } from '@/types/project.types'
+
 interface ImageUploaderProps {
-  files: File[]
-  onChange: (files: File[]) => void
+  files: MediaItem[]
+  onChange: (files: MediaItem[]) => void
   maxFiles?: number
   maxFileSize?: number // in bytes
   error?: string
@@ -27,13 +29,34 @@ export function ImageUploader({
   const [dragActive, setDragActive] = useState(false)
   const [previewUrls, setPreviewUrls] = useState<string[]>([])
 
+  console.log({ files })
+  // Helper function to check if item is a File
+  const isFile = (item: MediaItem): item is File => {
+    return item instanceof File
+  }
+
+  // Helper function to check if item is ProjectMedia
+  const isProjectMedia = (item: MediaItem): item is ProjectMedia => {
+    return !isFile(item) && 'id' in item && 'url' in item
+  }
+
   // Update preview URLs when files change
   useEffect(() => {
-    // Cleanup previous URLs
-    previewUrls.forEach((url) => URL.revokeObjectURL(url))
+    // Cleanup previous URLs (only for File objects)
+    previewUrls.forEach((url, index) => {
+      if (isFile(files[index])) {
+        URL.revokeObjectURL(url)
+      }
+    })
 
     if (files && files.length > 0) {
-      const urls = files.map((file) => URL.createObjectURL(file))
+      const urls = files.map((item) => {
+        if (isFile(item)) {
+          return URL.createObjectURL(item)
+        } else {
+          return item.url
+        }
+      })
       setPreviewUrls(urls)
     } else {
       setPreviewUrls([])
@@ -41,7 +64,11 @@ export function ImageUploader({
 
     // Cleanup on unmount
     return () => {
-      previewUrls.forEach((url) => URL.revokeObjectURL(url))
+      previewUrls.forEach((url, index) => {
+        if (files[index] && isFile(files[index])) {
+          URL.revokeObjectURL(url)
+        }
+      })
     }
   }, [files])
 
@@ -86,7 +113,6 @@ export function ImageUploader({
     e.preventDefault()
     e.stopPropagation()
     setDragActive(false)
-
     if (disabled) return
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
@@ -99,16 +125,41 @@ export function ImageUploader({
   const fileTypeText = acceptVideo ? 'photos or videos' : 'photos'
   const formatText = acceptVideo ? 'PNG, JPG, GIF, MP4, MOV' : 'PNG, JPG, GIF'
 
-  const renderFilePreview = (file: File, url: string, index: number) => {
-    const isVideo = file.type.startsWith('video/')
+  const getMediaType = (item: MediaItem): 'image' | 'video' => {
+    if (isFile(item)) {
+      return item.type.startsWith('video/') ? 'video' : 'image'
+    } else {
+      return item.type
+    }
+  }
+
+  const getMediaName = (item: MediaItem): string => {
+    if (isFile(item)) {
+      return item.name
+    } else {
+      return item.name
+    }
+  }
+
+  const renderFilePreview = (item: MediaItem, url: string, index: number) => {
+    const mediaType = getMediaType(item)
+    const mediaName = getMediaName(item)
+    const isVideo = mediaType === 'video'
+    const isExisting = isProjectMedia(item)
 
     return (
-      <div key={index} className='group relative'>
+      <div key={isExisting ? item.id : index} className='group relative'>
         <Card className='overflow-hidden'>
           <CardBody className='relative p-0'>
             {isVideo ? (
               <div className='relative flex h-20 w-full items-center justify-center bg-default-100'>
-                <video src={url} className='h-full w-full object-cover' muted preload='metadata' />
+                <video
+                  src={url}
+                  className='h-full w-full object-cover'
+                  muted
+                  preload='metadata'
+                  crossOrigin='anonymous'
+                />
                 <div className='absolute inset-0 flex items-center justify-center bg-black/30'>
                   <div className='rounded-full bg-white/90 p-1'>
                     <Play className='h-4 w-4 text-default-700' fill='currentColor' />
@@ -118,6 +169,9 @@ export function ImageUploader({
                   <Video className='h-3 w-3' />
                   <span>Video</span>
                 </div>
+                {isExisting && (
+                  <div className='absolute left-1 top-1 rounded bg-blue-500/90 px-1 text-xs text-white'>Saved</div>
+                )}
               </div>
             ) : (
               <div className='relative'>
@@ -134,6 +188,9 @@ export function ImageUploader({
                   <FileImage className='h-3 w-3' />
                   <span>Image</span>
                 </div>
+                {isExisting && (
+                  <div className='absolute left-1 top-1 rounded bg-blue-500/90 px-1 text-xs text-white'>Saved</div>
+                )}
               </div>
             )}
 
@@ -152,6 +209,10 @@ export function ImageUploader({
             </Button>
           </CardBody>
         </Card>
+
+        <div className='absolute -bottom-6 left-0 right-0 truncate text-center text-xs text-default-500'>
+          {mediaName}
+        </div>
       </div>
     )
   }
@@ -218,8 +279,8 @@ export function ImageUploader({
 
           {/* Scrollable grid container */}
           <div className='rounded-lg border border-default-200 bg-default-50/50 p-3'>
-            <div className='scrollbar-thin scrollbar-thumb-default-300 scrollbar-track-transparent grid max-h-28 grid-cols-2 gap-3 overflow-y-auto pr-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
-              {files.map((file, index) => renderFilePreview(file, previewUrls[index], index))}
+            <div className='scrollbar-thin scrollbar-thumb-default-300 scrollbar-track-transparent grid max-h-32 grid-cols-2 gap-3 overflow-y-auto pb-6 pr-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'>
+              {files.map((item, index) => renderFilePreview(item, previewUrls[index], index))}
             </div>
           </div>
         </div>
