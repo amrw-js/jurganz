@@ -1,12 +1,12 @@
 'use client'
 
 import { Button, Input } from '@heroui/react'
-import { FolderOpen, ImageIcon, Plus, Search, Users } from 'lucide-react'
+import { FolderOpen, ImageIcon, Plus, Search } from 'lucide-react'
 import { useState } from 'react'
 
 import { ProjectList } from '@/app/components/dashboard/projects/ProjectList'
+import { useCreateProject, useDeleteProject, useProjects, useUpdateProject } from '@/app/hooks/useProjects'
 import { ProjectModal } from '@/app/modals/ProjectModal'
-import { useCreateProject, useDeleteProject, useProjects, useUpdateProject } from '@/hooks/useProjects'
 import type { ProjectFormData } from '@/types/project.types'
 
 const ProjectsPage = () => {

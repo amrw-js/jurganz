@@ -36,7 +36,7 @@ export interface CreateProject {
   capacity: string
   time: string
   companyName: string
-  photos?: File[]
+  photos?: MediaItem[]
 }
 
 export interface ProjectsResponse {

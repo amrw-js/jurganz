@@ -6,7 +6,7 @@ import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Section } from '@/app/components/Section/Section'
-import { useProjects } from '@/hooks/useProjects'
+import { useProjects } from '@/app/hooks/useProjects'
 import ArrowUpIcon from '@/public/images/icons/ArrowUpIcon'
 import ClientIcon from '@/public/images/icons/ClientIcon'
 import EgyptIcon from '@/public/images/icons/EgyptIcon'
