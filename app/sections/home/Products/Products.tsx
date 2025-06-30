@@ -66,7 +66,7 @@ export const Products: FC = () => {
           viewport={{ once: false }}
           transition={{ delay: 0.1, duration: 0.6, ease: 'easeInOut' }}
         >
-          {t('products_heading')}
+          {t('home:products_heading')}
         </MotionH3>
         <MotionP
           className='text-sm font-medium leading-5 sm:text-lg sm:leading-7'
@@ -75,7 +75,7 @@ export const Products: FC = () => {
           viewport={{ once: false }}
           transition={{ delay: 0.2, duration: 0.6, ease: 'easeInOut' }}
         >
-          {t('products_desc')}
+          {t('home:products_desc')}
         </MotionP>
       </div>
       <div className='relative z-10'>
