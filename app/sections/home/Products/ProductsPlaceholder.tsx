@@ -9,9 +9,9 @@ export const ProductsPlaceholder = () => {
   return (
     <div className='flex flex-col items-center justify-center gap-5 lg:gap-10'>
       <ProductsPlaceholderIcon className='size-36 text-gray-300' />
-      <p className='text-lg font-semibold leading-9 text-gray-300 lg:text-3xl'>{t('No Production lines added yet')}</p>
+      <p className='text-lg font-semibold leading-9 text-gray-300 lg:text-3xl'>{t('home:products_placeholder')}</p>
       <Button color='primary'>
-        <Link href='#'>{t('add_new_line')}</Link>
+        <Link href='#'>{t('home:add_new_line')}</Link>
       </Button>
     </div>
   )
