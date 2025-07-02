@@ -15,11 +15,11 @@ import {
   ModalContent,
   ModalHeader,
 } from '@heroui/react'
-import { Camera, Clock, Edit, Factory, FileX, ImageIcon, Play, Plus, Trash2, Users, Video } from 'lucide-react'
+import { Camera, Clock, Edit, Factory, FileX, ImageIcon, Play, Plus, Trash2, Video } from 'lucide-react'
 import { useState } from 'react'
 
 import { ProjectModal } from '@/app/modals/ProjectModal'
-import type { Project, ProjectFormData } from '@/types/project.types'
+import type { Project, ProjectFormData, ProjectMedia } from '@/types/project.types'
 
 interface ProjectCardProps {
   project: Project
@@ -42,45 +42,14 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
     await onUpdate(project.id, data)
   }
 
-  const handleImageError = (photoId: string) => {
-    setImageErrors((prev) => new Set([...prev, photoId]))
+  const handleImageError = (mediaId: string) => {
+    setImageErrors((prev) => new Set([...prev, mediaId]))
   }
 
-  // Get project photos/media - handle different data structures
-  const getProjectMedia = () => {
-    if (!project.photos || project.photos.length === 0) {
-      return []
-    }
+  // Get project media - now always an array of ProjectMedia
+  const projectMedia: ProjectMedia[] = project.media || []
 
-    // Handle if photos is an array of URLs (strings)
-    if (typeof project.photos[0] === 'string') {
-      return project.photos.map((photo, index) => ({
-        id: `${project.id}-${index}`,
-        url: photo.url,
-        type: getFileTypeFromUrl(photo.url),
-        name: `Media ${index + 1}`,
-      }))
-    }
-
-    // Handle if photos is an array of objects
-    return project.photos.map((photo, index) => ({
-      id: photo.id || `${project.id}-${index}`,
-      url: photo.url || photo,
-      type: photo.type || getFileTypeFromUrl(photo.url),
-      name: photo.name || `Media ${index + 1}`,
-    }))
-  }
-
-  const getFileTypeFromUrl = (url: string): 'image' | 'video' => {
-    if (!url) return 'image'
-    const extension = url.split('.').pop()?.toLowerCase()
-    const videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm', 'ogg']
-    return videoExtensions.includes(extension || '') ? 'video' : 'image'
-  }
-
-  const projectMedia = getProjectMedia()
-
-  const renderMediaPreview = (media: any) => {
+  const renderMediaPreview = (media: ProjectMedia, index: number) => {
     const isVideo = media.type === 'video'
     const hasError = imageErrors.has(media.id)
 
@@ -158,21 +127,18 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
               <h3 className='text-lg font-semibold text-foreground transition-colors group-hover:text-primary'>
                 {project.name}
               </h3>
-              <h3 className='text-lg font-semibold text-foreground transition-colors group-hover:text-primary'>
-                {project.companyName}
-              </h3>
               <div className='mt-2 flex items-center gap-4'>
                 <div className='flex items-center gap-1 text-sm text-default-500'>
                   <Factory className='h-4 w-4' />
-                  <span className='whitespace-nowrap'>{project.capacity}</span>
+                  <span>{project.capacity}</span>
                 </div>
                 <div className='flex items-center gap-1 text-sm text-default-500'>
                   <Clock className='h-4 w-4' />
-                  <span className='whitespace-nowrap'>{project.time}</span>
+                  <span>{project.time}</span>
                 </div>
                 <div className='flex items-center gap-1 text-sm text-default-500'>
                   <Camera className='h-4 w-4' />
-                  <span className='whitespace-nowrap'>{projectMedia.length} files</span>
+                  <span>{projectMedia.length} files</span>
                 </div>
               </div>
             </div>
@@ -225,7 +191,7 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
 
               {projectMedia.length > 0 ? (
                 <div className='grid grid-cols-3 gap-2'>
-                  {projectMedia.slice(0, 5).map((media, index) => renderMediaPreview(media))}
+                  {projectMedia.slice(0, 5).map((media, index) => renderMediaPreview(media, index))}
 
                   {projectMedia.length > 5 && (
                     <div
@@ -320,13 +286,13 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
 // Enhanced Media Gallery Modal Component
 interface MediaGalleryModalProps {
   project: Project
-  media: any[]
+  media: ProjectMedia[]
   isOpen: boolean
   onClose: () => void
 }
 
 function MediaGalleryModal({ project, media, isOpen, onClose }: MediaGalleryModalProps) {
-  const [selectedMedia, setSelectedMedia] = useState<any>(null)
+  const [selectedMedia, setSelectedMedia] = useState<ProjectMedia | null>(null)
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onClose} size='4xl' scrollBehavior='inside'>
@@ -343,8 +309,9 @@ function MediaGalleryModal({ project, media, isOpen, onClose }: MediaGalleryModa
             <ModalBody className='py-6'>
               {media.length > 0 ? (
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                  {media.map((item, index) => {
+                  {media.map((item) => {
                     const isVideo = item.type === 'video'
+                    console.log('Media item:', item)
                     return (
                       <div key={item.id} className='group relative'>
                         <Card

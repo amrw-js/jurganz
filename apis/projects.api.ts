@@ -1,9 +1,6 @@
+import { API_BASE_URL } from '@/app/utils/constants'
 import { CreateProject, Project } from '@/types/project.types'
 
-const API_BASE_URL =
-  process.env.NODE_ENV === 'production'
-    ? process.env.NEXT_PUBLIC_BASE_URL_PROD
-    : process.env.NEXT_PUBLIC_BASE_URL_PROD_DEV
 export const projectsApi = {
   createProject: async (data: CreateProject): Promise<Project> => {
     // Check if we have files to upload

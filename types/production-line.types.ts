@@ -57,5 +57,5 @@ export interface ProductionLineFormData {
   isAvailableNow: boolean
   expectedAvailableDate?: string
   published: boolean
-  photos: File[]
+  media: ProductionLineMedia[]
 }

@@ -71,9 +71,6 @@ export default function ProductionLinesPage() {
             <h1 className='text-2xl font-bold text-foreground'>Production Lines</h1>
             <p className='text-default-500'>Manage production workflows and processes</p>
           </div>
-          <Chip color='warning' variant='flat' size='sm'>
-            Coming Soon
-          </Chip>
         </div>
       </div>
 

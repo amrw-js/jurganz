@@ -32,6 +32,7 @@ const ProjectsPage = () => {
 
   const handleUpdateProject = async (id: string, data: ProjectFormData) => {
     try {
+      console.log(id, data)
       updateProject({ id, data })
     } catch (error) {
       console.error('Failed to update project:', error)
@@ -117,7 +118,6 @@ const ProjectsPage = () => {
         />
       </div>
 
-      {/* Add Project Modal */}
       <ProjectModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onSubmit={handleAddProject} />
     </div>
   )

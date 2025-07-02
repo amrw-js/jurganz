@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Chip, Divider, Drawer, DrawerBody, DrawerContent, DrawerHeader } from '@heroui/react'
-import { ChevronRight, Factory, FolderOpen, Languages } from 'lucide-react'
+import { BookOpen, ChevronRight, Factory, FolderOpen, Languages } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import type { FC } from 'react'
 
@@ -24,11 +24,11 @@ export const SideBar: FC<SideBar> = ({ isOpen, onOpenChange }) => {
       available: true,
     },
     {
-      id: 'production-lines',
-      label: 'Production Lines',
-      icon: Factory,
-      href: '/dashboard/lines',
-      description: 'Manage production workflows',
+      id: 'blogs',
+      label: 'Blogs',
+      icon: BookOpen,
+      href: '/dashboard/blogs',
+      description: 'Create and manage blog posts',
       available: true,
     },
     {
@@ -37,6 +37,14 @@ export const SideBar: FC<SideBar> = ({ isOpen, onOpenChange }) => {
       icon: Languages,
       href: '/dashboard/translations',
       description: 'Manage translations and localization',
+      available: false,
+    },
+    {
+      id: 'production-lines',
+      label: 'Production Lines',
+      icon: Factory,
+      href: '/dashboard/lines',
+      description: 'Manage production workflows',
       available: false,
     },
   ]
@@ -118,7 +126,34 @@ export const SideBar: FC<SideBar> = ({ isOpen, onOpenChange }) => {
                   )
                 })}
               </nav>
+
+              {/* Additional Info Section */}
+              <div className='mt-8 rounded-lg bg-default-50 p-4'>
+                <h3 className='mb-2 text-sm font-medium text-foreground'>Quick Stats</h3>
+                <div className='space-y-2 text-xs text-default-500'>
+                  <div className='flex justify-between'>
+                    <span>Active Projects</span>
+                    <span className='font-medium'>-</span>
+                  </div>
+                  <div className='flex justify-between'>
+                    <span>Total Media Files</span>
+                    <span className='font-medium'>-</span>
+                  </div>
+                  <div className='flex justify-between'>
+                    <span>Storage Used</span>
+                    <span className='font-medium'>-</span>
+                  </div>
+                </div>
+              </div>
             </DrawerBody>
+
+            <Divider />
+
+            <div className='p-4'>
+              <Button color='danger' variant='light' onPress={onClose} className='w-full'>
+                Close Menu
+              </Button>
+            </div>
           </>
         )}
       </DrawerContent>

@@ -206,3 +206,6 @@ export const OUR_PROJECTS = [
     subTitle3: 'subtitle 43',
   },
 ]
+
+export const API_BASE_URL =
+  process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_BASE_URL_PROD : process.env.NEXT_PUBLIC_BASE_URL_DEV
