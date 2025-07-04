@@ -16,16 +16,257 @@ import {
   StrikethroughIcon,
   UnderlineIcon,
 } from '@heroicons/react/24/outline'
-import { Button, ButtonGroup, Card, CardBody, useDisclosure } from '@heroui/react'
-import Image from '@tiptap/extension-image'
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CardBody,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  useDisclosure,
+} from '@heroui/react'
+import { Node, mergeAttributes } from '@tiptap/core'
 import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
+import type { NodeViewRendererProps } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useCallback, useEffect } from 'react'
 
 import MediaUploadModal from '@/app/modals/UploadModal'
+
+// Define proper types for image attributes
+interface ImageAttributes {
+  src: string
+  alt?: string
+  title?: string
+  width?: number
+  height?: number
+}
+
+// Custom Image Node with resize functionality
+const ResizableImage = Node.create({
+  name: 'resizableImage',
+
+  addOptions() {
+    return {
+      inline: false,
+      allowBase64: false,
+      HTMLAttributes: {},
+    }
+  },
+
+  inline: false,
+  group: 'block',
+  draggable: true,
+
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      alt: {
+        default: null,
+      },
+      title: {
+        default: null,
+      },
+      width: {
+        default: null,
+      },
+      height: {
+        default: null,
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'img[src]',
+      },
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+  },
+
+  addCommands() {
+    return {
+      setResizableImage:
+        (options: ImageAttributes) =>
+        ({ commands }) => {
+          return commands.insertContent({
+            type: this.name,
+            attrs: options,
+          })
+        },
+    }
+  },
+
+  addNodeView() {
+    return ({ node, getPos, editor }: NodeViewRendererProps) => {
+      const container = document.createElement('div')
+      container.className = 'resizable-image-container'
+
+      const img = document.createElement('img')
+      img.src = node.attrs.src
+      img.alt = node.attrs.alt || ''
+      img.title = node.attrs.title || ''
+
+      if (node.attrs.width) img.style.width = `${node.attrs.width}px`
+      if (node.attrs.height) img.style.height = `${node.attrs.height}px`
+
+      img.className = 'resizable-image'
+      img.style.maxWidth = '100%'
+      img.style.height = 'auto'
+      img.style.borderRadius = '8px'
+      img.style.display = 'block'
+      img.style.margin = '16px auto'
+
+      let isSelected = false
+
+      // Add resize handles
+      const resizeHandle = document.createElement('div')
+      resizeHandle.className = 'resize-handle'
+      resizeHandle.style.cssText = `
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        width: 10px;
+        height: 10px;
+        background: #3b82f6;
+        border: 2px solid white;
+        border-radius: 50%;
+        cursor: se-resize;
+        display: ${isSelected ? 'block' : 'none'};
+      `
+
+      container.style.position = 'relative'
+      container.style.display = 'inline-block'
+      container.appendChild(img)
+      container.appendChild(resizeHandle)
+
+      // Handle resize
+      let isResizing = false
+      let startX: number
+      let startY: number
+      let startWidth: number
+      let startHeight: number
+
+      const updateAttributes = (attrs: Partial<ImageAttributes>) => {
+        const pos = getPos()
+        if (pos !== undefined) {
+          editor.view.dispatch(
+            editor.view.state.tr.setNodeMarkup(pos, undefined, {
+              ...node.attrs,
+              ...attrs,
+            }),
+          )
+        }
+      }
+
+      const handleMouseDown = (e: MouseEvent) => {
+        isResizing = true
+        startX = e.clientX
+        startY = e.clientY
+        startWidth = img.offsetWidth
+        startHeight = img.offsetHeight
+        e.preventDefault()
+      }
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!isResizing) return
+
+        const width = startWidth + (e.clientX - startX)
+        const height = startHeight + (e.clientY - startY)
+
+        if (width > 50 && height > 50) {
+          img.style.width = `${width}px`
+          img.style.height = `${height}px`
+          updateAttributes({ width, height })
+        }
+      }
+
+      const handleMouseUp = () => {
+        isResizing = false
+      }
+
+      resizeHandle.addEventListener('mousedown', handleMouseDown)
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+
+      // Delete on backspace/delete
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Backspace' || e.key === 'Delete') {
+          const pos = getPos()
+          if (pos !== undefined) {
+            const nodeSize = node.nodeSize
+            editor
+              .chain()
+              .focus()
+              .deleteRange({ from: pos, to: pos + nodeSize })
+              .run()
+          }
+        }
+      }
+
+      // Make container focusable for keyboard events
+      container.tabIndex = -1
+      container.addEventListener('keydown', handleKeyDown)
+
+      return {
+        dom: container,
+        update: (updatedNode) => {
+          if (updatedNode.type.name !== this.name) return false
+
+          img.src = updatedNode.attrs.src
+          img.alt = updatedNode.attrs.alt || ''
+          img.title = updatedNode.attrs.title || ''
+
+          if (updatedNode.attrs.width) {
+            img.style.width = `${updatedNode.attrs.width}px`
+          }
+          if (updatedNode.attrs.height) {
+            img.style.height = `${updatedNode.attrs.height}px`
+          }
+
+          return true
+        },
+        selectNode: () => {
+          isSelected = true
+          container.classList.add('selected')
+          resizeHandle.style.display = 'block'
+        },
+        deselectNode: () => {
+          isSelected = false
+          container.classList.remove('selected')
+          resizeHandle.style.display = 'none'
+        },
+        destroy: () => {
+          // Clean up event listeners
+          resizeHandle.removeEventListener('mousedown', handleMouseDown)
+          document.removeEventListener('mousemove', handleMouseMove)
+          document.removeEventListener('mouseup', handleMouseUp)
+          container.removeEventListener('keydown', handleKeyDown)
+        },
+      }
+    }
+  },
+})
+
+// Extend the editor commands interface
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    resizableImage: {
+      setResizableImage: (options: ImageAttributes) => ReturnType
+    }
+  }
+}
 
 interface RichTextEditorProps {
   content: string
@@ -51,7 +292,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
           keepAttributes: false,
         },
       }),
-      Image.configure({
+      ResizableImage.configure({
         HTMLAttributes: {
           class: 'max-w-full h-auto rounded-lg my-4',
         },
@@ -135,7 +376,43 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   const handleImageUpload = useCallback(
     (imageUrl: string) => {
       if (editor) {
-        editor.chain().focus().setImage({ src: imageUrl }).run()
+        editor.chain().focus().setResizableImage({ src: imageUrl }).run()
+      }
+    },
+    [editor],
+  )
+
+  const resizeSelectedImage = useCallback(
+    (size: 'small' | 'medium' | 'large' | 'original') => {
+      if (!editor) return
+
+      const { selection } = editor.state
+      const node = editor.state.doc.nodeAt(selection.from)
+
+      if (node && node.type.name === 'resizableImage') {
+        let width: number | null = null
+        let height: number | null = null
+
+        switch (size) {
+          case 'small':
+            width = 200
+            height = null
+            break
+          case 'medium':
+            width = 400
+            height = null
+            break
+          case 'large':
+            width = 600
+            height = null
+            break
+          case 'original':
+            width = null
+            height = null
+            break
+        }
+
+        editor.chain().focus().updateAttributes('resizableImage', { width, height }).run()
       }
     },
     [editor],
@@ -144,6 +421,8 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   if (!editor) {
     return null
   }
+
+  const hasSelectedImage = editor.isActive('resizableImage')
 
   return (
     <>
@@ -306,6 +585,31 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                   <PhotoIcon className='h-4 w-4' />
                 </Button>
               </ButtonGroup>
+
+              {/* Image Resize Controls - Only show when image is selected */}
+              {hasSelectedImage && (
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button size='sm' variant='flat' color='secondary'>
+                      Resize Image
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label='Image resize options'>
+                    <DropdownItem key='small' onPress={() => resizeSelectedImage('small')}>
+                      Small (200px)
+                    </DropdownItem>
+                    <DropdownItem key='medium' onPress={() => resizeSelectedImage('medium')}>
+                      Medium (400px)
+                    </DropdownItem>
+                    <DropdownItem key='large' onPress={() => resizeSelectedImage('large')}>
+                      Large (600px)
+                    </DropdownItem>
+                    <DropdownItem key='original' onPress={() => resizeSelectedImage('original')}>
+                      Original Size
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
             </div>
           </div>
 
