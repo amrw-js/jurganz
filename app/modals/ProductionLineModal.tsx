@@ -17,9 +17,9 @@ import {
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
-import type { ProductionLine, ProductionLineFormData } from '@/types/production-line.types'
+import type { ProductionLine, ProductionLineFormData, ProductionLineMedia } from '@/types/production-line.types'
 
-import { ImageUploader } from '../components/ImageUploader'
+import { ImageUploader, MediaItem } from '../components/ImageUploader'
 
 interface ProductionLineModalProps {
   productionLine?: ProductionLine
@@ -59,7 +59,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
       phoneNumber: '',
       productType: '',
       containerType: '',
-      capacity: 1,
+      capacity: '',
       yearOfManufacturing: currentYear,
       fillingProcess: '',
       fillingType: '',
@@ -72,7 +72,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
       isAvailableNow: true,
       expectedAvailableDate: '',
       published: false,
-      photos: [],
+      media: [],
     },
     mode: 'onChange',
   })
@@ -101,7 +101,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
         isAvailableNow: productionLine.isAvailableNow,
         expectedAvailableDate: productionLine.expectedAvailableDate || '',
         published: productionLine.published,
-        photos: [],
+        media: productionLine.media || [],
       })
     } else {
       reset({
@@ -111,7 +111,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
         phoneNumber: '',
         productType: '',
         containerType: '',
-        capacity: 1,
+        capacity: '',
         yearOfManufacturing: currentYear,
         fillingProcess: '',
         fillingType: '',
@@ -124,7 +124,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
         isAvailableNow: true,
         expectedAvailableDate: '',
         published: false,
-        photos: [],
+        media: [],
       })
     }
   }, [productionLine, isOpen, reset])
@@ -255,7 +255,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                         rules={{
                           required: 'Phone number is required',
                           pattern: {
-                            value: /^[+]?[\d\s\-$$$$]+$/,
+                            value: /^[+]?[\d\s\-()]+$/,
                             message: 'Invalid phone number format',
                           },
                         }}
@@ -323,17 +323,13 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                         control={control}
                         rules={{
                           required: 'Capacity is required',
-                          min: { value: 1, message: 'Capacity must be at least 1' },
+                          minLength: { value: 1, message: 'Capacity must be provided' },
                         }}
                         render={({ field }) => (
                           <Input
                             {...field}
-                            label='Capacity (units/hour)'
-                            placeholder='Production capacity per hour'
-                            type='number'
-                            min='1'
-                            value={field.value?.toString() || ''}
-                            onChange={(e) => field.onChange(Number(e.target.value) || 1)}
+                            label='Capacity'
+                            placeholder='e.g., 1000 bottles/hour, 500 units/day'
                             isInvalid={!!errors.capacity}
                             errorMessage={errors.capacity?.message}
                             variant='bordered'
@@ -364,9 +360,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                             isRequired
                           >
                             {years.map((year) => (
-                              <SelectItem key={year} value={year}>
-                                {year.toString()}
-                              </SelectItem>
+                              <SelectItem key={year}>{year.toString()}</SelectItem>
                             ))}
                           </Select>
                         )}
@@ -487,9 +481,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                             isRequired
                           >
                             {currencies.map((currency) => (
-                              <SelectItem key={currency.key} value={currency.key}>
-                                {currency.label}
-                              </SelectItem>
+                              <SelectItem key={currency.key}>{currency.label}</SelectItem>
                             ))}
                           </Select>
                         )}
@@ -561,7 +553,6 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                           render={({ field }) => (
                             <Input
                               {...field}
-                              classNames={{ mainWrapper: 'mt-5' }}
                               label='Expected Available Date'
                               placeholder='When will it be available?'
                               type='date'
@@ -579,12 +570,7 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                         name='published'
                         control={control}
                         render={({ field }) => (
-                          <Checkbox
-                            className='block'
-                            isSelected={field.value}
-                            onValueChange={field.onChange}
-                            color='success'
-                          >
+                          <Checkbox isSelected={field.value} onValueChange={field.onChange} color='success'>
                             Publish this production line (make it visible to others)
                           </Checkbox>
                         )}
@@ -602,38 +588,28 @@ export function ProductionLineModal({ productionLine, isOpen, onClose, onSubmit 
                     </div>
 
                     <Controller
-                      name='photos'
+                      name='media'
                       control={control}
-                      rules={{
-                        validate: (files) => {
-                          if (!files || files.length === 0) return true
-
-                          const invalidFiles = files.filter((file) => {
-                            const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/')
-                            const isValidSize = file.size <= 10 * 1024 * 1024 // 10MB
-                            return !isValidType || !isValidSize
-                          })
-
-                          if (invalidFiles.length > 0) {
-                            return 'Please upload only image or video files under 10MB'
-                          }
-
-                          if (files.length > 20) {
-                            return 'Maximum 20 files allowed'
-                          }
-
-                          return true
-                        },
-                      }}
                       render={({ field }) => (
                         <ImageUploader
-                          files={field.value || []}
-                          onChange={field.onChange}
+                          files={field.value as MediaItem[]}
+                          onChange={(files) => {
+                            // Filter out File objects and keep only ProductionLineMedia
+                            const mediaFiles = files.filter(
+                              (file): file is ProductionLineMedia => !('lastModified' in file) && 'id' in file,
+                            )
+                            field.onChange(mediaFiles)
+                          }}
                           maxFiles={20}
                           maxFileSize={10 * 1024 * 1024} // 10MB
-                          error={errors.photos?.message}
                           disabled={isSubmitting}
                           acceptVideo={true}
+                          onUploadComplete={(uploadedMedia) => {
+                            // Add uploaded media to existing media
+                            const currentMedia = field.value || []
+                            const newMedia = [...currentMedia, ...uploadedMedia]
+                            field.onChange(newMedia)
+                          }}
                         />
                       )}
                     />

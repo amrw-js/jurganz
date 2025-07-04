@@ -38,7 +38,7 @@ import type { ProductionLine, ProductionLineFormData } from '@/types/production-
 
 interface ProductionLineCardProps {
   productionLine: ProductionLine
-  onUpdate: (id: string, data: ProductionLineFormData) => Promise<void>
+  onUpdate: (id: string, data: ProductionLineFormData) => void
   onDelete: (id: string) => Promise<void>
 }
 
@@ -53,25 +53,25 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
     }
   }
 
-  const handleUpdate = async (data: ProductionLineFormData) => {
-    await onUpdate(productionLine.id, data)
+  const handleUpdate = (data: ProductionLineFormData) => {
+    onUpdate(productionLine.id, data)
   }
 
-  const handleImageError = (photoId: string) => {
-    setImageErrors((prev) => new Set([...prev, photoId]))
+  const handleImageError = (mediaId: string) => {
+    setImageErrors((prev) => new Set([...prev, mediaId]))
   }
 
   // Get production line media
   const getProductionLineMedia = () => {
-    if (!productionLine.photos || productionLine.photos.length === 0) {
+    if (!productionLine.media || productionLine.media.length === 0) {
       return []
     }
 
-    return productionLine.photos.map((photo, index) => ({
-      id: photo.id || `${productionLine.id}-${index}`,
-      url: photo.url || photo,
-      type: photo.type || 'image',
-      name: photo.name || `Media ${index + 1}`,
+    return productionLine.media.map((media, index) => ({
+      id: media.id || `${productionLine.id}-${index}`,
+      url: media.url,
+      type: media.type || 'image',
+      name: media.name || `Media ${index + 1}`,
     }))
   }
 
@@ -193,7 +193,7 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
                 <div className='flex items-center gap-1'>
                   <Factory className='h-3 w-3' />
                   <span>
-                    {productionLine.containerType} • {productionLine.capacity} units/hr
+                    {productionLine.containerType} • {productionLine.capacity}
                   </span>
                 </div>
                 <div className='flex items-center gap-1'>

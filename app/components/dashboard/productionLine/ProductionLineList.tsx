@@ -11,7 +11,7 @@ interface ProductionLineListProps {
   productionLines: ProductionLine[]
   loading: boolean
   searchTerm: string
-  onUpdate: (id: string, data: ProductionLineFormData) => Promise<void>
+  onUpdate: (id: string, data: ProductionLineFormData) => void
   onDelete: (id: string) => Promise<void>
   onCreateNew: () => void
 }

@@ -1,22 +1,27 @@
 'use client'
 
-import { Button, Chip, Input } from '@heroui/react'
+import { Button, Input } from '@heroui/react'
 import { Calendar, DollarSign, Factory, Plus, Search } from 'lucide-react'
 import { useState } from 'react'
 
 import { ProductionLineList } from '@/app/components/dashboard/productionLine/ProductionLineList'
-import { useProductionLines } from '@/app/hooks/useProductionLines'
+import {
+  useCreateProductionLine,
+  useDeleteProductionLine,
+  useProductionLines,
+  useUpdateProductionLine,
+} from '@/app/hooks/useProductionLines'
 import { ProductionLineModal } from '@/app/modals/ProductionLineModal'
 import type { ProductionLineFormData } from '@/types/production-line.types'
 
 export default function ProductionLinesPage() {
-  const { productionLines, loading, addProductionLine, updateProductionLine, deleteProductionLine } =
-    useProductionLines()
+  const { data: productionLines = [], isLoading: loading } = useProductionLines()
+  const { mutate: createProductionLine } = useCreateProductionLine()
+  const { mutate: updateProductionLine } = useUpdateProductionLine()
+  const { mutate: deleteProductionLine } = useDeleteProductionLine()
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-
-  console.log('Production Lines:', productionLines)
 
   const filteredProductionLines = productionLines.filter(
     (line) =>
@@ -25,18 +30,18 @@ export default function ProductionLinesPage() {
       line.containerType.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  const handleAddProductionLine = async (data: ProductionLineFormData) => {
+  const handleAddProductionLine = (data: ProductionLineFormData) => {
     try {
-      await addProductionLine(data)
+      createProductionLine(data)
       setIsAddModalOpen(false)
     } catch (error) {
       console.error('Failed to create production line:', error)
     }
   }
 
-  const handleUpdateProductionLine = async (id: string, data: ProductionLineFormData) => {
+  const handleUpdateProductionLine = (id: string, data: ProductionLineFormData) => {
     try {
-      await updateProductionLine(id, data)
+      updateProductionLine({ id, data })
     } catch (error) {
       console.error('Failed to update production line:', error)
     }
@@ -50,14 +55,8 @@ export default function ProductionLinesPage() {
     }
   }
 
-  // Calculate stats
-  const totalValue = productionLines.reduce((acc, line) => acc + line.price, 0)
   const availableLines = productionLines.filter((line) => line.isAvailableNow).length
-  const publishedLines = productionLines.filter((line) => line.published).length // Add this line
-  const averageYear =
-    productionLines.length > 0
-      ? Math.round(productionLines.reduce((acc, line) => acc + line.yearOfManufacturing, 0) / productionLines.length)
-      : new Date().getFullYear()
+  const publishedLines = productionLines.filter((line) => line.published).length
 
   return (
     <div className='p-8'>

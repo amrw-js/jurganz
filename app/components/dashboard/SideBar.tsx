@@ -32,20 +32,12 @@ export const SideBar: FC<SideBar> = ({ isOpen, onOpenChange }) => {
       available: true,
     },
     {
-      id: 'translations',
-      label: 'Translations',
-      icon: Languages,
-      href: '/dashboard/translations',
-      description: 'Manage translations and localization',
-      available: false,
-    },
-    {
       id: 'production-lines',
       label: 'Production Lines',
       icon: Factory,
       href: '/dashboard/lines',
       description: 'Manage production workflows',
-      available: false,
+      available: true,
     },
   ]
 

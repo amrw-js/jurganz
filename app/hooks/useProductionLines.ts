@@ -1,244 +1,92 @@
-'use client'
+// hooks/useProductionLines.ts
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { useCallback, useEffect, useState } from 'react'
+import { productionLinesApi } from '@/apis/production-lines.api'
+import { CreateProductionLine, ProductionLine } from '@/types/production-line.types'
 
-import type { ProductionLine, ProductionLineFormData, ProductionLineMedia } from '@/types/production-line.types'
+// Query keys
+export const productionLinesKeys = {
+  all: ['production-lines'] as const,
+  lists: () => [...productionLinesKeys.all, 'list'] as const,
+  list: (filters?: any) => [...productionLinesKeys.lists(), filters] as const,
+  published: () => [...productionLinesKeys.all, 'published'] as const,
+  details: () => [...productionLinesKeys.all, 'detail'] as const,
+  detail: (id: string) => [...productionLinesKeys.details(), id] as const,
+}
 
-const STORAGE_KEY = 'production-lines-data'
-
+// Get all production lines
 export const useProductionLines = () => {
-  const [productionLines, setProductionLines] = useState<ProductionLine[]>([])
-  const [loading, setLoading] = useState(true)
+  return useQuery<ProductionLine[], Error>({
+    queryKey: productionLinesKeys.lists(),
+    queryFn: productionLinesApi.getProductionLines,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
 
-  // Load production lines from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsedLines = JSON.parse(stored)
-        // Ensure dates are properly converted
-        const linesWithDates = parsedLines.map((line: any) => ({
-          ...line,
-          createdAt: new Date(line.createdAt),
-          updatedAt: new Date(line.updatedAt),
-        }))
-        setProductionLines(linesWithDates)
-      }
-    } catch (error) {
-      console.error('Error loading production lines:', error)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+// Get published production lines
+export const usePublishedProductionLines = () => {
+  return useQuery<ProductionLine[], Error>({
+    queryKey: productionLinesKeys.published(),
+    queryFn: productionLinesApi.getPublishedProductionLines,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
 
-  // Save production lines to localStorage whenever they change
-  const saveProductionLines = useCallback((updatedLines: ProductionLine[]) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedLines))
-      setProductionLines(updatedLines)
-    } catch (error) {
-      console.error('Error saving production lines:', error)
-    }
-  }, [])
+// Get single production line
+export const useProductionLine = (id: string) => {
+  return useQuery({
+    queryKey: productionLinesKeys.detail(id),
+    queryFn: () => productionLinesApi.getProductionLine(id),
+    enabled: !!id,
+  })
+}
 
-  // Convert File objects to ProductionLineMedia objects (simulate upload)
-  const processFiles = useCallback(async (files: File[]): Promise<ProductionLineMedia[]> => {
-    const processedMedia: ProductionLineMedia[] = []
+// Create production line mutation
+export const useCreateProductionLine = () => {
+  const queryClient = useQueryClient()
 
-    for (const file of files) {
-      try {
-        // Create object URL for preview (in real app, you'd upload to server/cloud)
-        const url = URL.createObjectURL(file)
-
-        // Determine file type
-        const type = file.type.startsWith('video/') ? 'video' : 'image'
-
-        const media: ProductionLineMedia = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          url: url,
-          type: type,
-          name: file.name,
-          size: file.size,
-          createdAt: new Date(),
-        }
-
-        processedMedia.push(media)
-      } catch (error) {
-        console.error('Error processing file:', file.name, error)
-      }
-    }
-
-    return processedMedia
-  }, [])
-
-  const addProductionLine = useCallback(
-    async (data: ProductionLineFormData) => {
-      try {
-        // Process uploaded files
-        const processedMedia = await processFiles(data.photos || [])
-
-        const newLine: ProductionLine = {
-          id: Date.now().toString(),
-          companyName: data.companyName,
-          fullName: data.fullName,
-          emailAddress: data.emailAddress,
-          phoneNumber: data.phoneNumber,
-          productType: data.productType,
-          containerType: data.containerType,
-          capacity: data.capacity,
-          yearOfManufacturing: data.yearOfManufacturing,
-          fillingProcess: data.fillingProcess,
-          fillingType: data.fillingType,
-          controlPLC: data.controlPLC,
-          lineMachines: data.lineMachines,
-          approximateWorkingTime: data.approximateWorkingTime,
-          localCurrency: data.localCurrency,
-          price: data.price,
-          negotiable: data.negotiable,
-          isAvailableNow: data.isAvailableNow,
-          expectedAvailableDate: data.expectedAvailableDate,
-          published: data.published, // Add this line
-          photos: processedMedia,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        }
-
-        const updatedLines = [...productionLines, newLine]
-
-        console.log('new production line:', newLine)
-        saveProductionLines(updatedLines)
-        return newLine
-      } catch (error) {
-        console.error('Error adding production line:', error)
-        throw error
-      }
+  return useMutation({
+    mutationFn: (data: CreateProductionLine) => productionLinesApi.createProductionLine(data),
+    onSuccess: () => {
+      // Invalidate and refetch production lines list
+      queryClient.invalidateQueries({ queryKey: productionLinesKeys.lists() })
+      // Also invalidate published list as the new item might be published
+      queryClient.invalidateQueries({ queryKey: productionLinesKeys.published() })
     },
-    [productionLines, saveProductionLines, processFiles],
-  )
+  })
+}
 
-  const updateProductionLine = useCallback(
-    async (id: string, data: ProductionLineFormData) => {
-      try {
-        // Process any new uploaded files
-        const processedMedia = await processFiles(data.photos || [])
+// Update production line mutation
+export const useUpdateProductionLine = () => {
+  const queryClient = useQueryClient()
 
-        const updatedLines = productionLines.map((line) => {
-          if (line.id === id) {
-            // Merge existing photos with new ones
-            const existingPhotos = line.photos || []
-            const allPhotos = [...existingPhotos, ...processedMedia]
-
-            return {
-              ...line,
-              companyName: data.companyName,
-              fullName: data.fullName,
-              emailAddress: data.emailAddress,
-              phoneNumber: data.phoneNumber,
-              productType: data.productType,
-              containerType: data.containerType,
-              capacity: data.capacity,
-              yearOfManufacturing: data.yearOfManufacturing,
-              fillingProcess: data.fillingProcess,
-              fillingType: data.fillingType,
-              controlPLC: data.controlPLC,
-              lineMachines: data.lineMachines,
-              approximateWorkingTime: data.approximateWorkingTime,
-              localCurrency: data.localCurrency,
-              price: data.price,
-              negotiable: data.negotiable,
-              isAvailableNow: data.isAvailableNow,
-              expectedAvailableDate: data.expectedAvailableDate,
-              published: data.published,
-              photos: allPhotos,
-              updatedAt: new Date(),
-            }
-          }
-          return line
-        })
-
-        saveProductionLines(updatedLines)
-      } catch (error) {
-        console.error('Error updating production line:', error)
-        throw error
-      }
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreateProductionLine> }) =>
+      productionLinesApi.updateProductionLine(id, data),
+    onSuccess: (updatedProductionLine) => {
+      // Update the specific production line in cache
+      queryClient.setQueryData(productionLinesKeys.detail(updatedProductionLine.id), updatedProductionLine)
+      // Invalidate production lines list
+      queryClient.invalidateQueries({ queryKey: productionLinesKeys.lists() })
+      // Invalidate published list in case publication status changed
+      queryClient.invalidateQueries({ queryKey: productionLinesKeys.published() })
     },
-    [productionLines, saveProductionLines, processFiles],
-  )
+  })
+}
 
-  const deleteProductionLine = useCallback(
-    (id: string) => {
-      try {
-        // Clean up object URLs before deleting
-        const lineToDelete = productionLines.find((l) => l.id === id)
-        if (lineToDelete?.photos) {
-          lineToDelete.photos.forEach((photo) => {
-            if (photo.url.startsWith('blob:')) {
-              URL.revokeObjectURL(photo.url)
-            }
-          })
-        }
+// Delete production line mutation
+export const useDeleteProductionLine = () => {
+  const queryClient = useQueryClient()
 
-        const updatedLines = productionLines.filter((line) => line.id !== id)
-        saveProductionLines(updatedLines)
-      } catch (error) {
-        console.error('Error deleting production line:', error)
-        throw error
-      }
+  return useMutation({
+    mutationFn: (id: string) => productionLinesApi.deleteProductionLine(id),
+    onSuccess: (_, deletedId) => {
+      // Remove from cache
+      queryClient.removeQueries({ queryKey: productionLinesKeys.detail(deletedId) })
+      // Invalidate production lines list
+      queryClient.invalidateQueries({ queryKey: productionLinesKeys.lists() })
+      // Invalidate published list
+      queryClient.invalidateQueries({ queryKey: productionLinesKeys.published() })
     },
-    [productionLines, saveProductionLines],
-  )
-
-  const getProductionLine = useCallback(
-    (id: string) => {
-      return productionLines.find((line) => line.id === id)
-    },
-    [productionLines],
-  )
-
-  const searchProductionLines = useCallback(
-    (query: string) => {
-      const lowercaseQuery = query.toLowerCase()
-      return productionLines.filter(
-        (line) =>
-          line.companyName.toLowerCase().includes(lowercaseQuery) ||
-          line.productType.toLowerCase().includes(lowercaseQuery) ||
-          line.containerType.toLowerCase().includes(lowercaseQuery),
-      )
-    },
-    [productionLines],
-  )
-
-  // Cleanup function to revoke all object URLs
-  const cleanup = useCallback(() => {
-    productionLines.forEach((line) => {
-      line.photos?.forEach((photo) => {
-        if (photo.url.startsWith('blob:')) {
-          URL.revokeObjectURL(photo.url)
-        }
-      })
-    })
-  }, [productionLines])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      cleanup()
-    }
-  }, [cleanup])
-
-  return {
-    // Data
-    productionLines,
-    loading,
-
-    // CRUD operations
-    addProductionLine,
-    updateProductionLine,
-    deleteProductionLine,
-    getProductionLine,
-
-    // Utility functions
-    searchProductionLines,
-    cleanup,
-  }
+  })
 }
