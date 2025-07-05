@@ -19,8 +19,11 @@ import { useTranslation } from 'react-i18next'
 
 import { NAVBAR_ITEMS } from '@/app/utils/constants'
 
+import { LanguageToggleCompact } from '../LanguageToggle'
 import { FacebookIcon } from '../ui/icons/FacebookIcon'
 import { LinkedInIcon } from '../ui/icons/LinkedInIcon'
+
+// Import the compact language toggle
 
 export const Header = () => {
   const { t } = useTranslation()
@@ -70,13 +73,18 @@ export const Header = () => {
           </NavbarItem>
         ))}
       </NavbarContent>
+
       <NavbarContent className='hidden lg:flex' justify='end'>
         <NavbarItem>
           <Button className='w-[7.5rem]' color='primary'>
             {t('contact_us')}
           </Button>
         </NavbarItem>
+        <NavbarItem>
+          <LanguageToggleCompact />
+        </NavbarItem>
       </NavbarContent>
+
       <NavbarMenu className='gap-0 py-4'>
         {NAVBAR_ITEMS.map(({ i18nKey, href }, index) => (
           <NavbarMenuItem key={i18nKey}>
@@ -92,6 +100,7 @@ export const Header = () => {
             </Link>
           </NavbarMenuItem>
         ))}
+
         <li className='mt-1 w-full self-start'>
           <Button className='h-10 w-full' color='primary'>
             {t('contact_us')}
@@ -111,6 +120,8 @@ export const Header = () => {
           >
             <LinkedInIcon aria-label='LinkedIn' className='size-3 text-black' />
           </Link>
+
+          <LanguageToggleCompact />
         </li>
       </NavbarMenu>
     </Navbar>

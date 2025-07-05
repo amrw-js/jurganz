@@ -168,3 +168,53 @@
 .cl-footerAction {
   display: none;
 }
+
+.projects-swiper .swiper-pagination-bullet-custom {
+  width: 12px;
+  height: 12px;
+  background: #d1d5db;
+  opacity: 1;
+  margin: 0 4px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.projects-swiper .swiper-pagination-bullet-active-custom {
+  background: #155e75;
+  transform: scale(1.2);
+}
+
+.projects-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.projects-swiper .swiper-slide > div {
+  height: 100%;
+}
+
+/* FIXED PRODUCTS SWIPER STYLES */
+.products-swiper .swiper-pagination-bullet-products {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+  margin: 0 4px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.products-swiper .swiper-pagination-bullet-active-products {
+  background: white;
+  transform: scale(1.2);
+}
+
+.products-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+}
+
+.products-swiper .swiper-slide > div {
+  height: 100%;
+  width: 100%;
+}
