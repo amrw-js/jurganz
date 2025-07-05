@@ -59,8 +59,13 @@ export function useLanguageToggle() {
     [pathname, router, getCurrentLocale],
   )
 
+  const currentLocale = getCurrentLocale()
+
+  const isArabic = currentLocale === 'ar'
+
   return {
-    currentLocale: getCurrentLocale(),
+    currentLocale,
+    isArabic,
     toggleLanguage,
     setLanguage,
   }

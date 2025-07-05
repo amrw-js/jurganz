@@ -28,7 +28,7 @@ export const Hero = () => {
               <ArrowUpRightIcon className='h-4 w-4 lg:h-6 lg:w-6' />
             </Link>
           </div>
-          <div className='flex flex-col gap-5 rounded-lg p-3 backdrop-blur lg:p-5'>
+          <div className='invisible flex flex-col gap-5 rounded-lg p-3 backdrop-blur lg:p-5'>
             <p className='text-lg font-semibold leading-7 lg:text-3xl lg:leading-9'>{t('home:hero_apps_title')}</p>
             <div className='flex flex-col gap-4 lg:flex-row lg:gap-8'>
               <PlayStore t={t} />

@@ -36,11 +36,11 @@ export const Logos: FC = () => {
     config: { duration: 500 },
   })
 
-  const Transparency = `<span class="text-primary font-bold">Transparency</span>`
-  const Obligation = `<span class="text-primary font-bold">Obligation</span>`
-  const Development = `<span class="text-primary font-bold">Development</span>`
+  const Transparency = `<span class="text-primary font-bold">${t('home:transparency')}</span>`
+  const Obligation = `<span class="text-primary font-bold">${t('home:obligation')}</span>`
+  const Development = `<span class="text-primary font-bold">${t('home:development')}</span>`
 
-  const objectiveText = t('objective', {
+  const objectiveText = t('home:objective', {
     Transparency,
     Obligation,
     Development,

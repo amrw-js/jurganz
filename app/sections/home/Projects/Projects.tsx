@@ -19,70 +19,69 @@ export const Projects: FC = () => {
   const { t } = useTranslation()
   const { data: projects, isLoading } = useProjects()
 
-  // State to track if the section is in the viewport
   const [inView, setInView] = useState(false)
 
-  // Projects container animation with slow transition and opacity change
   const projectsContainerProps = useSpring({
     opacity: inView ? 1 : 0,
     transform: inView ? 'translateY(0)' : 'translateY(30px)',
     config: { duration: 1000 },
   })
 
-  // Render item for each project
-  const renderProjectCard = useCallback((project: Project) => {
-    return (
-      <div className='flex h-full flex-1 shrink-0 justify-between rounded-lg border border-dashed border-zinc-300 px-5 py-[0.625rem]'>
-        <div className='flex flex-1 flex-col gap-3 py-3'>
-          <p className='text-xl font-semibold leading-7'>{project.name}</p>
-          <div className='space-y-1'>
-            <p className='flex items-center gap-1'>
-              <span className='font-semibold text-gray-700'>Company:</span>
-              <span className='text-gray-600'>{project.companyName}</span>
-            </p>
-            <p className='flex items-center gap-1'>
-              <span className='font-semibold text-gray-700'>Capacity:</span>
-              <span className='text-gray-600'>{project.capacity}</span>
-            </p>
-            <p className='flex items-center gap-1'>
-              <span className='font-semibold text-gray-700'>Duration:</span>
-              <span className='text-gray-600'>{project.time}</span>
-            </p>
-            <p className='flex items-center gap-1'>
-              <span className='font-semibold text-gray-700'>Location:</span>
-              <span className='text-gray-600'>{project.location}</span>
-            </p>
-          </div>
-          <p className='line-clamp-2 text-sm text-gray-500'>{project.description}</p>
-        </div>
-        <div className='ml-4 flex flex-col items-end justify-between'>
-          {project.media && project.media.length > 0 && (
-            <div className='mb-2 h-16 w-20 overflow-hidden rounded-md bg-gray-100'>
-              <img
-                src={project.media[0].url || '/placeholder.svg'}
-                alt={project.media[0].name}
-                className='h-full w-full object-cover'
-              />
+  const renderProjectCard = useCallback(
+    (project: Project) => {
+      return (
+        <div className='flex h-full flex-1 shrink-0 justify-between rounded-lg border border-dashed border-zinc-300 px-5 py-[0.625rem]'>
+          <div className='flex flex-1 flex-col gap-3 py-3'>
+            <p className='text-xl font-semibold leading-7'>{project.name}</p>
+            <div className='space-y-1'>
+              <p className='flex items-center gap-1'>
+                <span className='font-semibold text-gray-700'>{t('home:project_company')}:</span>
+                <span className='text-gray-600'>{project.companyName}</span>
+              </p>
+              <p className='flex items-center gap-1'>
+                <span className='font-semibold text-gray-700'>{t('home:project_capacity')}:</span>
+                <span className='text-gray-600'>{project.capacity}</span>
+              </p>
+              <p className='flex items-center gap-1'>
+                <span className='font-semibold text-gray-700'>{t('home:project_duration')}:</span>
+                <span className='text-gray-600'>{project.time}</span>
+              </p>
+              <p className='flex items-center gap-1'>
+                <span className='font-semibold text-gray-700'>{t('home:project_location')}:</span>
+                <span className='text-gray-600'>{project.location}</span>
+              </p>
             </div>
-          )}
-          <button
-            className='rounded-md px-4 py-2 text-sm font-medium text-white transition-colors'
-            style={{ backgroundColor: '#155E75' }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#0f4c5c'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#155E75'
-            }}
-          >
-            View Details
-          </button>
+            <p className='line-clamp-2 text-sm text-gray-500'>{project.description}</p>
+          </div>
+          <div className='ml-4 flex flex-col items-end justify-between'>
+            {project.media && project.media.length > 0 && (
+              <div className='mb-2 h-16 w-20 overflow-hidden rounded-md bg-gray-100'>
+                <img
+                  src={project.media[0].url || '/placeholder.svg'}
+                  alt={project.media[0].name}
+                  className='h-full w-full object-cover'
+                />
+              </div>
+            )}
+            <button
+              className='rounded-md px-4 py-2 text-sm font-medium text-white transition-colors'
+              style={{ backgroundColor: '#155E75' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#0f4c5c'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#155E75'
+              }}
+            >
+              {t('home:view_details')}
+            </button>
+          </div>
         </div>
-      </div>
-    )
-  }, [])
+      )
+    },
+    [t],
+  )
 
-  // Render loading skeleton
   const renderLoadingSkeleton = useCallback(() => {
     return (
       <div className='flex h-full flex-1 shrink-0 animate-pulse justify-between rounded-lg border border-dashed border-zinc-300 px-5 py-[0.625rem]'>
@@ -105,7 +104,6 @@ export const Projects: FC = () => {
     )
   }, [])
 
-  // Set up IntersectionObserver to trigger animation when the section is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -115,33 +113,23 @@ export const Projects: FC = () => {
           setInView(false)
         }
       },
-      {
-        threshold: 0.5,
-      },
+      { threshold: 0.5 },
     )
 
     const section = document.getElementById('projects-section')
-    if (section) {
-      observer.observe(section)
-    }
-
+    if (section) observer.observe(section)
     return () => {
-      if (section) {
-        observer.unobserve(section)
-      }
+      section && observer.unobserve(section)
     }
   }, [])
 
   return (
     <div className='flex flex-col gap-7 px-[0.875rem] py-10 sm:px-10 lg:gap-10 lg:py-20' id='projects-section'>
       <div className='flex w-full flex-col items-center justify-center gap-3 text-center lg:text-left'>
-        <p className='text-2xl font-semibold leading-8 lg:text-4xl lg:leading-10'>Our Projects</p>
-        <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>
-          Discover our latest infrastructure and transportation projects
-        </p>
+        <p className='text-2xl font-semibold leading-8 lg:text-4xl lg:leading-10'>{t('home:projects_heading')}</p>
+        <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>{t('home:projects_desc')}</p>
       </div>
 
-      {/* Projects container with slow animation */}
       <animated.div style={projectsContainerProps}>
         <div className='mb-6 flex items-center justify-between'>
           <Link
@@ -155,30 +143,20 @@ export const Projects: FC = () => {
               e.currentTarget.style.color = '#155E75'
             }}
           >
-            See All Projects
+            {t('home:see_all_projects')}
           </Link>
         </div>
 
         <div className='projects-swiper'>
           {isLoading ? (
-            // Loading state with skeleton cards
             <Swiper
               modules={[Navigation, Pagination]}
               spaceBetween={20}
               slidesPerView={1}
               breakpoints={{
-                640: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 24,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 28,
-                },
+                640: { slidesPerView: 1, spaceBetween: 20 },
+                768: { slidesPerView: 2, spaceBetween: 24 },
+                1024: { slidesPerView: 3, spaceBetween: 28 },
               }}
               className='!pb-12'
             >
@@ -189,7 +167,6 @@ export const Projects: FC = () => {
               ))}
             </Swiper>
           ) : projects && projects.length > 0 ? (
-            // Actual projects data
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
               spaceBetween={20}
@@ -203,23 +180,11 @@ export const Projects: FC = () => {
                 bulletClass: 'swiper-pagination-bullet-custom',
                 bulletActiveClass: 'swiper-pagination-bullet-active-custom',
               }}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
               breakpoints={{
-                640: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 24,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 28,
-                },
+                640: { slidesPerView: 1, spaceBetween: 20 },
+                768: { slidesPerView: 2, spaceBetween: 24 },
+                1024: { slidesPerView: 3, spaceBetween: 28 },
               }}
               className='!pb-12'
             >
@@ -230,7 +195,6 @@ export const Projects: FC = () => {
               ))}
             </Swiper>
           ) : (
-            // Empty state
             <div className='flex flex-col items-center justify-center py-12 text-center'>
               <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100'>
                 <svg className='h-8 w-8 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -242,20 +206,16 @@ export const Projects: FC = () => {
                   />
                 </svg>
               </div>
-              <p className='mb-2 text-lg font-medium text-gray-900'>No projects found</p>
-              <p className='text-gray-500'>Check back later for new projects.</p>
+              <p className='mb-2 text-lg font-medium text-gray-900'>{t('home:no_projects_found')}</p>
+              <p className='text-gray-500'>{t('home:no_projects_hint')}</p>
             </div>
           )}
 
-          {/* Custom Navigation Buttons - Only show when not loading and has projects */}
           {!isLoading && projects && projects.length > 0 && (
             <div className='mt-6 flex justify-center gap-4'>
               <button
                 className='swiper-button-prev-custom flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors'
-                style={{
-                  borderColor: '#155E75',
-                  color: '#155E75',
-                }}
+                style={{ borderColor: '#155E75', color: '#155E75' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#155E75'
                   e.currentTarget.style.color = 'white'
@@ -271,10 +231,7 @@ export const Projects: FC = () => {
               </button>
               <button
                 className='swiper-button-next-custom flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors'
-                style={{
-                  borderColor: '#155E75',
-                  color: '#155E75',
-                }}
+                style={{ borderColor: '#155E75', color: '#155E75' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#155E75'
                   e.currentTarget.style.color = 'white'

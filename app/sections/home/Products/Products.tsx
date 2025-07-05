@@ -15,7 +15,6 @@ import { ContactModal } from '@/app/components/ContactModal'
 import { useProductionLines } from '@/app/hooks/useProductionLines'
 import { ProductionLine } from '@/types/production-line.types'
 
-// Import Swiper styles
 import 'swiper/css'
 
 export const Products: FC = () => {
@@ -27,7 +26,17 @@ export const Products: FC = () => {
 
   const MotionDiv = motion.div as FC<HTMLAttributes<HTMLDivElement> & MotionProps>
   const MotionH3 = motion.h3 as FC<HTMLAttributes<HTMLHeadingElement> & MotionProps>
-  const MotionP = motion.p as FC<HTMLAttributes<HTMLHeadingElement> & MotionProps>
+  const MotionP = motion.p as FC<HTMLAttributes<HTMLParagraphElement> & MotionProps>
+
+  const handleContactClick = useCallback((product: ProductionLine) => {
+    setSelectedProduct(product)
+    setIsContactModalOpen(true)
+  }, [])
+
+  const handleCloseModal = useCallback(() => {
+    setIsContactModalOpen(false)
+    setSelectedProduct(null)
+  }, [])
 
   const renderProductCard = useCallback(
     (product: ProductionLine) => {
@@ -51,12 +60,12 @@ export const Products: FC = () => {
 
             {!product.isAvailableNow && (
               <div className='absolute right-3 top-3 rounded-full bg-red-500 px-3 py-1 text-xs font-medium text-white'>
-                Not Available
+                {t('home:not_available')}
               </div>
             )}
             {product.negotiable && product.isAvailableNow && (
               <div className='absolute right-3 top-3 rounded-full bg-green-500 px-3 py-1 text-xs font-medium text-white'>
-                Available
+                {t('home:available')}
               </div>
             )}
           </div>
@@ -69,19 +78,19 @@ export const Products: FC = () => {
 
             <div className='mb-4 space-y-2'>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>Container Type:</span>
+                <span className='text-gray-500'>{t('home:container_type')}:</span>
                 <span className='font-medium text-gray-700'>{product.containerType}</span>
               </div>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>Capacity:</span>
+                <span className='text-gray-500'>{t('home:capacity')}:</span>
                 <span className='font-medium text-gray-700'>{product.capacity}</span>
               </div>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>Year:</span>
+                <span className='text-gray-500'>{t('home:year')}:</span>
                 <span className='font-medium text-gray-700'>{product.yearOfManufacturing}</span>
               </div>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>Process:</span>
+                <span className='text-gray-500'>{t('home:process')}:</span>
                 <span className='font-medium text-gray-700'>{product.fillingProcess}</span>
               </div>
             </div>
@@ -89,7 +98,7 @@ export const Products: FC = () => {
             {!product.isAvailableNow && product.expectedAvailableDate && (
               <div className='mb-4 rounded-lg border border-orange-200 bg-orange-50 p-3'>
                 <p className='text-sm text-orange-700'>
-                  <span className='font-medium'>Expected Available:</span>{' '}
+                  <span className='font-medium'>{t('home:expected_available')}:</span>{' '}
                   {new Date(product.expectedAvailableDate).toLocaleDateString()}
                 </p>
               </div>
@@ -101,32 +110,22 @@ export const Products: FC = () => {
                 variant='light'
                 style={{ borderColor: '#155E75', color: '#155E75' }}
               >
-                {t('more_details')}
+                {t('home:more_details')}
               </Button>
               <Button
                 className='flex-1'
                 style={{ backgroundColor: '#155E75', color: 'white' }}
                 onPress={() => handleContactClick(product)}
               >
-                {t('default:contact_us')}
+                {t('home:contact_us')}
               </Button>
             </div>
           </div>
         </MotionDiv>
       )
     },
-    [t],
+    [t, handleContactClick],
   )
-
-  const handleContactClick = useCallback((product: ProductionLine) => {
-    setSelectedProduct(product)
-    setIsContactModalOpen(true)
-  }, [])
-
-  const handleCloseModal = useCallback(() => {
-    setIsContactModalOpen(false)
-    setSelectedProduct(null)
-  }, [])
 
   const renderLoadingSkeleton = useCallback(() => {
     return (
@@ -182,7 +181,7 @@ export const Products: FC = () => {
           viewport={{ once: false }}
           transition={{ delay: 0.1, duration: 0.6, ease: 'easeInOut' }}
         >
-          {t('products_heading')}
+          {t('home:products_heading')}
         </MotionH3>
         <MotionP
           className='text-sm font-medium leading-5 sm:text-lg sm:leading-7'
@@ -191,7 +190,7 @@ export const Products: FC = () => {
           viewport={{ once: false }}
           transition={{ delay: 0.2, duration: 0.6, ease: 'easeInOut' }}
         >
-          {t('products_desc')}
+          {t('home:products_desc')}
         </MotionP>
       </div>
 
@@ -201,34 +200,21 @@ export const Products: FC = () => {
             href='/production-lines'
             className='text-lg font-semibold text-white underline transition-colors hover:text-gray-300'
           >
-            {t('see_all_production_lines')}
+            {t('home:see_all_production_lines')}
           </Link>
         </div>
 
         <div className='products-swiper'>
           {isLoading ? (
-            // Loading state with skeleton cards
             <Swiper
               modules={[Navigation, Pagination]}
               spaceBetween={20}
               slidesPerView={1}
               breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 24,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 28,
-                },
-                1280: {
-                  slidesPerView: 4,
-                  spaceBetween: 32,
-                },
+                640: { slidesPerView: 2, spaceBetween: 20 },
+                768: { slidesPerView: 2, spaceBetween: 24 },
+                1024: { slidesPerView: 3, spaceBetween: 28 },
+                1280: { slidesPerView: 4, spaceBetween: 32 },
               }}
               className='!pb-12'
             >
@@ -239,7 +225,6 @@ export const Products: FC = () => {
               ))}
             </Swiper>
           ) : productionLines && productionLines.length > 0 ? (
-            // Actual products data
             <>
               <Swiper
                 modules={[Navigation, Pagination, Autoplay]}
@@ -259,22 +244,10 @@ export const Products: FC = () => {
                   disableOnInteraction: false,
                 }}
                 breakpoints={{
-                  640: {
-                    slidesPerView: 2,
-                    spaceBetween: 20,
-                  },
-                  768: {
-                    slidesPerView: 2,
-                    spaceBetween: 24,
-                  },
-                  1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 28,
-                  },
-                  1280: {
-                    slidesPerView: 4,
-                    spaceBetween: 32,
-                  },
+                  640: { slidesPerView: 2, spaceBetween: 20 },
+                  768: { slidesPerView: 2, spaceBetween: 24 },
+                  1024: { slidesPerView: 3, spaceBetween: 28 },
+                  1280: { slidesPerView: 4, spaceBetween: 32 },
                 }}
                 className='!pb-12'
               >
@@ -285,7 +258,6 @@ export const Products: FC = () => {
                 ))}
               </Swiper>
 
-              {/* Custom Navigation Buttons */}
               <div className='mt-6 flex justify-center gap-4'>
                 <button className='swiper-button-prev-products flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-white transition-colors hover:bg-white hover:text-black'>
                   <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
@@ -300,7 +272,6 @@ export const Products: FC = () => {
               </div>
             </>
           ) : (
-            // Empty state
             <div className='flex flex-col items-center justify-center py-12 text-center'>
               <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/20'>
                 <svg className='h-8 w-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -312,8 +283,8 @@ export const Products: FC = () => {
                   />
                 </svg>
               </div>
-              <p className='mb-2 text-lg font-medium text-white'>No products found</p>
-              <p className='text-gray-300'>Check back later for new products.</p>
+              <p className='mb-2 text-lg font-medium text-white'>{t('home:no_products_found')}</p>
+              <p className='text-gray-300'>{t('home:no_products_hint')}</p>
             </div>
           )}
         </div>
