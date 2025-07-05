@@ -20,16 +20,13 @@ export const Services = () => {
           <Button color='primary'>{t('default:contact_us')}</Button>
         </div>
         <div className='flex flex-wrap gap-y-5 lg:gap-x-11 lg:gap-y-5'>
-          {SERVICES.map(({ i18nKey, href }, index) => (
+          {SERVICES.map(({ i18nKey }, index) => (
             <div
               key={i18nKey}
               className='w-full rounded-lg border border-zinc-300 px-5 py-[1.625rem] font-medium lg:w-[calc(50%-1.375rem)]'
             >
               <p className='text-lg leading-7 text-gray-300'>0{index + 1}</p>
-              <p className='mt-3 uppercase'>{t(i18nKey)}</p>
-              <Link className='mt-4 flex underline' href={href}>
-                {t('more_details')}
-              </Link>
+              <p className='mt-3 text-2xl'>{t(i18nKey)}</p>
             </div>
           ))}
         </div>

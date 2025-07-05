@@ -17,15 +17,15 @@ export const Vision: FC<IComponent> = (props) => {
       <div className='mt-5 flex flex-col gap-10'>
         <div className='flex gap-5'>
           <TransparencyIcon className='box-content size-6 shrink-0 rounded-full bg-cyan-50 p-2 text-cyan-700' />
-          <p className='text-xl leading-7'>{t('vision_one')}</p>
+          <p className='text-xl leading-7'>{t('about:vision_one')}</p>
         </div>
         <div className='flex gap-5'>
           <ObligationIcon className='box-content size-6 shrink-0 rounded-full bg-cyan-50 p-2 text-cyan-700' />
-          <p className='text-xl leading-7'>{t('vision_two')}</p>
+          <p className='text-xl leading-7'>{t('about:vision_two')}</p>
         </div>
         <div className='flex gap-5'>
           <OperationsIcon className='box-content size-6 shrink-0 rounded-full bg-cyan-50 p-2 text-cyan-700' />
-          <p className='text-xl leading-7'>{t('vision_three')}</p>
+          <p className='text-xl leading-7'>{t('about:vision_three')}</p>
         </div>
       </div>
     </div>
