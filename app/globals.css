@@ -164,3 +164,7 @@
   background: #2563eb;
   transform: scale(1.2);
 }
+
+.cl-footerAction {
+  display: none;
+}

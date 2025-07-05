@@ -1,7 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 export const locales = ['en', 'ar'] as const
 export type Locale = (typeof locales)[number]
+
+// Define protected routes
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
 
 // Get the preferred locale from Accept-Language header
 function getLocale(request: NextRequest): Locale {
@@ -40,7 +44,8 @@ function getLocale(request: NextRequest): Locale {
   return 'en'
 }
 
-export function middleware(request: NextRequest) {
+// Internationalization middleware
+function handleI18n(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Check if pathname already has a locale
@@ -52,16 +57,14 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/api/') ||
     pathname.startsWith('/_next/') ||
     pathname.includes('.') ||
-    pathname.startsWith('/favicon') ||
-    pathname.includes('/dashboard')
+    pathname.startsWith('/favicon')
   ) {
-    return NextResponse.next()
+    return null // Return null instead of NextResponse.next()
   }
 
   // Redirect to locale-prefixed URL
   const locale = getLocale(request)
   const newUrl = new URL(`/${locale}${pathname}`, request.url)
-
   const response = NextResponse.redirect(newUrl)
 
   // Set locale cookie for future requests
@@ -73,9 +76,38 @@ export function middleware(request: NextRequest) {
   return response
 }
 
+export default clerkMiddleware(async (auth, req) => {
+  // Handle internationalization first for non-dashboard routes
+  if (!req.nextUrl.pathname.startsWith('/dashboard')) {
+    const i18nResponse = handleI18n(req)
+    if (i18nResponse) {
+      return i18nResponse
+    }
+  }
+
+  // Protect dashboard routes
+  if (isProtectedRoute(req)) {
+    // Allow access to signin and signup pages without authentication
+    if (req.nextUrl.pathname === '/dashboard/signin' || req.nextUrl.pathname === '/dashboard/signup') {
+      return NextResponse.next()
+    }
+
+    // Check authentication and redirect if needed
+    const { userId } = await auth()
+    if (!userId) {
+      const signInUrl = new URL('/dashboard/signin', req.url)
+      return NextResponse.redirect(signInUrl)
+    }
+  }
+
+  return NextResponse.next()
+})
+
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    '/((?!_next|api|favicon.ico).*)',
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
   ],
 }

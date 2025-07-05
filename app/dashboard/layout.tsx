@@ -1,7 +1,9 @@
 'use client'
 
+import { ClerkProvider } from '@clerk/nextjs'
 import { HeroUIProvider } from '@heroui/react'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { SessionProvider } from 'next-auth/react'
 import { FC, ReactNode, useState } from 'react'
 
 import { queryClient } from '../clients/reactQuery.client'
@@ -24,11 +26,13 @@ const DashboardLayout: FC<IDashboardLayout> = ({ children }) => {
     <html>
       <body>
         <HeroUIProvider>
-          <QueryClientProvider client={queryClient}>
-            <TopBar onOpenChange={handleOpenChange} />
-            <SideBar isOpen={sideBarOpen} onOpenChange={handleOpenChange} />
-            <div className='px-6'>{children}</div>
-          </QueryClientProvider>
+          <ClerkProvider>
+            <QueryClientProvider client={queryClient}>
+              <TopBar onOpenChange={handleOpenChange} />
+              <SideBar isOpen={sideBarOpen} onOpenChange={handleOpenChange} />
+              <div className='px-6'>{children}</div>
+            </QueryClientProvider>
+          </ClerkProvider>
         </HeroUIProvider>
       </body>
     </html>
