@@ -92,11 +92,11 @@ export const PROJECTS = [
 ]
 
 export const GOALS = [
-  { i18n_heading: 'goals_industry_knowledge', i18n_desc: 'goals_industry_knowledge_desc' },
-  { i18n_heading: 'goals_downtime', i18n_desc: 'goals_downtime_desc' },
-  { i18n_heading: 'goals_localized', i18n_desc: 'goals_localized_desc' },
-  { i18n_heading: 'goals_after_care', i18n_desc: 'goals_after_care_desc' },
-  { i18n_heading: 'goals_tailored', i18n_desc: 'goals_tailored_desc' },
+  { i18n_heading: 'home:goals_industry_knowledge', i18n_desc: 'home:goals_industry_knowledge_desc' },
+  { i18n_heading: 'home:goals_downtime', i18n_desc: 'home:goals_downtime_desc' },
+  { i18n_heading: 'home:goals_localized', i18n_desc: 'home:goals_localized_desc' },
+  { i18n_heading: 'home:goals_after_care', i18n_desc: 'home:goals_after_care_desc' },
+  { i18n_heading: 'home:goals_tailored', i18n_desc: 'home:goals_tailored_desc' },
 ]
 
 export const PROJECTS_SECTION = [

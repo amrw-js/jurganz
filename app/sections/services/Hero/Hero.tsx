@@ -12,7 +12,7 @@ export const Hero: FC<IComponent> = (props) => {
       <div className='relative z-10 flex flex-col gap-3 px-[0.875rem] py-10 text-white sm:px-10 sm:py-20 lg:gap-5'>
         <p className='text-sm font-semibold underline lg:text-lg'>#{t('services_gbs')}</p>
         <h3 className='mb-2 text-3xl font-semibold leading-9 lg:mb-5 lg:text-7xl lg:leading-none'>
-          {t('services_title')}
+          {t('project:services_title')}
         </h3>
         <Link className='flex items-center gap-1 font-semibold lg:gap-2' href='#'>
           <span className='text-base underline underline-offset-4 lg:text-xl'>{t('default:contact_us')}</span>
