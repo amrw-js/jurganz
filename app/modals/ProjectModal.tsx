@@ -1,6 +1,16 @@
 'use client'
 
-import { Button, Divider, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
+import {
+  Button,
+  Divider,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+} from '@heroui/react'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -17,6 +27,8 @@ interface ProjectModalProps {
 
 type FormData = {
   name: string
+  description: string
+  location: string
   capacity: string
   time: string
   companyName: string
@@ -33,6 +45,8 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
   } = useForm<FormData>({
     defaultValues: {
       name: '',
+      description: '',
+      location: '',
       capacity: '',
       time: '',
       companyName: '',
@@ -45,6 +59,8 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
     if (project && isOpen) {
       reset({
         name: project.name,
+        description: project.description || '',
+        location: project.location || '',
         capacity: project.capacity,
         time: project.time,
         media: project.media || [],
@@ -53,6 +69,8 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
     } else if (!project && isOpen) {
       reset({
         name: '',
+        description: '',
+        location: '',
         capacity: '',
         time: '',
         media: [],
@@ -68,6 +86,8 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
 
       const submitData: ProjectFormData = {
         name: data.name,
+        description: data.description || '',
+        location: data.location || '',
         capacity: data.capacity,
         time: data.time,
         media: uploadedMedia,
@@ -103,7 +123,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
       onOpenChange={handleClose}
       placement='center'
       backdrop='opaque'
-      size='3xl'
+      size='4xl'
       scrollBehavior='inside'
       classNames={{
         backdrop: 'bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20',
@@ -111,7 +131,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
         wrapper: 'items-center',
       }}
     >
-      <ModalContent className='max-w-4xl'>
+      <ModalContent className='max-w-5xl'>
         {(onClose) => (
           <>
             <ModalHeader className='flex flex-shrink-0 flex-col gap-1 px-6 py-4'>
@@ -126,41 +146,58 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
             <form onSubmit={handleSubmit(onFormSubmit)} className='flex h-full min-h-0 flex-col'>
               <ModalBody className='min-h-0 flex-1 overflow-y-auto px-6 py-6'>
                 <div className='flex flex-col gap-6'>
-                  {/* Basic Information */}
-                  <Controller
-                    name='companyName'
-                    control={control}
-                    rules={{
-                      required: 'Company name is required',
-                      minLength: {
-                        value: 2,
-                        message: 'Company name must be at least 2 characters',
-                      },
-                      maxLength: {
-                        value: 100,
-                        message: 'Company name cannot exceed 100 characters',
-                      },
-                      pattern: {
-                        value: /^[a-zA-Z0-9\s\-_&.,()]+$/,
-                        message: 'Company name contains invalid characters',
-                      },
-                    }}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        label='Company Name'
-                        placeholder='Enter company name'
-                        isInvalid={!!errors.companyName}
-                        errorMessage={errors.companyName?.message}
-                        variant='bordered'
-                        labelPlacement='outside'
-                        description='Name of the company for this project'
-                        isRequired
-                      />
-                    )}
-                  />
+                  {/* Company Information */}
+                  <div className='space-y-4'>
+                    <div className='flex flex-col gap-1'>
+                      <h3 className='text-lg font-medium text-foreground'>Company Information</h3>
+                      <p className='text-sm text-default-500'>Basic company details for this project</p>
+                    </div>
 
-                  <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+                    <Controller
+                      name='companyName'
+                      control={control}
+                      rules={{
+                        required: 'Company name is required',
+                        minLength: {
+                          value: 2,
+                          message: 'Company name must be at least 2 characters',
+                        },
+                        maxLength: {
+                          value: 100,
+                          message: 'Company name cannot exceed 100 characters',
+                        },
+                        pattern: {
+                          value: /^[a-zA-Z0-9\s\-_&.,()]+$/,
+                          message: 'Company name contains invalid characters',
+                        },
+                      }}
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          label='Company Name'
+                          placeholder='Enter company name'
+                          isInvalid={!!errors.companyName}
+                          errorMessage={errors.companyName?.message}
+                          variant='bordered'
+                          labelPlacement='outside'
+                          classNames={{ mainWrapper: 'mt-4' }}
+                          description='Name of the company for this project'
+                          isRequired
+                        />
+                      )}
+                    />
+                  </div>
+
+                  <Divider />
+
+                  {/* Project Details */}
+                  <div className='space-y-4'>
+                    <div className='flex flex-col gap-1'>
+                      <h3 className='text-lg font-medium text-foreground'>Project Details</h3>
+                      <p className='text-sm text-default-500'>Detailed information about your project</p>
+                    </div>
+
+                    {/* Project Name */}
                     <Controller
                       name='name'
                       control={control}
@@ -186,6 +223,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
                           placeholder='Enter project name'
                           isInvalid={!!errors.name}
                           errorMessage={errors.name?.message}
+                          classNames={{ mainWrapper: 'mt-4' }}
                           variant='bordered'
                           labelPlacement='outside'
                           description='Choose a descriptive name for your project'
@@ -194,63 +232,160 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
                       )}
                     />
 
+                    {/* Description */}
                     <Controller
-                      name='capacity'
+                      name='description'
                       control={control}
+                      render={({ field }) => (
+                        <Textarea
+                          {...field}
+                          label='Project Description'
+                          placeholder='Describe your project in detail...'
+                          isInvalid={!!errors.description}
+                          errorMessage={errors.description?.message}
+                          variant='bordered'
+                          labelPlacement='outside'
+                          description='Provide a detailed description of the project scope and objectives'
+                          minRows={3}
+                          maxRows={6}
+                        />
+                      )}
+                    />
+
+                    {/* Location and Capacity Grid */}
+                    <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+                      <Controller
+                        name='location'
+                        control={control}
+                        rules={{
+                          maxLength: {
+                            value: 100,
+                            message: 'Location cannot exceed 100 characters',
+                          },
+                        }}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            label='Project Location'
+                            placeholder='Enter project location'
+                            isInvalid={!!errors.location}
+                            errorMessage={errors.location?.message}
+                            variant='bordered'
+                            labelPlacement='outside'
+                            description='City, state, or full address'
+                            startContent={
+                              <svg
+                                className='h-4 w-4 text-default-400'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
+                              >
+                                <path
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
+                                  strokeWidth={2}
+                                  d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'
+                                />
+                                <path
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
+                                  strokeWidth={2}
+                                  d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'
+                                />
+                              </svg>
+                            }
+                          />
+                        )}
+                      />
+
+                      <Controller
+                        name='capacity'
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            label='Project Capacity'
+                            placeholder='Productivity capacity'
+                            value={field.value?.toString() || ''}
+                            isInvalid={!!errors.capacity}
+                            errorMessage={errors.capacity?.message}
+                            variant='bordered'
+                            labelPlacement='outside'
+                            description='Productivity capacity of the project'
+                            startContent={
+                              <svg
+                                className='h-4 w-4 text-default-400'
+                                fill='none'
+                                stroke='currentColor'
+                                viewBox='0 0 24 24'
+                              >
+                                <path
+                                  strokeLinecap='round'
+                                  strokeLinejoin='round'
+                                  strokeWidth={2}
+                                  d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
+                                />
+                              </svg>
+                            }
+                          />
+                        )}
+                      />
+                    </div>
+
+                    {/* Time Estimate */}
+                    <Controller
+                      name='time'
+                      control={control}
+                      rules={{
+                        required: 'Delivery time is required',
+                        minLength: {
+                          value: 2,
+                          message: 'Delivery time must be at least 2 characters',
+                        },
+                        maxLength: {
+                          value: 30,
+                          message: 'Delivery time cannot exceed 30 characters',
+                        },
+                        pattern: {
+                          value: /^[0-9]+\s*(hour|hours|day|days|week|weeks|month|months|year|years|h|d|w|m|y)$/i,
+                          message: "Please use format like '2 hours', '3 days', '1 week'",
+                        },
+                      }}
                       render={({ field }) => (
                         <Input
                           {...field}
-                          label='Project Capacity'
-                          placeholder='Productivity capacity'
-                          value={field.value?.toString() || ''}
-                          isInvalid={!!errors.capacity}
-                          errorMessage={errors.capacity?.message}
+                          label='Delivery Time'
+                          placeholder='e.g., 2 hours, 3 days, 1 week'
+                          isInvalid={!!errors.time}
+                          errorMessage={errors.time?.message}
                           variant='bordered'
                           labelPlacement='outside'
-                          description='Productivity capacity of the project'
+                          description='Estimated time to complete the project'
+                          isRequired
+                          classNames={{ mainWrapper: 'mt-4' }}
+                          startContent={
+                            <svg
+                              className='h-4 w-4 text-default-400'
+                              fill='none'
+                              stroke='currentColor'
+                              viewBox='0 0 24 24'
+                            >
+                              <circle cx={12} cy={12} r={10} />
+                              <polyline points='12,6 12,12 16,14' />
+                            </svg>
+                          }
                         />
                       )}
                     />
                   </div>
 
-                  <Controller
-                    name='time'
-                    control={control}
-                    rules={{
-                      required: 'Time estimate is required',
-                      minLength: {
-                        value: 2,
-                        message: 'Time estimate must be at least 2 characters',
-                      },
-                      maxLength: {
-                        value: 30,
-                        message: 'Time estimate cannot exceed 30 characters',
-                      },
-                      pattern: {
-                        value: /^[0-9]+\s*(hour|hours|day|days|week|weeks|month|months|year|years|h|d|w|m|y)$/i,
-                        message: "Please use format like '2 hours', '3 days', '1 week'",
-                      },
-                    }}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        label='Time Estimate'
-                        placeholder='e.g., 2 hours, 3 days, 1 week'
-                        isInvalid={!!errors.time}
-                        errorMessage={errors.time?.message}
-                        variant='bordered'
-                        labelPlacement='outside'
-                        description='Estimated time to complete the project'
-                        isRequired
-                      />
-                    )}
-                  />
+                  <Divider />
 
                   {/* Media Upload Section */}
-                  <div className='space-y-3'>
+                  <div className='space-y-4'>
                     <div className='flex flex-col gap-1'>
-                      <label className='text-sm font-medium text-foreground'>Project Media</label>
-                      <p className='text-xs text-default-500'>
+                      <h3 className='text-lg font-medium text-foreground'>Project Media</h3>
+                      <p className='text-sm text-default-500'>
                         Upload up to 20 photos or videos (max 10MB each). Files will be uploaded automatically.
                       </p>
                     </div>

@@ -32,7 +32,6 @@ const ProjectsPage = () => {
 
   const handleUpdateProject = async (id: string, data: ProjectFormData) => {
     try {
-      console.log(id, data)
       updateProject({ id, data })
     } catch (error) {
       console.error('Failed to update project:', error)
@@ -47,8 +46,7 @@ const ProjectsPage = () => {
     }
   }
 
-  // Calculate stats
-  const totalPhotos = projects.reduce((acc, project) => acc + (project.photos?.length || 0), 0)
+  const totalPhotos = projects.reduce((acc, project) => acc + (project.media?.length || 0), 0)
 
   return (
     <div className='p-8'>

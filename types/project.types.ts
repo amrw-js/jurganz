@@ -7,6 +7,8 @@ export interface Project {
   media?: ProjectMedia[]
   createdAt: Date
   updatedAt: Date
+  location: string
+  description: string
 }
 
 export interface ProjectMedia {
@@ -31,6 +33,8 @@ export interface ProjectFormData {
   companyName: string
   capacity: string
   time: string
+  location: string
+  description: string
   media: ProjectMedia[]
 }
 
