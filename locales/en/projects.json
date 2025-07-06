@@ -2,5 +2,13 @@
   "projects_gbs": "GBS Projects",
   "projects_hero_desc": "Our Work in Action: Projects that Drive Industrial Growth",
   "projects_heading": "Precision-Driven Projects, Unmatched Innovation",
-  "projects_subtitle": "Showcasing Excellence: Our Impactful Projects"
+  "projects_subtitle": "Showcasing Excellence: Our Impactful Projects",
+  "projects_title":" Our Projects",
+  "company": "Company",
+  "location": "Location",
+  "capacity": "Capacity",
+  "duration": "Duration",
+  "not_specified": "Not specified",
+  "photos": "photos",
+  "no_media": "No media available"
 }

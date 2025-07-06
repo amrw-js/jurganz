@@ -8,7 +8,7 @@ import { Section } from '@/app/components/Section/Section'
 import { useProjects } from '@/app/hooks/useProjects'
 
 export const Services = () => {
-  const { data: projects, isLoading } = useProjects()
+  const { data: projects } = useProjects()
   const { t } = useTranslation(['default', 'projects'])
 
   if (!projects || !projects.length) {

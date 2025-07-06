@@ -1,0 +1,23 @@
+{
+  "loading_title": "Loading project details...",
+  "loading_subtitle": "Please wait while we fetch the information",
+  "not_found_title": "Project Not Found",
+  "not_found_description": "The requested project could not be found. It may have been moved or deleted.",
+  "back_to_projects": "Back to Projects",
+  "gallery_title": "Project Gallery",
+  "gallery_stats": "{{count}} media files • {{images}} images • {{videos}} videos",
+  "photos_label": "{{count}} Photos",
+  "videos_chip_label": "{{count}} Videos",
+  "slide_counter": "{{current}} of {{total}}",
+  "no_description_title": "No Description Available",
+  "no_description_subtitle": "Project description has not been added yet.",
+  "details_title": "Project Details",
+  "company_label": "Company",
+  "location_label": "Location",
+  "capacity_label": "Capacity",
+  "completion_time_label": "Completion Time",
+  "media_stats_title": "Media Statistics",
+  "total_files_label": "Total Files",
+  "images_label": "Images",
+  "videos_label": "Videos"
+}

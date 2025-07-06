@@ -18,6 +18,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
@@ -32,6 +33,7 @@ import { useProject } from '@/app/hooks/useProjects'
 import 'swiper/css'
 
 export default function ProjectDetailPage() {
+  const { t } = useTranslation('project')
   const { id } = useParams()
   const { data: project, isLoading, error } = useProject(id as string)
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
@@ -47,8 +49,8 @@ export default function ProjectDetailPage() {
             </div>
           </div>
           <div className='text-center'>
-            <p className='text-2xl font-semibold text-gray-800'>Loading project details...</p>
-            <p className='mt-2 text-gray-600'>Please wait while we fetch the information</p>
+            <p className='text-2xl font-semibold text-gray-800'>{t('loading_title')}</p>
+            <p className='mt-2 text-gray-600'>{t('loading_subtitle')}</p>
           </div>
         </div>
       </div>
@@ -63,10 +65,8 @@ export default function ProjectDetailPage() {
             <div className='mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100'>
               <ArrowLeftIcon className='h-10 w-10 text-gray-600' />
             </div>
-            <h3 className='mb-4 text-3xl font-bold text-gray-800'>Project Not Found</h3>
-            <p className='mb-8 text-lg leading-relaxed text-gray-600'>
-              The requested project could not be found. It may have been moved or deleted.
-            </p>
+            <h3 className='mb-4 text-3xl font-bold text-gray-800'>{t('not_found_title')}</h3>
+            <p className='mb-8 text-lg leading-relaxed text-gray-600'>{t('not_found_description')}</p>
             <Button
               as={Link}
               href='/projects'
@@ -74,7 +74,7 @@ export default function ProjectDetailPage() {
               size='lg'
               className='w-full bg-gray-800 font-semibold text-white hover:bg-gray-900'
             >
-              Back to Projects
+              {t('back_to_projects')}
             </Button>
           </CardBody>
         </Card>
@@ -142,9 +142,13 @@ export default function ProjectDetailPage() {
                 {/* Gallery Header */}
                 <div className='flex items-center justify-between'>
                   <div>
-                    <h2 className='text-2xl font-bold text-gray-900'>Project Gallery</h2>
+                    <h2 className='text-start text-2xl font-bold text-gray-900'>{t('gallery_title')}</h2>
                     <p className='text-gray-600'>
-                      {project.media!.length} media files • {imageCount} images • {videoCount} videos
+                      {t('gallery_stats', {
+                        count: project.media!.length,
+                        images: imageCount,
+                        videos: videoCount,
+                      })}
                     </p>
                   </div>
                   <div className='flex items-center gap-2'>
@@ -153,7 +157,7 @@ export default function ProjectDetailPage() {
                       className='border border-gray-200 bg-gray-100 text-gray-700'
                       startContent={<Camera className='h-3 w-3' />}
                     >
-                      {imageCount} Photos
+                      {t('photos_label', { count: imageCount })}
                     </Chip>
                     {videoCount > 0 && (
                       <Chip
@@ -161,7 +165,7 @@ export default function ProjectDetailPage() {
                         className='border border-gray-300 bg-gray-200 text-gray-700'
                         startContent={<Play className='h-3 w-3' />}
                       >
-                        {videoCount} Videos
+                        {t('videos_chip_label', { count: videoCount })}
                       </Chip>
                     )}
                   </div>
@@ -208,7 +212,7 @@ export default function ProjectDetailPage() {
                               <div className='absolute bottom-6 left-6 text-white'>
                                 <p className='text-xl font-bold drop-shadow-lg'>{media.name}</p>
                                 <p className='text-sm opacity-90'>
-                                  {index + 1} of {project.media!.length}
+                                  {t('slide_counter', { current: index + 1, total: project.media!.length })}
                                 </p>
                               </div>
                             </>
@@ -296,8 +300,8 @@ export default function ProjectDetailPage() {
                     <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100'>
                       <Edit3 className='h-8 w-8 text-gray-400' />
                     </div>
-                    <h3 className='mb-2 text-xl font-semibold text-gray-600'>No Description Available</h3>
-                    <p className='text-gray-500'>Project description has not been added yet.</p>
+                    <h3 className='mb-2 text-xl font-semibold text-gray-600'>{t('no_description_title')}</h3>
+                    <p className='text-gray-500'>{t('no_description_subtitle')}</p>
                   </div>
                 )}
               </CardBody>
@@ -309,7 +313,7 @@ export default function ProjectDetailPage() {
             {/* Project Information */}
             <Card className='border border-gray-200 shadow-lg'>
               <CardHeader className='border-b border-gray-200 bg-gray-50 p-6'>
-                <h2 className='text-xl font-bold text-gray-900'>Project Details</h2>
+                <h2 className='text-xl font-bold text-gray-900'>{t('details_title')}</h2>
               </CardHeader>
               <CardBody className='space-y-4 p-6'>
                 {/* Company */}
@@ -318,7 +322,7 @@ export default function ProjectDetailPage() {
                     <Building2 className='h-6 w-6 text-gray-600' />
                   </div>
                   <div className='flex-1'>
-                    <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>Company</p>
+                    <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>{t('company_label')}</p>
                     <p className='text-lg font-bold text-gray-900'>{project.companyName}</p>
                   </div>
                 </div>
@@ -330,7 +334,7 @@ export default function ProjectDetailPage() {
                       <MapPin className='h-6 w-6 text-gray-600' />
                     </div>
                     <div className='flex-1'>
-                      <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>Location</p>
+                      <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>{t('location_label')}</p>
                       <p className='text-lg font-bold text-gray-900'>{project.location}</p>
                     </div>
                   </div>
@@ -342,7 +346,7 @@ export default function ProjectDetailPage() {
                     <Factory className='h-6 w-6 text-gray-600' />
                   </div>
                   <div className='flex-1'>
-                    <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>Capacity</p>
+                    <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>{t('capacity_label')}</p>
                     <p className='text-lg font-bold text-gray-900'>{project.capacity}</p>
                   </div>
                 </div>
@@ -353,7 +357,9 @@ export default function ProjectDetailPage() {
                     <Clock className='h-6 w-6 text-gray-600' />
                   </div>
                   <div className='flex-1'>
-                    <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>Completion Time</p>
+                    <p className='text-xs font-bold uppercase tracking-wider text-gray-500'>
+                      {t('completion_time_label')}
+                    </p>
                     <p className='text-lg font-bold text-gray-900'>{project.time}</p>
                   </div>
                 </div>
@@ -364,22 +370,22 @@ export default function ProjectDetailPage() {
             {hasMedia && (
               <Card className='border border-gray-200 shadow-lg'>
                 <CardHeader className='border-b border-gray-200 bg-gray-50 p-6'>
-                  <h2 className='text-xl font-bold text-gray-900'>Media Statistics</h2>
+                  <h2 className='text-xl font-bold text-gray-900'>{t('media_stats_title')}</h2>
                 </CardHeader>
                 <CardBody className='p-6'>
                   <div className='grid grid-cols-1 gap-4'>
                     <div className='rounded-xl border border-gray-200 bg-gray-100 p-6 text-center'>
                       <p className='text-3xl font-bold text-gray-900'>{project.media!.length}</p>
-                      <p className='text-sm font-semibold text-gray-600'>Total Files</p>
+                      <p className='text-sm font-semibold text-gray-600'>{t('total_files_label')}</p>
                     </div>
                     <div className='grid grid-cols-2 gap-4'>
                       <div className='rounded-xl border border-gray-200 bg-gray-50 p-4 text-center'>
                         <p className='text-2xl font-bold text-gray-800'>{imageCount}</p>
-                        <p className='text-xs font-semibold text-gray-600'>Images</p>
+                        <p className='text-xs font-semibold text-gray-600'>{t('images_label')}</p>
                       </div>
                       <div className='rounded-xl border border-gray-200 bg-gray-100 p-4 text-center'>
                         <p className='text-2xl font-bold text-gray-800'>{videoCount}</p>
-                        <p className='text-xs font-semibold text-gray-600'>Videos</p>
+                        <p className='text-xs font-semibold text-gray-600'>{t('videos_label')}</p>
                       </div>
                     </div>
                   </div>

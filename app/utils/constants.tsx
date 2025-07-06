@@ -23,7 +23,7 @@ export const NAVBAR_ITEMS = [
   },
   {
     i18nKey: 'navbar_production_line',
-    href: '/production-line',
+    href: '/production-lines',
   },
 ]
 
