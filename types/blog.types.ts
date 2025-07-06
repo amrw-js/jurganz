@@ -2,9 +2,10 @@ export interface Blog {
   id: string
   title: string
   content: string
+  featureImage?: string
   media?: BlogMedia[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
 
 export interface BlogMedia {
@@ -19,13 +20,15 @@ export interface BlogMedia {
 export interface CreateBlog {
   title: string
   content: string
+  featureImage?: string
   media?: BlogMedia[]
 }
 
 export interface BlogFormData {
   title: string
   content: string
-  media: BlogMedia[]
+  featureImage?: string
+  media?: BlogMedia[]
 }
 
 export interface BlogsResponse {

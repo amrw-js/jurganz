@@ -12,6 +12,23 @@ interface BlogDetailPageProps {
   params: Promise<{ id: string }>
 }
 
+// Helper function to get the display image for a blog
+const getBlogDisplayImage = (blog: any) => {
+  // Priority: feature image first, then first media image, then placeholder
+  if (blog.featureImage) {
+    return blog.featureImage
+  }
+
+  if (blog.media && blog.media.length > 0) {
+    const firstImage = blog.media.find((item: any) => item.type === 'image')
+    if (firstImage) {
+      return firstImage.url
+    }
+  }
+
+  return null
+}
+
 export default function BlogDetailPage({ params }: BlogDetailPageProps) {
   const { id } = use(params)
   const { data: blog, isLoading, error } = useBlog(id)
@@ -49,7 +66,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
   if (error || !blog) {
     return (
       <div className='min-h-screen bg-background p-8'>
-        <div className='mx-auto max-w-4xl'>
+        <div className='mx-auto'>
           <Card className='border-danger'>
             <CardBody>
               <p className='text-danger'>Error loading blog: {error?.message || 'Blog not found'}</p>
@@ -59,6 +76,8 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
       </div>
     )
   }
+
+  const displayImage = getBlogDisplayImage(blog)
 
   return (
     <div className='min-h-screen bg-background p-8'>
@@ -87,13 +106,21 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
         <Card>
           <CardBody className='p-0'>
             {/* Featured Image */}
-            {blog.media && blog.media.length > 0 && blog.media[0].type === 'image' && (
-              <Image
-                src={blog.media[0].url || '/placeholder.svg?height=400&width=800'}
-                alt={blog.title}
-                className='h-64 w-full object-cover md:h-96'
-                radius='none'
-              />
+            {displayImage && (
+              <div className='relative'>
+                <Image
+                  classNames={{ wrapper: 'flex items-center justify-center w-full mx-auto' }}
+                  src={displayImage}
+                  alt={blog.title}
+                  className='h-48 w-full object-cover md:h-64'
+                  radius='none'
+                />
+                {blog.featureImage && (
+                  <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4 z-50'>
+                    Featured
+                  </Chip>
+                )}
+              </div>
             )}
 
             <div className='p-8'>
@@ -113,7 +140,10 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
 
               {/* Content */}
-              <div className='prose prose-lg max-w-none' dangerouslySetInnerHTML={{ __html: blog.content }} />
+              <div
+                className='tiptap-content prose prose-lg max-w-none'
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
             </div>
           </CardBody>
         </Card>

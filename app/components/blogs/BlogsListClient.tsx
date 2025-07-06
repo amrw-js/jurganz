@@ -84,6 +84,7 @@ export default function BlogsListClient() {
     )
   }
 
+  // Get featured and regular posts without modifying the blog objects
   const featuredPost = filteredBlogs?.[0]
   const regularPosts = filteredBlogs?.slice(1) || []
 

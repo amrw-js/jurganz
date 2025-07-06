@@ -1,11 +1,13 @@
 'use client'
 
-import { Button, Card, CardBody, CardFooter, Input } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, Image, Input } from '@heroui/react'
+import { ImageIcon, Upload, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 import { useCreateBlog, useUpdateBlog } from '@/app/hooks/useBlogs'
+import { useUpload } from '@/app/hooks/useUpload'
 import type { Blog, BlogFormData } from '@/types/blog.types'
 
 import RichTextEditor from './RichTextEditor'
@@ -19,19 +21,53 @@ export default function BlogForm({ blog }: BlogFormProps) {
   const createBlogMutation = useCreateBlog()
   const updateBlogMutation = useUpdateBlog()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [featureImageUrl, setFeatureImageUrl] = useState<string | null>(blog?.featureImage || null)
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<BlogFormData>({
     defaultValues: {
       title: blog?.title || '',
       content: blog?.content || '',
+      featureImage: blog?.featureImage || '',
       media: blog?.media || [],
     },
   })
+
+  const featureImageUpload = useUpload({
+    onSuccess: (media) => {
+      if (media && media.length > 0) {
+        const uploadedImage = media[0]
+        setFeatureImageUrl(uploadedImage.url)
+        setValue('featureImage', uploadedImage.url)
+      }
+    },
+    onError: (error) => {
+      console.error('Feature image upload error:', error)
+    },
+  })
+
+  const handleFeatureImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file')
+        return
+      }
+
+      featureImageUpload.uploadSingle(file)
+    }
+  }
+
+  const removeFeatureImage = () => {
+    setFeatureImageUrl(null)
+    setValue('featureImage', '')
+  }
 
   const onSubmit = async (data: BlogFormData) => {
     setIsSubmitting(true)
@@ -43,6 +79,7 @@ export default function BlogForm({ blog }: BlogFormProps) {
           data: {
             title: data.title,
             content: data.content,
+            featureImage: data.featureImage,
             media: data.media,
           },
         })
@@ -52,6 +89,7 @@ export default function BlogForm({ blog }: BlogFormProps) {
         const newBlog = await createBlogMutation.mutateAsync({
           title: data.title,
           content: data.content,
+          featureImage: data.featureImage,
           media: data.media,
         })
         router.push(`/dashboard/blogs/${newBlog.id}`)
@@ -79,6 +117,60 @@ export default function BlogForm({ blog }: BlogFormProps) {
             isInvalid={!!errors.title}
             errorMessage={errors.title?.message}
           />
+
+          {/* Feature Image */}
+          <div>
+            <label className='mb-2 block text-sm font-medium'>Feature Image</label>
+            <div className='space-y-3'>
+              {featureImageUrl ? (
+                <div className='relative'>
+                  <Image src={featureImageUrl} alt='Feature image' className='h-48 w-full rounded-lg object-cover' />
+                  <Button
+                    isIconOnly
+                    size='sm'
+                    color='danger'
+                    variant='solid'
+                    className='absolute right-2 top-2'
+                    onPress={removeFeatureImage}
+                  >
+                    <X size={16} />
+                  </Button>
+                </div>
+              ) : (
+                <div className='relative'>
+                  <input
+                    type='file'
+                    accept='image/*'
+                    onChange={handleFeatureImageUpload}
+                    className='absolute inset-0 h-full w-full cursor-pointer opacity-0'
+                    id='feature-image-upload'
+                  />
+                  <div className='flex h-48 w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400'>
+                    <div className='text-center'>
+                      {featureImageUpload.isUploading ? (
+                        <div className='space-y-2'>
+                          <div className='text-sm text-gray-600'>Uploading...</div>
+                          <div className='h-2 w-32 rounded-full bg-gray-200'>
+                            <div
+                              className='h-2 rounded-full bg-primary transition-all duration-300'
+                              style={{ width: `${featureImageUpload.progress}%` }}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className='space-y-2'>
+                          <ImageIcon className='mx-auto h-12 w-12 text-gray-400' />
+                          <div className='text-sm text-gray-600'>Click to upload feature image</div>
+                          <div className='text-xs text-gray-500'>PNG, JPG, GIF up to 5MB</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {featureImageUpload.error && <p className='mt-1 text-sm text-danger'>{featureImageUpload.error}</p>}
+          </div>
 
           {/* Content Editor */}
           <div>

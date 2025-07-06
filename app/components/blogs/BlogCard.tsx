@@ -13,7 +13,7 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog, featured = false }: BlogCardProps) {
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string) => {
     return formatDistanceToNow(new Date(date), { addSuffix: true })
   }
 
@@ -23,7 +23,24 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
     return plainText.substring(0, maxLength).trim() + '...'
   }
 
-  const featuredImage = blog.media?.[0]
+  // Helper function to get the display image for a blog
+  const getBlogDisplayImage = (blog: Blog) => {
+    // Priority: feature image first, then first media image, then null
+    if (blog.featureImage) {
+      return blog.featureImage
+    }
+
+    if (blog.media && blog.media.length > 0) {
+      const firstImage = blog.media.find((item) => item.type === 'image')
+      if (firstImage) {
+        return firstImage.url
+      }
+    }
+
+    return null
+  }
+
+  const displayImage = getBlogDisplayImage(blog)
 
   if (featured) {
     return (
@@ -32,12 +49,20 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
           <div className='grid min-h-[500px] grid-cols-1 lg:grid-cols-2'>
             {/* Image */}
             <div className='relative overflow-hidden'>
-              {featuredImage ? (
-                <img
-                  src={featuredImage.url || '/placeholder.svg'}
-                  alt={blog.title}
-                  className='h-full w-full object-cover transition-transform duration-700 group-hover:scale-110'
-                />
+              {displayImage ? (
+                <>
+                  <img
+                    src={displayImage}
+                    alt={blog.title}
+                    className='h-full w-full object-cover transition-transform duration-700 group-hover:scale-110'
+                  />
+                  {/* Featured badge for feature images */}
+                  {blog.featureImage && (
+                    <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
+                      Featured
+                    </Chip>
+                  )}
+                </>
               ) : (
                 <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600'>
                   <div className='text-6xl font-bold text-white opacity-20'>{blog.title.charAt(0)}</div>
@@ -77,12 +102,20 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
       <article className='h-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800'>
         {/* Image */}
         <div className='relative aspect-[16/10] overflow-hidden'>
-          {featuredImage ? (
-            <img
-              src={featuredImage.url || '/placeholder.svg'}
-              alt={blog.title}
-              className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
-            />
+          {displayImage ? (
+            <>
+              <img
+                src={displayImage}
+                alt={blog.title}
+                className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
+              />
+              {/* Featured badge for feature images */}
+              {blog.featureImage && (
+                <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
+                  Featured
+                </Chip>
+              )}
+            </>
           ) : (
             <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800'>
               <div className='text-4xl font-bold text-slate-400 opacity-30'>{blog.title.charAt(0)}</div>

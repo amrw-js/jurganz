@@ -218,3 +218,183 @@
   height: 100%;
   width: 100%;
 }
+
+/* TipTap Content Styles - Save as: styles/tiptap-content.css */
+
+.tiptap-content {
+  line-height: 1.6;
+  color: inherit;
+}
+
+.tiptap-content h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 2rem 0 1rem 0;
+  line-height: 1.2;
+}
+
+.tiptap-content h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin: 1.75rem 0 1rem 0;
+  line-height: 1.3;
+}
+
+.tiptap-content h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1.5rem 0 1rem 0;
+  line-height: 1.4;
+}
+
+.tiptap-content p {
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+.tiptap-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.tiptap-content img[data-align='center'] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tiptap-content img[data-align='left'] {
+  float: left;
+  margin-right: 16px;
+}
+
+.tiptap-content img[data-align='right'] {
+  float: right;
+  margin-left: 16px;
+}
+
+.tiptap-content ul {
+  list-style-type: disc;
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.tiptap-content ol {
+  list-style-type: decimal;
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.tiptap-content li {
+  margin: 0.5rem 0;
+}
+
+.tiptap-content blockquote {
+  border-left: 4px solid #e2e8f0;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  background-color: #f8fafc;
+  font-style: italic;
+}
+
+.tiptap-content code {
+  background-color: #f1f5f9;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.tiptap-content pre {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.tiptap-content pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.tiptap-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.tiptap-content a:hover {
+  color: #1d4ed8;
+}
+
+.tiptap-content strong {
+  font-weight: bold;
+}
+
+.tiptap-content em {
+  font-style: italic;
+}
+
+.tiptap-content u {
+  text-decoration: underline;
+}
+
+.tiptap-content s {
+  text-decoration: line-through;
+}
+
+/* Handle inline text alignment */
+.tiptap-content [style*='text-align: center'] {
+  text-align: center;
+}
+
+.tiptap-content [style*='text-align: left'] {
+  text-align: left;
+}
+
+.tiptap-content [style*='text-align: right'] {
+  text-align: right;
+}
+
+.tiptap-content [style*='text-align: justify'] {
+  text-align: justify;
+}
+
+/* Handle image alignment attributes */
+.tiptap-content img[align='center'] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tiptap-content img[align='left'] {
+  float: left;
+  margin-right: 16px;
+}
+
+.tiptap-content img[align='right'] {
+  float: right;
+  margin-left: 16px;
+}
+
+/* Clear floats after images */
+.tiptap-content::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* Responsive images */
+@media (max-width: 768px) {
+  .tiptap-content img {
+    width: 100% !important;
+    height: auto !important;
+    float: none !important;
+    margin: 16px 0 !important;
+    display: block !important;
+  }
+}

@@ -41,6 +41,23 @@ export default function BlogsPage() {
     }
   }
 
+  // Helper function to get the display image for a blog
+  const getBlogDisplayImage = (blog: Blog) => {
+    // Priority: feature image first, then first media image, then placeholder
+    if (blog.featureImage) {
+      return blog.featureImage
+    }
+
+    if (blog.media && blog.media.length > 0) {
+      const firstImage = blog.media.find((item) => item.type === 'image')
+      if (firstImage) {
+        return firstImage.url
+      }
+    }
+
+    return '/placeholder.svg?height=200&width=400'
+  }
+
   if (isLoading) {
     return (
       <div className='min-h-screen bg-background p-8'>
@@ -104,14 +121,20 @@ export default function BlogsPage() {
             {blogs.map((blog) => (
               <Card key={blog.id} className='w-full'>
                 <CardBody className='p-0'>
-                  {blog.media && blog.media.length > 0 && blog.media[0].type === 'image' && (
+                  <div className='relative'>
                     <Image
-                      src={blog.media[0].url || '/placeholder.svg?height=200&width=400'}
+                      src={getBlogDisplayImage(blog)}
                       alt={blog.title}
                       className='h-48 w-full object-cover'
                       radius='none'
                     />
-                  )}
+                    {/* Feature image indicator */}
+                    {blog.featureImage && (
+                      <Chip size='sm' color='primary' variant='solid' className='absolute left-2 top-2'>
+                        Featured
+                      </Chip>
+                    )}
+                  </div>
                 </CardBody>
                 <CardFooter className='flex flex-col gap-3'>
                   <div className='w-full'>

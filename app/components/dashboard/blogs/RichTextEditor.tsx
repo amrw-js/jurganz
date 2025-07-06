@@ -31,12 +31,20 @@ import { Node, mergeAttributes } from '@tiptap/core'
 import Link from '@tiptap/extension-link'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
+import { NodeSelection } from '@tiptap/pm/state'
 import { EditorContent, useEditor } from '@tiptap/react'
 import type { NodeViewRendererProps } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useCallback, useEffect } from 'react'
 
 import MediaUploadModal from '@/app/modals/UploadModal'
+
+// Type declarations for better TypeScript support
+declare global {
+  interface HTMLImageElement {
+    updateTimeout?: NodeJS.Timeout
+  }
+}
 
 // Define proper types for image attributes
 interface ImageAttributes {
@@ -45,9 +53,10 @@ interface ImageAttributes {
   title?: string
   width?: number
   height?: number
+  align?: 'left' | 'center' | 'right'
 }
 
-// Custom Image Node with resize functionality
+// Custom Image Node with resize functionality and alignment
 const ResizableImage = Node.create({
   name: 'resizableImage',
 
@@ -80,6 +89,9 @@ const ResizableImage = Node.create({
       height: {
         default: null,
       },
+      align: {
+        default: 'center',
+      },
     }
   },
 
@@ -87,12 +99,29 @@ const ResizableImage = Node.create({
     return [
       {
         tag: 'img[src]',
+        getAttrs: (element) => {
+          const img = element as HTMLImageElement
+          return {
+            src: img.getAttribute('src'),
+            alt: img.getAttribute('alt'),
+            title: img.getAttribute('title'),
+            width: img.getAttribute('width') ? parseInt(img.getAttribute('width')!) : null,
+            height: img.getAttribute('height') ? parseInt(img.getAttribute('height')!) : null,
+            align: img.getAttribute('data-align') || 'center',
+          }
+        },
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['img', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+    const { align, ...attrs } = HTMLAttributes
+    return [
+      'img',
+      mergeAttributes(this.options.HTMLAttributes, attrs, {
+        'data-align': align,
+      }),
+    ]
   },
 
   addCommands() {
@@ -102,7 +131,7 @@ const ResizableImage = Node.create({
         ({ commands }) => {
           return commands.insertContent({
             type: this.name,
-            attrs: options,
+            attrs: { align: 'center', ...options },
           })
         },
     }
@@ -110,23 +139,38 @@ const ResizableImage = Node.create({
 
   addNodeView() {
     return ({ node, getPos, editor }: NodeViewRendererProps) => {
+      const wrapper = document.createElement('div')
+      wrapper.className = 'resizable-image-wrapper'
+
       const container = document.createElement('div')
       container.className = 'resizable-image-container'
+
+      // Set wrapper alignment
+      const align = node.attrs.align || 'center'
+      wrapper.style.textAlign = align
+      wrapper.style.margin = '16px 0'
+      wrapper.style.width = '100%'
 
       const img = document.createElement('img')
       img.src = node.attrs.src
       img.alt = node.attrs.alt || ''
       img.title = node.attrs.title || ''
 
-      if (node.attrs.width) img.style.width = `${node.attrs.width}px`
-      if (node.attrs.height) img.style.height = `${node.attrs.height}px`
+      if (node.attrs.width) {
+        img.style.width = `${node.attrs.width}px`
+      } else {
+        img.style.maxWidth = '100%'
+      }
+
+      if (node.attrs.height) {
+        img.style.height = `${node.attrs.height}px`
+      } else {
+        img.style.height = 'auto'
+      }
 
       img.className = 'resizable-image'
-      img.style.maxWidth = '100%'
-      img.style.height = 'auto'
       img.style.borderRadius = '8px'
-      img.style.display = 'block'
-      img.style.margin = '16px auto'
+      img.style.display = 'inline-block'
 
       let isSelected = false
 
@@ -137,19 +181,22 @@ const ResizableImage = Node.create({
         position: absolute;
         bottom: -5px;
         right: -5px;
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         background: #3b82f6;
         border: 2px solid white;
         border-radius: 50%;
         cursor: se-resize;
-        display: ${isSelected ? 'block' : 'none'};
+        display: none;
+        z-index: 10;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       `
 
       container.style.position = 'relative'
       container.style.display = 'inline-block'
       container.appendChild(img)
       container.appendChild(resizeHandle)
+      wrapper.appendChild(container)
 
       // Handle resize
       let isResizing = false
@@ -157,6 +204,7 @@ const ResizableImage = Node.create({
       let startY: number
       let startWidth: number
       let startHeight: number
+      let aspectRatio: number
 
       const updateAttributes = (attrs: Partial<ImageAttributes>) => {
         const pos = getPos()
@@ -176,33 +224,75 @@ const ResizableImage = Node.create({
         startY = e.clientY
         startWidth = img.offsetWidth
         startHeight = img.offsetHeight
+        aspectRatio = startWidth / startHeight
+
         e.preventDefault()
+        e.stopPropagation()
+
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
       }
 
       const handleMouseMove = (e: MouseEvent) => {
         if (!isResizing) return
 
-        const width = startWidth + (e.clientX - startX)
-        const height = startHeight + (e.clientY - startY)
+        const deltaX = e.clientX - startX
+        const deltaY = e.clientY - startY
 
-        if (width > 50 && height > 50) {
-          img.style.width = `${width}px`
-          img.style.height = `${height}px`
-          updateAttributes({ width, height })
+        // Use the larger delta to maintain aspect ratio
+        const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY * aspectRatio
+
+        let newWidth = startWidth + delta
+        let newHeight = newWidth / aspectRatio
+
+        // Minimum size constraints
+        if (newWidth < 50) {
+          newWidth = 50
+          newHeight = newWidth / aspectRatio
         }
+
+        // Maximum size constraints
+        const maxWidth = editor.view.dom.clientWidth - 40
+        if (newWidth > maxWidth) {
+          newWidth = maxWidth
+          newHeight = newWidth / aspectRatio
+        }
+
+        img.style.width = `${newWidth}px`
+        img.style.height = `${newHeight}px`
+
+        // Update attributes with debouncing
+        if (img.updateTimeout) {
+          clearTimeout(img.updateTimeout)
+        }
+        img.updateTimeout = setTimeout(() => {
+          updateAttributes({ width: Math.round(newWidth), height: Math.round(newHeight) })
+        }, 100)
       }
 
       const handleMouseUp = () => {
-        isResizing = false
+        if (isResizing) {
+          isResizing = false
+          document.removeEventListener('mousemove', handleMouseMove)
+          document.removeEventListener('mouseup', handleMouseUp)
+
+          // Final update
+          if (img.updateTimeout) {
+            clearTimeout(img.updateTimeout)
+          }
+          updateAttributes({
+            width: Math.round(img.offsetWidth),
+            height: Math.round(img.offsetHeight),
+          })
+        }
       }
 
       resizeHandle.addEventListener('mousedown', handleMouseDown)
-      document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
 
-      // Delete on backspace/delete
+      // Delete on backspace/delete when selected
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Backspace' || e.key === 'Delete') {
+        if (isSelected && (e.key === 'Backspace' || e.key === 'Delete')) {
+          e.preventDefault()
           const pos = getPos()
           if (pos !== undefined) {
             const nodeSize = node.nodeSize
@@ -215,18 +305,30 @@ const ResizableImage = Node.create({
         }
       }
 
-      // Make container focusable for keyboard events
-      container.tabIndex = -1
-      container.addEventListener('keydown', handleKeyDown)
+      // Click to select
+      container.addEventListener('click', (e) => {
+        e.preventDefault()
+        const pos = getPos()
+        if (pos !== undefined) {
+          const selection = NodeSelection.create(editor.state.doc, pos)
+          editor.view.dispatch(editor.state.tr.setSelection(selection))
+        }
+      })
+
+      document.addEventListener('keydown', handleKeyDown)
 
       return {
-        dom: container,
+        dom: wrapper,
         update: (updatedNode) => {
           if (updatedNode.type.name !== this.name) return false
 
           img.src = updatedNode.attrs.src
           img.alt = updatedNode.attrs.alt || ''
           img.title = updatedNode.attrs.title || ''
+
+          // Update alignment
+          const newAlign = updatedNode.attrs.align || 'center'
+          wrapper.style.textAlign = newAlign
 
           if (updatedNode.attrs.width) {
             img.style.width = `${updatedNode.attrs.width}px`
@@ -239,20 +341,22 @@ const ResizableImage = Node.create({
         },
         selectNode: () => {
           isSelected = true
-          container.classList.add('selected')
+          container.style.outline = '2px solid #3b82f6'
+          container.style.outlineOffset = '2px'
           resizeHandle.style.display = 'block'
         },
         deselectNode: () => {
           isSelected = false
-          container.classList.remove('selected')
+          container.style.outline = 'none'
           resizeHandle.style.display = 'none'
         },
         destroy: () => {
-          // Clean up event listeners
-          resizeHandle.removeEventListener('mousedown', handleMouseDown)
+          document.removeEventListener('keydown', handleKeyDown)
           document.removeEventListener('mousemove', handleMouseMove)
           document.removeEventListener('mouseup', handleMouseUp)
-          container.removeEventListener('keydown', handleKeyDown)
+          if (img.updateTimeout) {
+            clearTimeout(img.updateTimeout)
+          }
         },
       }
     }
@@ -279,7 +383,6 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        // Ensure heading and list extensions are enabled
         heading: {
           levels: [1, 2, 3],
         },
@@ -294,7 +397,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       }),
       ResizableImage.configure({
         HTMLAttributes: {
-          class: 'max-w-full h-auto rounded-lg my-4',
+          class: 'editor-image',
         },
       }),
       Link.configure({
@@ -305,6 +408,8 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
+        alignments: ['left', 'center', 'right', 'justify'],
+        defaultAlignment: 'left',
       }),
       Underline,
     ],
@@ -355,6 +460,11 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     [editor],
   )
 
+  const setParagraph = useCallback(() => {
+    if (!editor) return
+    editor.chain().focus().setParagraph().run()
+  }, [editor])
+
   const toggleBulletList = useCallback(() => {
     if (!editor) return
     editor.chain().focus().toggleBulletList().run()
@@ -368,7 +478,20 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   const setTextAlign = useCallback(
     (alignment: 'left' | 'center' | 'right' | 'justify') => {
       if (!editor) return
-      editor.chain().focus().setTextAlign(alignment).run()
+
+      const { from, to } = editor.state.selection
+      const { schema } = editor.state
+
+      // Get the current node type (paragraph or heading)
+      const currentNode = editor.state.doc.nodeAt(from)
+      const nodeType = currentNode?.type || schema.nodes.paragraph
+
+      // Only apply to the current block, not everything below
+      editor.view.dispatch(
+        editor.view.state.tr
+          .setBlockType(from, to, nodeType, { textAlign: alignment })
+          .setMeta('preventDispatch', false),
+      )
     },
     [editor],
   )
@@ -376,7 +499,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   const handleImageUpload = useCallback(
     (imageUrl: string) => {
       if (editor) {
-        editor.chain().focus().setResizableImage({ src: imageUrl }).run()
+        editor.chain().focus().setResizableImage({ src: imageUrl, align: 'center' }).run()
       }
     },
     [editor],
@@ -386,25 +509,35 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     (size: 'small' | 'medium' | 'large' | 'original') => {
       if (!editor) return
 
-      const { selection } = editor.state
-      const node = editor.state.doc.nodeAt(selection.from)
+      const { state } = editor
+      const { selection } = state
+      const { $from } = selection
 
-      if (node && node.type.name === 'resizableImage') {
+      // Find the selected image node
+      let imageNode = null
+      let imagePos = null
+
+      state.doc.descendants((node, pos) => {
+        if (node.type.name === 'resizableImage' && pos <= $from.pos && pos + node.nodeSize >= $from.pos) {
+          imageNode = node
+          imagePos = pos
+          return false
+        }
+      })
+
+      if (imageNode && imagePos !== null) {
         let width: number | null = null
         let height: number | null = null
 
         switch (size) {
           case 'small':
             width = 200
-            height = null
             break
           case 'medium':
             width = 400
-            height = null
             break
           case 'large':
             width = 600
-            height = null
             break
           case 'original':
             width = null
@@ -412,7 +545,45 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
             break
         }
 
-        editor.chain().focus().updateAttributes('resizableImage', { width, height }).run()
+        editor.view.dispatch(
+          editor.view.state.tr.setNodeMarkup(imagePos, undefined, {
+            ...(imageNode as any).attrs,
+            width,
+            height,
+          }),
+        )
+      }
+    },
+    [editor],
+  )
+
+  const setImageAlignment = useCallback(
+    (alignment: 'left' | 'center' | 'right') => {
+      if (!editor) return
+
+      const { state } = editor
+      const { selection } = state
+      const { $from } = selection
+
+      // Find the selected image node
+      let imageNode = null
+      let imagePos = null
+
+      state.doc.descendants((node, pos) => {
+        if (node.type.name === 'resizableImage' && pos <= $from.pos && pos + node.nodeSize >= $from.pos) {
+          imageNode = node
+          imagePos = pos
+          return false
+        }
+      })
+
+      if (imageNode && imagePos !== null) {
+        editor.view.dispatch(
+          editor.view.state.tr.setNodeMarkup(imagePos, undefined, {
+            ...(imageNode as any).attrs,
+            align: alignment,
+          }),
+        )
       }
     },
     [editor],
@@ -423,6 +594,16 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
   }
 
   const hasSelectedImage = editor.isActive('resizableImage')
+
+  // Get current text alignment only for the active node
+  const getCurrentTextAlign = () => {
+    const { selection } = editor.state
+    const { $from } = selection
+    const node = $from.node()
+    return (node.attrs as any)?.textAlign || 'left'
+  }
+
+  const currentTextAlign = getCurrentTextAlign()
 
   return (
     <>
@@ -435,7 +616,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
               <ButtonGroup size='sm' variant='flat'>
                 <Button
                   onPress={() => setTextAlign('left')}
-                  color={editor.isActive({ textAlign: 'left' }) ? 'primary' : 'default'}
+                  color={currentTextAlign === 'left' ? 'primary' : 'default'}
                   isIconOnly
                   title='Align Left'
                 >
@@ -443,7 +624,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 </Button>
                 <Button
                   onPress={() => setTextAlign('center')}
-                  color={editor.isActive({ textAlign: 'center' }) ? 'primary' : 'default'}
+                  color={currentTextAlign === 'center' ? 'primary' : 'default'}
                   isIconOnly
                   title='Align Center'
                 >
@@ -451,7 +632,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 </Button>
                 <Button
                   onPress={() => setTextAlign('right')}
-                  color={editor.isActive({ textAlign: 'right' }) ? 'primary' : 'default'}
+                  color={currentTextAlign === 'right' ? 'primary' : 'default'}
                   isIconOnly
                   title='Align Right'
                 >
@@ -459,7 +640,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 </Button>
                 <Button
                   onPress={() => setTextAlign('justify')}
-                  color={editor.isActive({ textAlign: 'justify' }) ? 'primary' : 'default'}
+                  color={currentTextAlign === 'justify' ? 'primary' : 'default'}
                   isIconOnly
                   title='Justify'
                 >
@@ -503,8 +684,16 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 </Button>
               </ButtonGroup>
 
-              {/* Headings */}
+              {/* Headings and Paragraph */}
               <ButtonGroup size='sm' variant='flat'>
+                <Button
+                  onPress={setParagraph}
+                  color={editor.isActive('paragraph') && !editor.isActive('heading') ? 'primary' : 'default'}
+                  className='font-normal'
+                  title='Paragraph'
+                >
+                  P
+                </Button>
                 <Button
                   onPress={() => toggleHeading(1)}
                   color={editor.isActive('heading', { level: 1 }) ? 'primary' : 'default'}
@@ -586,29 +775,50 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
                 </Button>
               </ButtonGroup>
 
-              {/* Image Resize Controls - Only show when image is selected */}
+              {/* Image Controls - Only show when image is selected */}
               {hasSelectedImage && (
-                <Dropdown>
-                  <DropdownTrigger>
-                    <Button size='sm' variant='flat' color='secondary'>
-                      Resize Image
-                    </Button>
-                  </DropdownTrigger>
-                  <DropdownMenu aria-label='Image resize options'>
-                    <DropdownItem key='small' onPress={() => resizeSelectedImage('small')}>
-                      Small (200px)
-                    </DropdownItem>
-                    <DropdownItem key='medium' onPress={() => resizeSelectedImage('medium')}>
-                      Medium (400px)
-                    </DropdownItem>
-                    <DropdownItem key='large' onPress={() => resizeSelectedImage('large')}>
-                      Large (600px)
-                    </DropdownItem>
-                    <DropdownItem key='original' onPress={() => resizeSelectedImage('original')}>
-                      Original Size
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                <>
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <Button size='sm' variant='flat' color='secondary'>
+                        Resize Image
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label='Image resize options'>
+                      <DropdownItem key='small' onPress={() => resizeSelectedImage('small')}>
+                        Small (200px)
+                      </DropdownItem>
+                      <DropdownItem key='medium' onPress={() => resizeSelectedImage('medium')}>
+                        Medium (400px)
+                      </DropdownItem>
+                      <DropdownItem key='large' onPress={() => resizeSelectedImage('large')}>
+                        Large (600px)
+                      </DropdownItem>
+                      <DropdownItem key='original' onPress={() => resizeSelectedImage('original')}>
+                        Original Size
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <Button size='sm' variant='flat' color='secondary'>
+                        Align Image
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label='Image alignment options'>
+                      <DropdownItem key='left' onPress={() => setImageAlignment('left')}>
+                        Align Left
+                      </DropdownItem>
+                      <DropdownItem key='center' onPress={() => setImageAlignment('center')}>
+                        Align Center
+                      </DropdownItem>
+                      <DropdownItem key='right' onPress={() => setImageAlignment('right')}>
+                        Align Right
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </>
               )}
             </div>
           </div>
