@@ -60,7 +60,7 @@ export default function ProjectDetailPage() {
   if (error || !project) {
     return (
       <div className='flex min-h-screen items-center justify-center bg-gray-50'>
-        <Card className='max-w-lg border border-gray-200 shadow-xl'>
+        <Card className='border border-gray-200 shadow-xl'>
           <CardBody className='p-12 text-center'>
             <div className='mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100'>
               <ArrowLeftIcon className='h-10 w-10 text-gray-600' />
@@ -90,7 +90,7 @@ export default function ProjectDetailPage() {
     <div className='min-h-screen bg-gray-50'>
       {/* Professional Header */}
       <div className='sticky top-20 z-30 border-b border-gray-200 bg-white shadow-sm'>
-        <div className='mx-auto max-w-7xl p-6'>
+        <div className='mx-auto p-6'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-6'>
               <Button
@@ -133,7 +133,7 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      <div className='mx-auto max-w-7xl space-y-8 p-6'>
+      <div className='mx-auto space-y-8 p-6'>
         {/* Professional Media Gallery */}
         {hasMedia && (
           <Card className='border border-gray-200 shadow-lg'>

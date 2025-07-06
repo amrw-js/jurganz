@@ -64,7 +64,7 @@ export default function ProductionLineDetailPage() {
   if (error || !productionLine) {
     return (
       <div className='flex min-h-screen items-center justify-center bg-gray-50'>
-        <Card className='max-w-lg border border-gray-200 shadow-xl'>
+        <Card className='border border-gray-200 shadow-xl'>
           <CardBody className='p-12 text-center'>
             <div className='mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100'>
               <ArrowLeftIcon className='h-10 w-10 text-gray-600' />
@@ -92,20 +92,11 @@ export default function ProductionLineDetailPage() {
   const imageCount = productionLine.media?.filter((m) => m.type === 'image').length || 0
   const videoCount = productionLine.media?.filter((m) => m.type === 'video').length || 0
 
-  const formatPrice = (price: number, currency: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency === 'USD' ? 'USD' : 'EUR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price)
-  }
-
   return (
     <div className='min-h-screen bg-gray-50'>
       {/* Clean Header */}
       <div className='border-b border-gray-200 bg-white'>
-        <div className='mx-auto max-w-6xl px-6 py-8'>
+        <div className='mx-auto px-6 py-8'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-6'>
               <Button as={Link} href='/production-lines' isIconOnly variant='light' className='hover:bg-gray-100'>
@@ -129,18 +120,6 @@ export default function ProductionLineDetailPage() {
                     {productionLine.isAvailableNow ? 'Available Now' : 'Coming Soon'}
                   </Chip>
                 </div>
-
-                <div className='flex items-center gap-4 text-gray-600'>
-                  <div className='flex items-center gap-2'>
-                    <DollarSign className='h-5 w-5 text-gray-500' />
-                    <p className='text-xl font-bold text-gray-900'>
-                      {formatPrice(productionLine.price, productionLine.localCurrency)}
-                      {productionLine.negotiable && (
-                        <span className='ml-2 text-sm font-normal text-gray-500'>(Negotiable)</span>
-                      )}
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -155,7 +134,7 @@ export default function ProductionLineDetailPage() {
         </div>
       </div>
 
-      <div className='mx-auto max-w-6xl px-6 py-12'>
+      <div className='mx-auto px-6 py-12'>
         <div className='grid grid-cols-1 gap-12 lg:grid-cols-3'>
           {/* Media Gallery */}
           <div className='lg:col-span-2'>

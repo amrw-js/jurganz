@@ -18,12 +18,16 @@ export const NAVBAR_ITEMS = [
     href: '/projects',
   },
   {
-    i18nKey: 'navbar_careers',
-    href: '/careers',
-  },
-  {
     i18nKey: 'navbar_production_line',
     href: '/production-lines',
+  },
+  {
+    i18nKey: 'navbar_blogs',
+    href: '/blogs',
+  },
+  {
+    i18nKey: 'navbar_careers',
+    href: '/careers',
   },
 ]
 

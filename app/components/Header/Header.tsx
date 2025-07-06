@@ -23,14 +23,22 @@ import { LanguageToggleCompact } from '../LanguageToggle'
 import { FacebookIcon } from '../ui/icons/FacebookIcon'
 import { LinkedInIcon } from '../ui/icons/LinkedInIcon'
 
-// Import the compact language toggle
-
 export const Header = () => {
   const { t } = useTranslation()
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const isActiveLink = (path: string): boolean => pathname.includes(path)
+  // Fixed active link detection
+  const isActiveLink = (path: string): boolean => {
+    // Handle exact match for home page
+    if (path === '/' || path === '') {
+      return pathname === '/' || pathname === ''
+    }
+
+    // For other paths, check if pathname starts with the path
+    // and ensure it's followed by '/' or end of string to avoid partial matches
+    return pathname === path || pathname.startsWith(path + '/')
+  }
 
   return (
     <Navbar

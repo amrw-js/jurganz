@@ -1,13 +1,24 @@
 'use client'
 
 import { Button } from '@heroui/react'
-import { Factory, Plus, Search } from 'lucide-react'
+import { Factory, Plus } from 'lucide-react'
+import { useState } from 'react'
 
 import { ProductionLineCard } from '@/app/components/ProductionLineCard'
-import { useProductionLines } from '@/app/hooks/useProductionLines'
+import { useCreateProductionLine, useProductionLines } from '@/app/hooks/useProductionLines'
+import ProductionLineModal from '@/app/modals/SellProductionLineModal'
 
 export default function ProductionLinesPage() {
   const { data: productionLines = [], isLoading, error } = useProductionLines()
+  const { mutate: createLine, isPending: isPending } = useCreateProductionLine()
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleCreateLine = (formData: any) => {
+    createLine({ ...formData, published: false })
+  }
+
+  const filteredLines = productionLines.filter((line) => line.published)
 
   if (isLoading) {
     return (
@@ -44,12 +55,12 @@ export default function ProductionLinesPage() {
     <div className='min-h-screen bg-gray-50'>
       {/* Clean Header */}
       <div className='border-b border-gray-200 bg-white'>
-        <div className='mx-auto max-w-6xl px-6 py-12'>
+        <div className='mx-auto px-6 py-12'>
           <div className='text-center'>
             <h1 className='text-4xl font-bold text-gray-900 lg:text-5xl'>Production Lines</h1>
             <p className='mt-4 text-xl text-gray-600'>Find the perfect production line for your business</p>
             <div className='mt-8 flex items-center justify-center gap-4'>
-              <Button color='primary' startContent={<Plus className='h-4 w-4' />}>
+              <Button onPress={() => setIsModalOpen(true)} color='primary' startContent={<Plus className='h-4 w-4' />}>
                 List Your Line
               </Button>
             </div>
@@ -58,14 +69,14 @@ export default function ProductionLinesPage() {
       </div>
 
       {/* Production Lines */}
-      <div className='mx-auto max-w-6xl px-6 py-12'>
-        {productionLines.length > 0 ? (
+      <div className='mx-auto px-6 py-12'>
+        {filteredLines.length > 0 ? (
           <div className='space-y-8'>
-            {productionLines.map((productionLine, index) => (
+            {filteredLines.map((productionLine, index) => (
               <ProductionLineCard
                 key={productionLine.id}
                 productionLine={productionLine}
-                showDivider={index < productionLines.length - 1}
+                showDivider={index < filteredLines.length - 1}
               />
             ))}
           </div>
@@ -85,6 +96,12 @@ export default function ProductionLinesPage() {
           </div>
         )}
       </div>
+      <ProductionLineModal
+        isOpen={isModalOpen}
+        isPending={isPending}
+        onSubmit={handleCreateLine}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   )
 }
