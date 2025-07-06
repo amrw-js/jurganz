@@ -4,6 +4,7 @@ import { Chip } from '@heroui/react'
 import { formatDistanceToNow } from 'date-fns'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 import type { Blog } from '@/types/blog.types'
 
@@ -13,6 +14,8 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog, featured = false }: BlogCardProps) {
+  const { t } = useTranslation('blogs')
+
   const formatDate = (date: Date | string) => {
     return formatDistanceToNow(new Date(date), { addSuffix: true })
   }
@@ -59,7 +62,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
                   {/* Featured badge for feature images */}
                   {blog.featureImage && (
                     <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
-                      Featured
+                      {t('featured')}
                     </Chip>
                   )}
                 </>
@@ -87,7 +90,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
               </p>
 
               <div className='flex items-center font-semibold text-blue-600 transition-all duration-300 group-hover:gap-3 dark:text-blue-400'>
-                <span>Read full article</span>
+                <span>{t('readFullArticle')}</span>
                 <ArrowRight className='h-5 w-5 transition-transform duration-300 group-hover:translate-x-1' />
               </div>
             </div>
@@ -112,7 +115,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
               {/* Featured badge for feature images */}
               {blog.featureImage && (
                 <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
-                  Featured
+                  {t('featured')}
                 </Chip>
               )}
             </>
@@ -133,7 +136,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
               <>
                 <span>•</span>
                 <Clock className='h-4 w-4' />
-                <span>Updated</span>
+                <span>{t('updated')}</span>
               </>
             )}
           </div>
@@ -149,14 +152,14 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
           <div className='flex items-center justify-between'>
             {blog.media?.length ? (
               <Chip size='sm' variant='flat' color='secondary' className='text-xs'>
-                {blog.media.length} image{blog.media.length > 1 ? 's' : ''}
+                {blog.media.length} {blog.media.length > 1 ? t('images') : t('image')}
               </Chip>
             ) : (
               <div />
             )}
 
             <div className='flex items-center text-sm font-medium text-blue-600 transition-all duration-300 group-hover:gap-2 dark:text-blue-400'>
-              <span>Read more</span>
+              <span>{t('readMore')}</span>
               <ArrowRight className='h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' />
             </div>
           </div>

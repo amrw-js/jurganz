@@ -1,0 +1,15 @@
+{
+  "backToBlog": "Back to Blog",
+  "backToAllArticles": "Back to All Articles",
+  "somethingWentWrong": "Something went wrong",
+  "couldNotLoadPost": "We couldn't load this blog post. Please try again.",
+  "tryAgain": "Try Again",
+  "articleNotFound": "Article not found",
+  "articleNotFoundDescription": "The article you're looking for doesn't exist or has been removed.",
+  "updated": "Updated",
+  "featured": "Featured",
+  "images": "images",
+  "image": "image",
+  "gallery": "Gallery",
+  "galleryImageAlt": "Gallery image"
+}

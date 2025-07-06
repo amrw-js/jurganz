@@ -8,8 +8,7 @@ interface BlogPostPageProps {
   }
 }
 
-export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  // In a real app, you might want to fetch the blog data here for SEO
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Blog Post',
     description: 'Read this blog post',

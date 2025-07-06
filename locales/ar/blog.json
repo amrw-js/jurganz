@@ -1,0 +1,15 @@
+{
+  "backToBlog": "العودة إلى المدونة",
+  "backToAllArticles": "العودة إلى جميع المقالات",
+  "somethingWentWrong": "حدث خطأ ما",
+  "couldNotLoadPost": "لم نتمكن من تحميل هذا المقال. يرجى المحاولة مرة أخرى.",
+  "tryAgain": "حاول مرة أخرى",
+  "articleNotFound": "المقال غير موجود",
+  "articleNotFoundDescription": "المقال الذي تبحث عنه غير موجود أو تم حذفه.",
+  "updated": "محدث",
+  "featured": "مميز",
+  "images": "صور",
+  "image": "صورة",
+  "gallery": "معرض الصور",
+  "galleryImageAlt": "صورة المعرض"
+}

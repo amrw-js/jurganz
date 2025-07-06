@@ -3,6 +3,7 @@
 import { Button } from '@heroui/react'
 import { AlertCircle, RefreshCw, Search } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useBlogs } from '@/app/hooks/useBlogs'
 
@@ -10,6 +11,7 @@ import BlogCard from './BlogCard'
 import BlogCardSkeleton from './BlogCardSkeleton'
 
 export default function BlogsListClient() {
+  const { t } = useTranslation('blogs')
   const { data: blogs, isLoading, error, refetch, isRefetching } = useBlogs()
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -51,8 +53,8 @@ export default function BlogsListClient() {
       <div className='flex flex-col items-center justify-center py-20'>
         <div className='rounded-2xl border border-red-200 bg-red-50 p-8 text-center dark:border-red-800 dark:bg-red-900/20'>
           <AlertCircle className='mx-auto mb-4 h-12 w-12 text-red-500' />
-          <h3 className='mb-2 text-lg font-semibold text-red-900 dark:text-red-100'>Oops! Something went wrong</h3>
-          <p className='mb-6 text-red-700 dark:text-red-300'>We couldn't load the blog posts. Please try again.</p>
+          <h3 className='mb-2 text-lg font-semibold text-red-900 dark:text-red-100'>{t('errorTitle')}</h3>
+          <p className='mb-6 text-red-700 dark:text-red-300'>{t('errorDescription')}</p>
           <Button
             onPress={() => refetch()}
             isLoading={isRefetching}
@@ -61,7 +63,7 @@ export default function BlogsListClient() {
             startContent={<RefreshCw className='h-4 w-4' />}
             className='font-medium'
           >
-            Try Again
+            {t('tryAgain')}
           </Button>
         </div>
       </div>
@@ -75,10 +77,8 @@ export default function BlogsListClient() {
           <div className='mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800'>
             <Search className='h-12 w-12 text-slate-400' />
           </div>
-          <h3 className='mb-4 text-2xl font-bold text-slate-900 dark:text-white'>No posts yet</h3>
-          <p className='text-lg text-slate-600 dark:text-slate-400'>
-            We're working on some amazing content. Check back soon!
-          </p>
+          <h3 className='mb-4 text-2xl font-bold text-slate-900 dark:text-white'>{t('noPostsTitle')}</h3>
+          <p className='text-lg text-slate-600 dark:text-slate-400'>{t('noPostsDescription')}</p>
         </div>
       </div>
     )
@@ -96,7 +96,7 @@ export default function BlogsListClient() {
           <Search className='absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 transform text-slate-400' />
           <input
             type='text'
-            placeholder='Search articles...'
+            placeholder={t('searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className='w-full rounded-full border border-slate-200 bg-white py-3 pl-12 pr-4 text-slate-900 placeholder-slate-500 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white'
@@ -106,7 +106,9 @@ export default function BlogsListClient() {
 
       {filteredBlogs && filteredBlogs.length === 0 && searchTerm && (
         <div className='py-12 text-center'>
-          <p className='text-lg text-slate-600 dark:text-slate-400'>No articles found for "{searchTerm}"</p>
+          <p className='text-lg text-slate-600 dark:text-slate-400'>
+            {t('noSearchResults')} "{searchTerm}"
+          </p>
         </div>
       )}
 
@@ -115,7 +117,7 @@ export default function BlogsListClient() {
         <div className='mb-16'>
           <div className='mb-8 text-center'>
             <span className='inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-200'>
-              ✨ Featured Article
+              {t('featuredArticle')}
             </span>
           </div>
           <BlogCard blog={featuredPost} featured />
@@ -126,7 +128,9 @@ export default function BlogsListClient() {
       {regularPosts.length > 0 && (
         <div>
           {!searchTerm && (
-            <h2 className='mb-8 text-center text-2xl font-bold text-slate-900 dark:text-white'>Latest Articles</h2>
+            <h2 className='mb-8 text-center text-2xl font-bold text-slate-900 dark:text-white'>
+              {t('latestArticles')}
+            </h2>
           )}
           <div className='grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3'>
             {(searchTerm ? filteredBlogs : regularPosts)?.map((blog) => (
