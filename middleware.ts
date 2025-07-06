@@ -7,7 +7,7 @@ export type Locale = (typeof locales)[number]
 // Define protected routes
 const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
 
-// Get the preferred locale from Accept-Language header
+// Get the preferred locale - PRIORITIZE COOKIE FIRST
 function getLocale(request: NextRequest): Locale {
   // Check if there's a locale in the pathname
   const pathname = request.nextUrl.pathname
@@ -17,7 +17,17 @@ function getLocale(request: NextRequest): Locale {
     return pathname.split('/')[1] as Locale
   }
 
-  // Get locale from Accept-Language header
+  // PRIORITY 1: Get locale from cookie (user's explicit choice)
+  const localeCookie =
+    request.cookies.get('locale')?.value ||
+    request.cookies.get('NEXT_LOCALE')?.value ||
+    request.cookies.get('NEXT_INTL_LOCALE')?.value
+
+  if (localeCookie && locales.includes(localeCookie as Locale)) {
+    return localeCookie as Locale
+  }
+
+  // PRIORITY 2: Get locale from Accept-Language header (only if no cookie)
   const acceptLanguage = request.headers.get('Accept-Language')
   if (acceptLanguage) {
     const preferredLocale = acceptLanguage
@@ -32,12 +42,6 @@ function getLocale(request: NextRequest): Locale {
       const shortLang = preferredLocale.split('-')[0]
       return shortLang as Locale
     }
-  }
-
-  // Get locale from cookie
-  const localeCookie = request.cookies.get('locale')?.value
-  if (localeCookie && locales.includes(localeCookie as Locale)) {
-    return localeCookie as Locale
   }
 
   // Default to 'en'
@@ -67,11 +71,16 @@ function handleI18n(request: NextRequest) {
   const newUrl = new URL(`/${locale}${pathname}`, request.url)
   const response = NextResponse.redirect(newUrl)
 
-  // Set locale cookie for future requests
-  response.cookies.set('locale', locale, {
+  // Set multiple locale cookies for compatibility
+  const cookieOptions = {
     maxAge: 60 * 60 * 24 * 365,
     path: '/',
-  })
+    sameSite: 'lax' as const,
+  }
+
+  response.cookies.set('locale', locale, cookieOptions)
+  response.cookies.set('NEXT_LOCALE', locale, cookieOptions)
+  response.cookies.set('NEXT_INTL_LOCALE', locale, cookieOptions)
 
   return response
 }

@@ -25,10 +25,10 @@ export const NAVBAR_ITEMS = [
     i18nKey: 'navbar_blogs',
     href: '/blogs',
   },
-  {
-    i18nKey: 'navbar_careers',
-    href: '/careers',
-  },
+  // {
+  //   i18nKey: 'navbar_careers',
+  //   href: '/careers',
+  // },
 ]
 
 export const SERVICES = [

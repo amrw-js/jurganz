@@ -16,7 +16,7 @@ export const Footer = () => {
   const { isArabic } = useLanguageToggle()
 
   return (
-    <div className='bg-cyan-50 px-6 pb-10 pt-10 lg:px-[3.75rem] lg:pt-20'>
+    <div id='contact-us' className='bg-cyan-50 px-6 pb-10 pt-10 lg:px-[3.75rem] lg:pt-20'>
       <div className='flex flex-1 flex-col gap-8 lg:flex-row lg:gap-[3.75rem]'>
         <div className={cn('flex flex-col gap-3 text-center', isArabic ? 'lg:text-right' : 'lg:text-left')}>
           <h3 className='text-2xl font-semibold leading-8 sm:text-4xl sm:leading-10'>{t('home:contact_us_heading')}</h3>

@@ -84,7 +84,7 @@ export const Header = () => {
 
       <NavbarContent className='hidden lg:flex' justify='end'>
         <NavbarItem>
-          <Button className='w-[7.5rem]' color='primary'>
+          <Button as='a' href='#contact-us' className='w-[7.5rem]' color='primary'>
             {t('contact_us')}
           </Button>
         </NavbarItem>
@@ -110,7 +110,7 @@ export const Header = () => {
         ))}
 
         <li className='mt-1 w-full self-start'>
-          <Button className='h-10 w-full' color='primary'>
+          <Button as='a' href='#contact-us' className='h-10 w-full' color='primary'>
             {t('contact_us')}
           </Button>
         </li>

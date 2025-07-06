@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
 
+import Loading from '../components/ui/Loading'
+
 interface I18nClientProviderProps {
   children: React.ReactNode
 }
@@ -44,7 +46,7 @@ export default function I18nClientProvider({ children }: I18nClientProviderProps
   }, [pathname])
 
   if (!isReady || !i18n) {
-    return <div>Loading translations...</div>
+    return <Loading />
   }
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>

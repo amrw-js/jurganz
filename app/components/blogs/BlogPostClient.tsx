@@ -91,9 +91,8 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
 
   const displayImage = getBlogDisplayImage(blog)
 
-  // Get remaining media for gallery (excluding the feature image from media array)
   const galleryMedia = blog.media
-    ? blog.media.filter((media: any, index: number) => {
+    ? blog.media.filter((_, index: number) => {
         // If we have a feature image, show all media in gallery
         // If no feature image, skip the first media item as it's used as header image
         if (blog.featureImage) {
@@ -122,9 +121,6 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
             <div className='flex items-center gap-2'>
               <Button isIconOnly variant='light' className='text-slate-600 dark:text-slate-400'>
                 <Share2 className='h-4 w-4' />
-              </Button>
-              <Button isIconOnly variant='light' className='text-slate-600 dark:text-slate-400'>
-                <Bookmark className='h-4 w-4' />
               </Button>
             </div>
           </div>
