@@ -11,5 +11,11 @@
   "images": "صور",
   "image": "صورة",
   "gallery": "معرض الصور",
-  "galleryImageAlt": "صورة المعرض"
+  "galleryImageAlt": "صورة المعرض",
+  "shareArticle": "مشاركة المقال",
+  "shareDescription": "شارك هذا المقال مع شبكتك",
+  "copyLink": "نسخ الرابط",
+  "linkCopied": "تم نسخ الرابط إلى الحافظة!",
+  "close": "إغلاق",
+  "shareOnSocialMedia": "شارك على وسائل التواصل الاجتماعي"
 }

@@ -11,5 +11,11 @@
   "images": "images",
   "image": "image",
   "gallery": "Gallery",
-  "galleryImageAlt": "Gallery image"
+  "galleryImageAlt": "Gallery image",
+  "shareArticle": "Share Article",
+  "shareDescription": "Share this article with your network",
+  "copyLink": "Copy Link",
+  "linkCopied": "Link copied to clipboard!",
+  "close": "Close",
+  "shareOnSocialMedia": "Share on social media"
 }

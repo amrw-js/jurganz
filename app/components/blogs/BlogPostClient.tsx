@@ -2,11 +2,13 @@
 
 import { Button, Chip } from '@heroui/react'
 import { format, formatDistanceToNow } from 'date-fns'
-import { AlertCircle, ArrowLeft, Bookmark, Calendar, Clock, Eye, RefreshCw, Share2 } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Calendar, Clock, Eye, RefreshCw, Share2 } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBlog } from '@/app/hooks/useBlogs'
+import ShareModal from '@/app/modals/ShareModal'
 
 import BlogPostSkeleton from './BlogPostSkeleton'
 
@@ -34,6 +36,15 @@ const getBlogDisplayImage = (blog: any) => {
 export default function BlogPostClient({ id }: BlogPostClientProps) {
   const { t } = useTranslation('blog')
   const { data: blog, isLoading, error, refetch, isRefetching } = useBlog(id)
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+  const [currentUrl, setCurrentUrl] = useState('')
+
+  // Get current URL for sharing
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentUrl(window.location.href)
+    }
+  }, [])
 
   if (isLoading) {
     return <BlogPostSkeleton />
@@ -102,6 +113,12 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
       })
     : []
 
+  // Create a clean description for sharing
+  const getShareDescription = (content: string) => {
+    const plainText = content.replace(/<[^>]*>/g, '')
+    return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText
+  }
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800'>
       {/* Header */}
@@ -119,7 +136,12 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
             </Button>
 
             <div className='flex items-center gap-2'>
-              <Button isIconOnly variant='light' className='text-slate-600 dark:text-slate-400'>
+              <Button
+                isIconOnly
+                variant='light'
+                className='text-slate-600 transition-colors hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400'
+                onPress={() => setIsShareModalOpen(true)}
+              >
                 <Share2 className='h-4 w-4' />
               </Button>
             </div>
@@ -220,6 +242,15 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
           </footer>
         </div>
       </article>
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        title={blog.title}
+        url={currentUrl}
+        description={getShareDescription(blog.content)}
+      />
     </div>
   )
 }
