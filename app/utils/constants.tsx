@@ -213,3 +213,27 @@ export const OUR_PROJECTS = [
 
 export const API_BASE_URL =
   process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_BASE_URL_PROD : process.env.NEXT_PUBLIC_BASE_URL_DEV
+
+export const OFFICE_LOCATIONS = [
+  {
+    country: 'United States',
+    city: 'New York',
+    address: '123 Business Ave, Suite 100',
+    phone: '+1 (555) 123-4567',
+    email: 'usa@gbs.com',
+  },
+  {
+    country: 'United Kingdom',
+    city: 'London',
+    address: '456 Corporate St, Floor 5',
+    phone: '+44 20 1234 5678',
+    email: 'uk@gbs.com',
+  },
+  {
+    country: 'Germany',
+    city: 'Berlin',
+    address: '789 Industrial Blvd, Building A',
+    phone: '+49 30 12345678',
+    email: 'germany@gbs.com',
+  },
+]

@@ -31,5 +31,17 @@
   "service_installation": "تركيب خطوط إنتاج جديدة",
   "service_relocation": "نقل خطوط الإنتاج",
   "services_heading": "دعم شامل لتحقيق التميز في الإنتاج",
-  "service_support": "الدعم الفني والصيانة"
+  "service_support": "الدعم الفني والصيانة",
+  "sending_label": "جارٍ الإرسال...",
+  "contact_form_name_required": "الاسم مطلوب",
+  "contact_form_name_min_length": "يجب أن يكون الاسم أكثر من حرفين",
+  "contact_form_email_required": "البريد الإلكتروني مطلوب",
+  "contact_form_invalid_email": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+  "contact_form_invalid_phone": "يرجى إدخال رقم هاتف صحيح",
+  "contact_form_message_required": "الرسالة مطلوبة",
+  "contact_form_message_min_length": "يجب أن تكون الرسالة أكثر من 10 أحرف",
+  "contact_form_validation_error": "يرجى تصحيح الأخطاء أعلاه",
+  "contact_form_network_error": "خطأ في الشبكة. يرجى التحقق من اتصالك والمحاولة مرة أخرى",
+  "contact_form_error": "حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً",
+  "contact_form_success": "شكراً لك! تم إرسال رسالتك بنجاح. سنتواصل معك قريباً!"
 }
