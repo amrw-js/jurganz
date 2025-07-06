@@ -21,7 +21,7 @@ if (typeof window !== 'undefined') {
       debug: process.env.NODE_ENV === 'development',
 
       defaultNS: 'default',
-      ns: ['default', 'home', 'about', 'projects', 'services'],
+      ns: ['about', 'default', 'home', 'lines', 'project', 'projects', 'services', 'line'],
 
       interpolation: {
         escapeValue: false,

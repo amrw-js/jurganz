@@ -1,0 +1,11 @@
+{
+  "loading_production_lines": "جاري تحميل خطوط الإنتاج...",
+  "please_wait_fetch_info": "يرجى الانتظار بينما نحصل على المعلومات",
+  "error_loading_production_lines": "خطأ في تحميل خطوط الإنتاج",
+  "please_try_again_later": "يرجى المحاولة مرة أخرى لاحقاً",
+  "production_lines": "خطوط الإنتاج",
+  "find_perfect_production_line": "اعثر على خط الإنتاج المثالي لعملك",
+  "list_your_line": "اعرض خطك",
+  "no_production_lines_found": "لا توجد خطوط إنتاج",
+  "be_first_to_list": "كن أول من يعرض خط إنتاج"
+}

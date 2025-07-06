@@ -111,18 +111,6 @@ export function ContactModal({ isOpen, onClose, productionLine }: ContactModalPr
                         }}
                       />
                       <Input
-                        label='Price'
-                        value={`${formatPrice(productionLine.price, productionLine.localCurrency)}${
-                          productionLine.negotiable ? ' (Negotiable)' : ''
-                        }`}
-                        isDisabled
-                        variant='bordered'
-                        classNames={{
-                          input: 'text-gray-700',
-                          label: 'text-gray-600',
-                        }}
-                      />
-                      <Input
                         label='Container Type'
                         value={productionLine.containerType}
                         isDisabled
