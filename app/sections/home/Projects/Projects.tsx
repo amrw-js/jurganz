@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@heroui/react'
 import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useState } from 'react'
@@ -54,27 +55,9 @@ export const Projects: FC = () => {
             <p className='line-clamp-2 text-sm text-gray-500'>{project.description}</p>
           </div>
           <div className='ml-4 flex flex-col items-end justify-between'>
-            {project.media && project.media.length > 0 && (
-              <div className='mb-2 h-16 w-20 overflow-hidden rounded-md bg-gray-100'>
-                <img
-                  src={project.media[0].url || '/placeholder.svg'}
-                  alt={project.media[0].name}
-                  className='h-full w-full object-cover'
-                />
-              </div>
-            )}
-            <button
-              className='rounded-md px-4 py-2 text-sm font-medium text-white transition-colors'
-              style={{ backgroundColor: '#155E75' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#0f4c5c'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#155E75'
-              }}
-            >
+            <Button as={Link} href={`projects/${project.id}`} className='mt-auto' color='primary'>
               {t('home:view_details')}
-            </button>
+            </Button>
           </div>
         </div>
       )
@@ -133,7 +116,7 @@ export const Projects: FC = () => {
       <animated.div style={projectsContainerProps}>
         <div className='mb-6 flex items-center justify-between'>
           <Link
-            href='#'
+            href='/projects'
             className='text-lg font-semibold underline transition-colors'
             style={{ color: '#155E75' }}
             onMouseEnter={(e) => {

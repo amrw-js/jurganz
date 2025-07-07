@@ -2,7 +2,7 @@
 
 import { Button, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Textarea } from '@heroui/react'
 import { Building2, Mail, Phone, User } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -50,6 +50,7 @@ export function ContactModal({ isOpen, onClose, productionLine }: ContactModalPr
         containerType: productionLine.containerType.trim(),
         capacity: productionLine.capacity.trim(),
       })
+
       handleClose()
     } catch (error) {
       console.error('Error sending inquiry:', error)
@@ -63,6 +64,7 @@ export function ContactModal({ isOpen, onClose, productionLine }: ContactModalPr
   }
 
   useEffect(() => {
+    if (!isSuccess && !isError) return
     handleClose()
   }, [isSuccess, isError])
 

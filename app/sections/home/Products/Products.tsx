@@ -106,17 +106,14 @@ export const Products: FC = () => {
 
             <div className='flex gap-3'>
               <Button
+                as={Link}
+                href={`/production-lines/${product.id}`}
                 className='flex-1 border-2 hover:bg-gray-50'
                 variant='light'
-                style={{ borderColor: '#155E75', color: '#155E75' }}
               >
                 {t('home:more_details')}
               </Button>
-              <Button
-                className='flex-1'
-                style={{ backgroundColor: '#155E75', color: 'white' }}
-                onPress={() => handleContactClick(product)}
-              >
+              <Button color='primary' className='flex-1' onPress={() => handleContactClick(product)}>
                 {t('home:contact_us')}
               </Button>
             </div>

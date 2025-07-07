@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { FC } from 'react'
 
 import { Section } from '@/app/components/Section/Section'

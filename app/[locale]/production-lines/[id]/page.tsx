@@ -1,21 +1,7 @@
 'use client'
 
 import { Button, Card, CardBody, Chip } from '@heroui/react'
-import {
-  ArrowLeftIcon,
-  Calendar,
-  Camera,
-  Clock,
-  Container,
-  DollarSign,
-  Factory,
-  Mail,
-  Play,
-  Settings,
-  Share2,
-  Star,
-  Zap,
-} from 'lucide-react'
+import { ArrowLeftIcon, Calendar, Camera, Clock, Container, Factory, Mail, Play, Settings, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -39,7 +25,6 @@ export default function ProductionLineDetailPage() {
   const { t } = useTranslation()
   const { id } = useParams()
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
-  const [isFavorited, setIsFavorited] = useState(false)
   const [isContactModalOpen, setIsContactModalOpen] = useState(false)
 
   const { data: productionLine, isLoading, error } = useProductionLine(id as string)
