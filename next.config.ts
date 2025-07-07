@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     // For development with localhost
-    domains: ['localhost'],
+    domains: ['localhost', 'gbs-be.onrender.com'],
   },
 }
 

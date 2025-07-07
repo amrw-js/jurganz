@@ -28,6 +28,7 @@ interface ProjectModalProps {
 type FormData = {
   name: string
   description: string
+  arDescription: string // Add Arabic description to form data
   location: string
   capacity: string
   time: string
@@ -46,6 +47,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
     defaultValues: {
       name: '',
       description: '',
+      arDescription: '', // Add Arabic description default
       location: '',
       capacity: '',
       time: '',
@@ -60,6 +62,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
       reset({
         name: project.name,
         description: project.description || '',
+        arDescription: project.arDescription || '', // Include Arabic description
         location: project.location || '',
         capacity: project.capacity,
         time: project.time,
@@ -70,6 +73,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
       reset({
         name: '',
         description: '',
+        arDescription: '', // Reset Arabic description
         location: '',
         capacity: '',
         time: '',
@@ -87,6 +91,7 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
       const submitData: ProjectFormData = {
         name: data.name,
         description: data.description || '',
+        arDescription: data.arDescription || undefined, // Include Arabic description
         location: data.location || '',
         capacity: data.capacity,
         time: data.time,
@@ -247,6 +252,41 @@ export function ProjectModal({ project, isOpen, onClose, onSubmit }: ProjectModa
                         description='Provide a detailed description of the project scope and objectives'
                         minRows={3}
                         maxRows={6}
+                      />
+                    )}
+                  />
+
+                  {/* Arabic Description */}
+                  <Controller
+                    name='arDescription'
+                    control={control}
+                    rules={{
+                      minLength: {
+                        value: 10,
+                        message: 'Arabic description must be at least 10 characters',
+                      },
+                      maxLength: {
+                        value: 1000,
+                        message: 'Arabic description cannot exceed 1000 characters',
+                      },
+                    }}
+                    render={({ field }) => (
+                      <Textarea
+                        {...field}
+                        label='Project Description (Arabic)'
+                        placeholder='اكتب وصف المشروع بالتفصيل...'
+                        isInvalid={!!errors.arDescription}
+                        errorMessage={errors.arDescription?.message}
+                        variant='bordered'
+                        labelPlacement='outside'
+                        description='Provide a detailed description of the project in Arabic (optional)'
+                        minRows={3}
+                        maxRows={6}
+                        dir='rtl'
+                        classNames={{
+                          input: 'text-right',
+                          inputWrapper: 'text-right',
+                        }}
                       />
                     )}
                   />

@@ -15,6 +15,7 @@ import 'swiper/css/thumbs'
 import { Autoplay, EffectFade, Navigation, Pagination, Thumbs } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
+import { useLanguageToggle } from '@/app/hooks/useLanguageToggle'
 import { useProject } from '@/app/hooks/useProjects'
 
 // Import Swiper styles
@@ -24,6 +25,7 @@ export default function ProjectDetailPage() {
   const { t } = useTranslation('project')
   const { id } = useParams()
   const { data: project, isLoading, error } = useProject(id as string)
+  const { isArabic } = useLanguageToggle()
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
 
   if (isLoading) {
@@ -279,19 +281,11 @@ export default function ProjectDetailPage() {
             {/* Professional Description */}
             <Card className='border border-gray-200 shadow-lg'>
               <CardBody className='p-8'>
-                {project.description ? (
-                  <div className='prose prose-lg prose-gray max-w-none'>
-                    <p className='whitespace-pre-wrap text-lg leading-relaxed text-gray-700'>{project.description}</p>
-                  </div>
-                ) : (
-                  <div className='py-12 text-center'>
-                    <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100'>
-                      <Edit3 className='h-8 w-8 text-gray-400' />
-                    </div>
-                    <h3 className='mb-2 text-xl font-semibold text-gray-600'>{t('no_description_title')}</h3>
-                    <p className='text-gray-500'>{t('no_description_subtitle')}</p>
-                  </div>
-                )}
+                <div className='prose prose-lg prose-gray max-w-none'>
+                  <p className='whitespace-pre-wrap text-lg leading-relaxed text-gray-700'>
+                    {isArabic ? (project.arDescription ?? project.description) : project.description}
+                  </p>
+                </div>
               </CardBody>
             </Card>
           </div>

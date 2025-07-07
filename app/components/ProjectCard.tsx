@@ -12,6 +12,8 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import type { Project } from '@/types/project.types'
 
+import { useLanguageToggle } from '../hooks/useLanguageToggle'
+
 import 'swiper/css'
 
 interface ProjectCardProps {
@@ -22,6 +24,7 @@ interface ProjectCardProps {
 export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) => {
   const router = useRouter()
   const { t } = useTranslation()
+  const { isArabic } = useLanguageToggle()
 
   const hasMedia = project.media && project.media.length > 0
 
@@ -29,9 +32,12 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
     router.push(`/projects/${project.id}`)
   }
 
-  const trimDescription = (text: string, maxLength = 120) => {
-    if (text.length <= maxLength) return text
-    return text.substring(0, maxLength).trim() + '...'
+  const trimDescription = (maxLength = 120) => {
+    const trimmedText = isArabic ? (project.arDescription ?? project.description) : project.description
+
+    if (trimmedText.length <= maxLength) return trimmedText
+
+    return trimmedText.substring(0, maxLength).trim() + '...'
   }
 
   return (
@@ -140,11 +146,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
                 </h2>
               </div>
 
-              {project.description && (
-                <p className='text-sm leading-relaxed text-gray-600 lg:text-base'>
-                  {trimDescription(project.description, 150)}
-                </p>
-              )}
+              <p className='text-sm leading-relaxed text-gray-600 lg:text-base'>{trimDescription(150)}</p>
             </div>
 
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>

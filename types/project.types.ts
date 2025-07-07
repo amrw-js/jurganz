@@ -9,6 +9,7 @@ export interface Project {
   updatedAt: Date
   location: string
   description: string
+  arDescription?: string // New optional Arabic description field
 }
 
 export interface ProjectMedia {
@@ -26,6 +27,9 @@ export interface CreateProject {
   capacity: string
   time: string
   media?: ProjectMedia[]
+  location: string
+  description: string
+  arDescription?: string // New optional Arabic description field
 }
 
 export interface ProjectFormData {
@@ -35,6 +39,7 @@ export interface ProjectFormData {
   time: string
   location: string
   description: string
+  arDescription?: string // New optional Arabic description field
   media: ProjectMedia[]
 }
 
