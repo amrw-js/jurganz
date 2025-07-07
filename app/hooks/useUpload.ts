@@ -70,7 +70,7 @@ export function useUpload(options: UseUploadOptions = {}) {
                 const blogMedia = convertResponseToBlogMedia(response)
                 options.onSuccess?.([blogMedia])
                 resolve(blogMedia)
-              } catch (parseError) {
+              } catch {
                 const errorMsg = 'Failed to parse upload response'
                 setError(errorMsg)
                 options.onError?.(errorMsg)
@@ -139,7 +139,7 @@ export function useUpload(options: UseUploadOptions = {}) {
                 const blogMediaArray = responses.map(convertResponseToBlogMedia)
                 options.onSuccess?.(blogMediaArray)
                 resolve(blogMediaArray)
-              } catch (parseError) {
+              } catch {
                 const errorMsg = 'Failed to parse upload response'
                 setError(errorMsg)
                 options.onError?.(errorMsg)

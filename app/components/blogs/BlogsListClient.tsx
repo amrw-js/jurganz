@@ -107,7 +107,7 @@ export default function BlogsListClient() {
       {filteredBlogs && filteredBlogs.length === 0 && searchTerm && (
         <div className='py-12 text-center'>
           <p className='text-lg text-slate-600 dark:text-slate-400'>
-            {t('noSearchResults')} "{searchTerm}"
+            {t('noSearchResults')} &quot;{searchTerm}&quot;
           </p>
         </div>
       )}

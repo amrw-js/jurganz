@@ -215,7 +215,9 @@ export default function BlogsPage() {
               <>
                 <ModalHeader className='flex flex-col gap-1'>Delete Blog Post</ModalHeader>
                 <ModalBody>
-                  <p>Are you sure you want to delete "{blogToDelete?.title}"? This action cannot be undone.</p>
+                  <p>
+                    Are you sure you want to delete &quot;{blogToDelete?.title}&quot;? This action cannot be undone.
+                  </p>
                 </ModalBody>
                 <ModalFooter>
                   <Button variant='light' onPress={onClose}>

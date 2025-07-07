@@ -8,7 +8,6 @@ import { CreateProductionLine, ProductionLine } from '@/types/production-line.ty
 export const productionLinesKeys = {
   all: ['production-lines'] as const,
   lists: () => [...productionLinesKeys.all, 'list'] as const,
-  list: (filters?: any) => [...productionLinesKeys.lists(), filters] as const,
   published: () => [...productionLinesKeys.all, 'published'] as const,
   details: () => [...productionLinesKeys.all, 'detail'] as const,
   detail: (id: string) => [...productionLinesKeys.details(), id] as const,

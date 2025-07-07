@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
-import { Copy, Facebook, Linkedin, Mail, MessageCircle, Share2, Twitter, X } from 'lucide-react'
+import { Copy, Facebook, Linkedin, Mail, MessageCircle, Share2, Twitter } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -52,7 +52,7 @@ export default function ShareModal({ isOpen, onClose, title, url, description = 
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
-    } catch (err) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea')
       textArea.value = shareUrl

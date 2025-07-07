@@ -7,7 +7,6 @@ import { Blog, CreateBlog } from '@/types/blog.types'
 export const blogsKeys = {
   all: ['blogs'] as const,
   lists: () => [...blogsKeys.all, 'list'] as const,
-  list: (filters?: any) => [...blogsKeys.lists(), filters] as const,
   details: () => [...blogsKeys.all, 'detail'] as const,
   detail: (id: string) => [...blogsKeys.details(), id] as const,
 }

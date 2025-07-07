@@ -56,90 +56,6 @@ export default function MediaUploadModal({ isOpen, onOpenChange, onImageSelect }
 
   const maxRetries = 3
 
-  const getErrorDetails = (error: any, status?: number): UploadError => {
-    // Network errors
-    if (error.message?.includes('Network') || error.message?.includes('fetch')) {
-      return {
-        type: 'network',
-        message: 'Network connection failed. Please check your internet connection.',
-        retryable: true,
-      }
-    }
-
-    // Timeout errors
-    if (error.message?.includes('timeout')) {
-      return {
-        type: 'timeout',
-        message: 'Upload timed out. The file might be too large or your connection is slow.',
-        retryable: true,
-      }
-    }
-
-    // Server errors based on status code
-    if (status) {
-      switch (status) {
-        case 413:
-          return {
-            type: 'file',
-            message: 'File is too large. Please choose a smaller image (max 10MB).',
-            code: status,
-            retryable: false,
-          }
-        case 415:
-          return {
-            type: 'file',
-            message: 'File type not supported. Please use PNG, JPG, or GIF format.',
-            code: status,
-            retryable: false,
-          }
-        case 429:
-          return {
-            type: 'server',
-            message: 'Too many uploads. Please wait a moment and try again.',
-            code: status,
-            retryable: true,
-          }
-        case 500:
-          return {
-            type: 'server',
-            message: 'Server error occurred. Please try again later.',
-            code: status,
-            retryable: true,
-          }
-        case 503:
-          return {
-            type: 'server',
-            message: 'Service temporarily unavailable. Please try again later.',
-            code: status,
-            retryable: true,
-          }
-        default:
-          return {
-            type: 'server',
-            message: `Upload failed with error ${status}. Please try again.`,
-            code: status,
-            retryable: true,
-          }
-      }
-    }
-
-    // Abort errors
-    if (error.message?.includes('abort')) {
-      return {
-        type: 'abort',
-        message: 'Upload was cancelled.',
-        retryable: false,
-      }
-    }
-
-    // Default unknown error
-    return {
-      type: 'unknown',
-      message: 'An unexpected error occurred. Please try again.',
-      retryable: true,
-    }
-  }
-
   const handleFileUpload = async (file: File, isRetry = false) => {
     if (!isRetry) {
       setCurrentFile(file)
@@ -187,7 +103,7 @@ export default function MediaUploadModal({ isOpen, onOpenChange, onImageSelect }
               } else {
                 reject(new Error('No URL in response'))
               }
-            } catch (e) {
+            } catch {
               reject(new Error('Invalid response format'))
             }
           } else {
@@ -208,10 +124,12 @@ export default function MediaUploadModal({ isOpen, onOpenChange, onImageSelect }
       const uploadedUrl = await uploadPromise
       setUploadedImage(uploadedUrl)
       setUploadError(null)
-    } catch (error: any) {
-      console.error('Upload error:', error)
-      const errorDetails = getErrorDetails(error, error.status)
-      setUploadError(errorDetails)
+    } catch {
+      setUploadError({
+        type: 'file',
+        message: 'Upload failed. Please try again.',
+        retryable: false,
+      })
       setUploadProgress(0)
       setUploadSpeed('')
     } finally {

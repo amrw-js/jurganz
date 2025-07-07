@@ -3,7 +3,6 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { HeroUIProvider } from '@heroui/react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { SessionProvider } from 'next-auth/react'
 import { FC, ReactNode, useState } from 'react'
 
 import { queryClient } from '../clients/reactQuery.client'

@@ -7,20 +7,21 @@ import Link from 'next/link'
 import { use } from 'react'
 
 import { useBlog } from '@/app/hooks/useBlogs'
+import { Blog, BlogMedia } from '@/types/blog.types'
 
 interface BlogDetailPageProps {
   params: Promise<{ id: string }>
 }
 
 // Helper function to get the display image for a blog
-const getBlogDisplayImage = (blog: any) => {
+const getBlogDisplayImage = (blog: Blog) => {
   // Priority: feature image first, then first media image, then placeholder
   if (blog.featureImage) {
     return blog.featureImage
   }
 
   if (blog.media && blog.media.length > 0) {
-    const firstImage = blog.media.find((item: any) => item.type === 'image')
+    const firstImage = blog.media.find((item: BlogMedia) => item.type === 'image')
     if (firstImage) {
       return firstImage.url
     }

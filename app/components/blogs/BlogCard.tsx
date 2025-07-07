@@ -1,6 +1,6 @@
 'use client'
 
-import { Chip } from '@heroui/react'
+import { Chip, Image } from '@heroui/react'
 import { formatDistanceToNow } from 'date-fns'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
@@ -54,7 +54,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
             <div className='relative overflow-hidden'>
               {displayImage ? (
                 <>
-                  <img
+                  <Image
                     src={displayImage}
                     alt={blog.title}
                     className='h-full w-full object-cover transition-transform duration-700 group-hover:scale-110'
@@ -107,7 +107,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
         <div className='relative aspect-[16/10] overflow-hidden'>
           {displayImage ? (
             <>
-              <img
+              <Image
                 src={displayImage}
                 alt={blog.title}
                 className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'

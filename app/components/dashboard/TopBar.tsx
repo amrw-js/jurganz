@@ -29,16 +29,17 @@ export const TopBar: FC<TopBar> = ({ onOpenChange }) => {
   return (
     <Navbar maxWidth='full' className='border-b border-gray-200 bg-white/80 backdrop-blur-md'>
       <NavbarBrand className='flex items-center gap-5'>
-        <Button size='sm' variant='light' color='primary' onPress={() => onOpenChange(true)} className='lg:hidden'>
+        <Button size='sm' variant='light' color='primary' onPress={() => onOpenChange(true)}>
           <BurgerIcon className='size-6 -scale-100 text-brand' />
         </Button>
+
         <Image className='shrink-0' src='/images/logo.png' alt='gbs logo' width={154} height={40} />
       </NavbarBrand>
 
       <NavbarContent justify='end' className='gap-4'>
         {isLoaded && user ? (
           <>
-            <NavbarItem>
+            <NavbarItem className='hidden lg:flex'>
               <Dropdown placement='bottom-end'>
                 <DropdownTrigger>
                   <User

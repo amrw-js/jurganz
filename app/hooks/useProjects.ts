@@ -2,13 +2,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { projectsApi } from '@/apis/projects.api'
-import { CreateProject, Project, ProjectsResponse } from '@/types/project.types'
+import { CreateProject, Project } from '@/types/project.types'
 
 // Query keys
 export const projectsKeys = {
   all: ['projects'] as const,
   lists: () => [...projectsKeys.all, 'list'] as const,
-  list: (filters?: any) => [...projectsKeys.lists(), filters] as const,
   details: () => [...projectsKeys.all, 'detail'] as const,
   detail: (id: string) => [...projectsKeys.details(), id] as const,
 }

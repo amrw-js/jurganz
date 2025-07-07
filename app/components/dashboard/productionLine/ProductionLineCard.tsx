@@ -34,7 +34,7 @@ import {
 import { useState } from 'react'
 
 import { ProductionLineModal } from '@/app/modals/ProductionLineModal'
-import type { ProductionLine, ProductionLineFormData } from '@/types/production-line.types'
+import type { ProductionLine, ProductionLineFormData, ProductionLineMedia } from '@/types/production-line.types'
 
 interface ProductionLineCardProps {
   productionLine: ProductionLine
@@ -77,7 +77,7 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
 
   const productionLineMedia = getProductionLineMedia()
 
-  const renderMediaPreview = (media: any, index: number) => {
+  const renderMediaPreview = (media: ProductionLineMedia) => {
     const isVideo = media.type === 'video'
     const hasError = imageErrors.has(media.id)
 
@@ -269,7 +269,7 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
 
               {productionLineMedia.length > 0 ? (
                 <div className='grid grid-cols-3 gap-2'>
-                  {productionLineMedia.slice(0, 5).map((media, index) => renderMediaPreview(media, index))}
+                  {productionLineMedia.slice(0, 5).map((media) => renderMediaPreview(media))}
 
                   {productionLineMedia.length > 5 && (
                     <div
@@ -371,7 +371,7 @@ export function ProductionLineCard({ productionLine, onUpdate, onDelete }: Produ
 // Media Gallery Modal Component
 interface MediaGalleryModalProps {
   productionLine: ProductionLine
-  media: any[]
+  media: ProductionLineMedia[]
   isOpen: boolean
   onClose: () => void
 }
@@ -380,75 +380,73 @@ function MediaGalleryModal({ productionLine, media, isOpen, onClose }: MediaGall
   return (
     <Modal isOpen={isOpen} onOpenChange={onClose} size='4xl' scrollBehavior='inside'>
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className='flex flex-col gap-1'>
-              <h2 className='text-xl font-semibold'>{productionLine.productType} - Media Gallery</h2>
-              <p className='text-sm font-normal text-default-500'>{media.length} files</p>
-            </ModalHeader>
+        <>
+          <ModalHeader className='flex flex-col gap-1'>
+            <h2 className='text-xl font-semibold'>{productionLine.productType} - Media Gallery</h2>
+            <p className='text-sm font-normal text-default-500'>{media.length} files</p>
+          </ModalHeader>
 
-            <Divider />
+          <Divider />
 
-            <ModalBody className='py-6'>
-              {media.length > 0 ? (
-                <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                  {media.map((item, index) => {
-                    const isVideo = item.type === 'video'
-                    return (
-                      <div key={item.id} className='group relative'>
-                        <Card className='cursor-pointer overflow-hidden transition-shadow hover:shadow-md'>
-                          <CardBody className='p-0'>
-                            <div className='relative aspect-square'>
-                              {isVideo ? (
-                                <div className='flex h-full w-full items-center justify-center bg-default-200'>
-                                  <div className='text-center'>
-                                    <div className='mx-auto mb-2 w-fit rounded-full bg-default-300 p-4'>
-                                      <Video className='h-6 w-6 text-default-600' />
-                                    </div>
-                                    <p className='text-sm font-medium text-default-600'>Video File</p>
-                                    <p className='text-xs text-default-500'>{item.name}</p>
+          <ModalBody className='py-6'>
+            {media.length > 0 ? (
+              <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                {media.map((item) => {
+                  const isVideo = item.type === 'video'
+                  return (
+                    <div key={item.id} className='group relative'>
+                      <Card className='cursor-pointer overflow-hidden transition-shadow hover:shadow-md'>
+                        <CardBody className='p-0'>
+                          <div className='relative aspect-square'>
+                            {isVideo ? (
+                              <div className='flex h-full w-full items-center justify-center bg-default-200'>
+                                <div className='text-center'>
+                                  <div className='mx-auto mb-2 w-fit rounded-full bg-default-300 p-4'>
+                                    <Video className='h-6 w-6 text-default-600' />
                                   </div>
-                                  <div className='absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100'>
-                                    <div className='rounded-full bg-white/90 p-3'>
-                                      <Play className='h-5 w-5 text-default-700' fill='currentColor' />
-                                    </div>
+                                  <p className='text-sm font-medium text-default-600'>Video File</p>
+                                  <p className='text-xs text-default-500'>{item.name}</p>
+                                </div>
+                                <div className='absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100'>
+                                  <div className='rounded-full bg-white/90 p-3'>
+                                    <Play className='h-5 w-5 text-default-700' fill='currentColor' />
                                   </div>
                                 </div>
-                              ) : (
-                                <Image
-                                  src={item.url || '/placeholder.svg'}
-                                  alt={item.name}
-                                  className='h-full w-full object-cover'
-                                  classNames={{
-                                    wrapper: 'w-full h-full',
-                                    img: 'w-full h-full object-cover',
-                                  }}
-                                  fallbackSrc='/placeholder.svg?height=200&width=200'
-                                />
-                              )}
-
-                              <div className='absolute bottom-2 left-2'>
-                                <Chip size='sm' color={isVideo ? 'secondary' : 'primary'} variant='solid'>
-                                  {isVideo ? 'Video' : 'Image'}
-                                </Chip>
                               </div>
+                            ) : (
+                              <Image
+                                src={item.url || '/placeholder.svg'}
+                                alt={item.name}
+                                className='h-full w-full object-cover'
+                                classNames={{
+                                  wrapper: 'w-full h-full',
+                                  img: 'w-full h-full object-cover',
+                                }}
+                                fallbackSrc='/placeholder.svg?height=200&width=200'
+                              />
+                            )}
+
+                            <div className='absolute bottom-2 left-2'>
+                              <Chip size='sm' color={isVideo ? 'secondary' : 'primary'} variant='solid'>
+                                {isVideo ? 'Video' : 'Image'}
+                              </Chip>
                             </div>
-                          </CardBody>
-                        </Card>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className='py-12 text-center'>
-                  <ImageIcon className='mx-auto mb-4 h-12 w-12 text-default-300' />
-                  <p className='mb-2 text-default-500'>No media files found</p>
-                  <p className='text-sm text-default-400'>Add some photos or videos to see them here</p>
-                </div>
-              )}
-            </ModalBody>
-          </>
-        )}
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className='py-12 text-center'>
+                <ImageIcon className='mx-auto mb-4 h-12 w-12 text-default-300' />
+                <p className='mb-2 text-default-500'>No media files found</p>
+                <p className='text-sm text-default-400'>Add some photos or videos to see them here</p>
+              </div>
+            )}
+          </ModalBody>
+        </>
       </ModalContent>
     </Modal>
   )

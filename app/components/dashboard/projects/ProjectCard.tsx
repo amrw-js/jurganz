@@ -1,11 +1,9 @@
 'use client'
 
 import {
-  Badge,
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Chip,
   Divider,
@@ -49,7 +47,7 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
   // Get project media - now always an array of ProjectMedia
   const projectMedia: ProjectMedia[] = project.media || []
 
-  const renderMediaPreview = (media: ProjectMedia, index: number) => {
+  const renderMediaPreview = (media: ProjectMedia) => {
     const isVideo = media.type === 'video'
     const hasError = imageErrors.has(media.id)
 
@@ -220,7 +218,7 @@ export function ProjectCard({ project, onUpdate, onDelete }: ProjectCardProps) {
 
               {projectMedia.length > 0 ? (
                 <div className='grid grid-cols-4 gap-3'>
-                  {projectMedia.slice(0, 7).map((media, index) => renderMediaPreview(media, index))}
+                  {projectMedia.slice(0, 7).map((media) => renderMediaPreview(media))}
                   {projectMedia.length > 7 && (
                     <div
                       className='flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 transition-all duration-300 hover:border-primary/50 hover:from-primary/10 hover:to-primary/20'
@@ -309,102 +307,100 @@ function MediaGalleryModal({ project, media, isOpen, onClose }: MediaGalleryModa
       }}
     >
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader className='flex flex-col gap-2 border-b border-default-200/50 bg-gradient-to-r from-primary/5 to-secondary/5'>
-              <h2 className='text-2xl font-bold text-foreground'>{project.name}</h2>
-              <div className='flex items-center gap-3 text-sm text-default-600'>
-                <div className='flex items-center gap-1'>
-                  <Camera className='h-4 w-4 text-primary' />
-                  <span className='font-medium'>{media.length} files</span>
-                </div>
-                {project.location && (
-                  <>
-                    <div className='h-1 w-1 rounded-full bg-default-400' />
-                    <div className='flex items-center gap-1'>
-                      <MapPin className='h-4 w-4 text-secondary' />
-                      <span>{project.location}</span>
-                    </div>
-                  </>
-                )}
-                {project.companyName && (
-                  <>
-                    <div className='h-1 w-1 rounded-full bg-default-400' />
-                    <span className='font-medium text-primary'>{project.companyName}</span>
-                  </>
-                )}
+        <>
+          <ModalHeader className='flex flex-col gap-2 border-b border-default-200/50 bg-gradient-to-r from-primary/5 to-secondary/5'>
+            <h2 className='text-2xl font-bold text-foreground'>{project.name}</h2>
+            <div className='flex items-center gap-3 text-sm text-default-600'>
+              <div className='flex items-center gap-1'>
+                <Camera className='h-4 w-4 text-primary' />
+                <span className='font-medium'>{media.length} files</span>
               </div>
-            </ModalHeader>
+              {project.location && (
+                <>
+                  <div className='h-1 w-1 rounded-full bg-default-400' />
+                  <div className='flex items-center gap-1'>
+                    <MapPin className='h-4 w-4 text-secondary' />
+                    <span>{project.location}</span>
+                  </div>
+                </>
+              )}
+              {project.companyName && (
+                <>
+                  <div className='h-1 w-1 rounded-full bg-default-400' />
+                  <span className='font-medium text-primary'>{project.companyName}</span>
+                </>
+              )}
+            </div>
+          </ModalHeader>
 
-            <ModalBody className='py-8'>
-              {media.length > 0 ? (
-                <div className='grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4'>
-                  {media.map((item) => {
-                    const isVideo = item.type === 'video'
-                    return (
-                      <div key={item.id} className='group relative'>
-                        <Card
-                          className='cursor-pointer overflow-hidden border-0 shadow-sm ring-1 ring-default-200/50 transition-all duration-300 hover:shadow-lg hover:ring-primary/30'
-                          isPressable
-                        >
-                          <CardBody className='p-0'>
-                            <div className='relative aspect-square'>
-                              {isVideo ? (
-                                <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-default-200 to-default-300'>
-                                  <div className='text-center'>
-                                    <div className='mx-auto mb-3 w-fit rounded-full bg-gradient-to-br from-secondary/20 to-secondary/40 p-6 shadow-sm'>
-                                      <Video className='h-8 w-8 text-secondary-600' />
-                                    </div>
-                                    <p className='text-sm font-semibold text-default-700'>Video File</p>
-                                    <p className='text-xs text-default-500'>{item.name}</p>
+          <ModalBody className='py-8'>
+            {media.length > 0 ? (
+              <div className='grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4'>
+                {media.map((item) => {
+                  const isVideo = item.type === 'video'
+                  return (
+                    <div key={item.id} className='group relative'>
+                      <Card
+                        className='cursor-pointer overflow-hidden border-0 shadow-sm ring-1 ring-default-200/50 transition-all duration-300 hover:shadow-lg hover:ring-primary/30'
+                        isPressable
+                      >
+                        <CardBody className='p-0'>
+                          <div className='relative aspect-square'>
+                            {isVideo ? (
+                              <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-default-200 to-default-300'>
+                                <div className='text-center'>
+                                  <div className='mx-auto mb-3 w-fit rounded-full bg-gradient-to-br from-secondary/20 to-secondary/40 p-6 shadow-sm'>
+                                    <Video className='h-8 w-8 text-secondary-600' />
                                   </div>
-                                  <div className='absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-300 group-hover:bg-black/30'>
-                                    <div className='scale-90 rounded-full bg-white/90 p-4 opacity-0 shadow-lg transition-all duration-300 group-hover:scale-100 group-hover:opacity-100'>
-                                      <Play className='h-6 w-6 text-default-700' fill='currentColor' />
-                                    </div>
+                                  <p className='text-sm font-semibold text-default-700'>Video File</p>
+                                  <p className='text-xs text-default-500'>{item.name}</p>
+                                </div>
+                                <div className='absolute inset-0 flex items-center justify-center bg-black/0 transition-all duration-300 group-hover:bg-black/30'>
+                                  <div className='scale-90 rounded-full bg-white/90 p-4 opacity-0 shadow-lg transition-all duration-300 group-hover:scale-100 group-hover:opacity-100'>
+                                    <Play className='h-6 w-6 text-default-700' fill='currentColor' />
                                   </div>
                                 </div>
-                              ) : (
-                                <Image
-                                  src={item.url || '/placeholder.svg'}
-                                  alt={item.name}
-                                  className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-110'
-                                  classNames={{
-                                    wrapper: 'w-full h-full',
-                                    img: 'w-full h-full object-cover',
-                                  }}
-                                  fallbackSrc='/placeholder.svg?height=300&width=300'
-                                />
-                              )}
-                              <div className='absolute bottom-3 left-3'>
-                                <Chip
-                                  size='sm'
-                                  color={isVideo ? 'secondary' : 'primary'}
-                                  variant='shadow'
-                                  className='font-medium backdrop-blur-sm'
-                                >
-                                  {isVideo ? 'Video' : 'Image'}
-                                </Chip>
                               </div>
+                            ) : (
+                              <Image
+                                src={item.url || '/placeholder.svg'}
+                                alt={item.name}
+                                className='h-full w-full object-cover transition-transform duration-300 group-hover:scale-110'
+                                classNames={{
+                                  wrapper: 'w-full h-full',
+                                  img: 'w-full h-full object-cover',
+                                }}
+                                fallbackSrc='/placeholder.svg?height=300&width=300'
+                              />
+                            )}
+                            <div className='absolute bottom-3 left-3'>
+                              <Chip
+                                size='sm'
+                                color={isVideo ? 'secondary' : 'primary'}
+                                variant='shadow'
+                                className='font-medium backdrop-blur-sm'
+                              >
+                                {isVideo ? 'Video' : 'Image'}
+                              </Chip>
                             </div>
-                          </CardBody>
-                        </Card>
-                      </div>
-                    )
-                  })}
+                          </div>
+                        </CardBody>
+                      </Card>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className='py-16 text-center'>
+                <div className='mx-auto mb-6 w-fit rounded-full bg-gradient-to-br from-primary/10 to-primary/20 p-8'>
+                  <ImageIcon className='h-16 w-16 text-primary/70' />
                 </div>
-              ) : (
-                <div className='py-16 text-center'>
-                  <div className='mx-auto mb-6 w-fit rounded-full bg-gradient-to-br from-primary/10 to-primary/20 p-8'>
-                    <ImageIcon className='h-16 w-16 text-primary/70' />
-                  </div>
-                  <p className='mb-2 text-lg font-semibold text-default-600'>No media files found</p>
-                  <p className='text-sm text-default-500'>Add some photos or videos to see them here</p>
-                </div>
-              )}
-            </ModalBody>
-          </>
-        )}
+                <p className='mb-2 text-lg font-semibold text-default-600'>No media files found</p>
+                <p className='text-sm text-default-500'>Add some photos or videos to see them here</p>
+              </div>
+            )}
+          </ModalBody>
+        </>
       </ModalContent>
     </Modal>
   )

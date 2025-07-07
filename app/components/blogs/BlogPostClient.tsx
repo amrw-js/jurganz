@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Chip } from '@heroui/react'
+import { Button, Chip, Image } from '@heroui/react'
 import { format, formatDistanceToNow } from 'date-fns'
 import { AlertCircle, ArrowLeft, Calendar, Clock, Eye, RefreshCw, Share2 } from 'lucide-react'
 import Link from 'next/link'
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useBlog } from '@/app/hooks/useBlogs'
 import ShareModal from '@/app/modals/ShareModal'
+import { Blog, BlogMedia } from '@/types/blog.types'
 
 import BlogPostSkeleton from './BlogPostSkeleton'
 
@@ -17,14 +18,14 @@ interface BlogPostClientProps {
 }
 
 // Helper function to get the display image for a blog
-const getBlogDisplayImage = (blog: any) => {
+const getBlogDisplayImage = (blog: Blog) => {
   // Priority: feature image first, then first media image, then null
   if (blog.featureImage) {
     return blog.featureImage
   }
 
   if (blog.media && blog.media.length > 0) {
-    const firstImage = blog.media.find((item: any) => item.type === 'image')
+    const firstImage = blog.media.find((item: BlogMedia) => item.type === 'image')
     if (firstImage) {
       return firstImage.url
     }
@@ -192,7 +193,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
           {displayImage && (
             <div className='mb-32'>
               <div className='overflow-hidden rounded-2xl'>
-                <img src={displayImage} alt={blog.title} className='mx-auto w-full object-cover lg:w-2/3' />
+                <Image src={displayImage} alt={blog.title} className='mx-auto w-full object-cover lg:w-2/3' />
               </div>
             </div>
           )}
@@ -212,10 +213,10 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
                 {t('blog:gallery')}
               </h3>
               <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-                {galleryMedia.map((media: any, index: number) => (
+                {galleryMedia.map((media: BlogMedia, index: number) => (
                   <div key={index} className='group'>
                     <div className='aspect-square overflow-hidden rounded-xl shadow-lg transition-all duration-300 group-hover:shadow-xl'>
-                      <img
+                      <Image
                         src={media.url || '/placeholder.svg'}
                         alt={`${t('blog:galleryImageAlt')} ${index + 1}`}
                         className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'

@@ -1,5 +1,6 @@
 'use client'
 
+import { i18n } from 'i18next'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
@@ -11,7 +12,7 @@ interface I18nClientProviderProps {
 }
 
 export default function I18nClientProvider({ children }: I18nClientProviderProps) {
-  const [i18n, setI18n] = useState<any>(null)
+  const [i18n, setI18n] = useState<i18n | null>(null)
   const [isReady, setIsReady] = useState(false)
   const pathname = usePathname()
 

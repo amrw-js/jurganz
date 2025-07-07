@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@heroui/react'
-import { animated, useSpring } from '@react-spring/web'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -21,12 +20,6 @@ export const Projects: FC = () => {
   const { data: projects, isLoading } = useProjects()
 
   const [inView, setInView] = useState(false)
-
-  const projectsContainerProps = useSpring({
-    opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0)' : 'translateY(30px)',
-    config: { duration: 1000 },
-  })
 
   const renderProjectCard = useCallback(
     (project: Project) => {
@@ -52,7 +45,7 @@ export const Projects: FC = () => {
                 <span className='text-gray-600'>{project.location}</span>
               </p>
             </div>
-            <p className='line-clamp-2 text-sm text-gray-500'>{project.description}</p>
+            <p className='line-clamp-2 w-2/3 text-sm text-gray-500'>{project.description}</p>
           </div>
           <div className='ml-4 flex flex-col items-end justify-between'>
             <Button as={Link} href={`projects/${project.id}`} className='mt-auto' color='primary'>
@@ -102,7 +95,7 @@ export const Projects: FC = () => {
     const section = document.getElementById('projects-section')
     if (section) observer.observe(section)
     return () => {
-      section && observer.unobserve(section)
+      if (section) observer.unobserve(section)
     }
   }, [])
 
@@ -113,7 +106,11 @@ export const Projects: FC = () => {
         <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>{t('home:projects_desc')}</p>
       </div>
 
-      <animated.div style={projectsContainerProps}>
+      <div
+        className={`transition-all duration-1000 ease-out ${
+          inView ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+        }`}
+      >
         <div className='mb-6 flex items-center justify-between'>
           <Link
             href='/projects'
@@ -231,7 +228,7 @@ export const Projects: FC = () => {
             </div>
           )}
         </div>
-      </animated.div>
+      </div>
     </div>
   )
 }

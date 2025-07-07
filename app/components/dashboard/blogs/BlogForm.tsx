@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Card, CardBody, CardFooter, Image, Input } from '@heroui/react'
-import { ImageIcon, Upload, X } from 'lucide-react'
+import { ImageIcon, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'

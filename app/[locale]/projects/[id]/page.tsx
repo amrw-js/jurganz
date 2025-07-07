@@ -1,19 +1,7 @@
 'use client'
 
 import { Button, Card, CardBody, CardHeader, Chip } from '@heroui/react'
-import {
-  ArrowLeftIcon,
-  Building2,
-  Calendar,
-  Camera,
-  Clock,
-  Edit3,
-  Factory,
-  MapPin,
-  Play,
-  Share2,
-  Star,
-} from 'lucide-react'
+import { ArrowLeftIcon, Building2, Camera, Clock, Edit3, Factory, MapPin, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'

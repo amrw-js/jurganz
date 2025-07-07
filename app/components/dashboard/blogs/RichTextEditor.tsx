@@ -56,6 +56,10 @@ interface ImageAttributes {
   align?: 'left' | 'center' | 'right'
 }
 
+type TextAlignType = {
+  attrs: { textAlign?: 'left' | 'center' | 'right' | 'justify' }
+  textAlign?: 'left' | 'center' | 'right' | 'justify'
+}
 // Custom Image Node with resize functionality and alignment
 const ResizableImage = Node.create({
   name: 'resizableImage',
@@ -547,7 +551,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
 
         editor.view.dispatch(
           editor.view.state.tr.setNodeMarkup(imagePos, undefined, {
-            ...(imageNode as any).attrs,
+            ...(imageNode as TextAlignType).attrs,
             width,
             height,
           }),
@@ -580,7 +584,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       if (imageNode && imagePos !== null) {
         editor.view.dispatch(
           editor.view.state.tr.setNodeMarkup(imagePos, undefined, {
-            ...(imageNode as any).attrs,
+            ...(imageNode as TextAlignType).attrs,
             align: alignment,
           }),
         )
@@ -600,7 +604,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     const { selection } = editor.state
     const { $from } = selection
     const node = $from.node()
-    return (node.attrs as any)?.textAlign || 'left'
+    return (node.attrs as TextAlignType)?.textAlign || 'left'
   }
 
   const currentTextAlign = getCurrentTextAlign()

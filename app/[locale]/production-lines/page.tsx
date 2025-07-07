@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { ProductionLineCard } from '@/app/components/ProductionLineCard'
 import { useCreateProductionLine, useProductionLines } from '@/app/hooks/useProductionLines'
 import ProductionLineModal from '@/app/modals/SellProductionLineModal'
+import { CreateProductionLine } from '@/types/production-line.types'
 
 export default function ProductionLinesPage() {
   const { t } = useTranslation()
@@ -16,7 +17,7 @@ export default function ProductionLinesPage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const handleCreateLine = (formData: any) => {
+  const handleCreateLine = (formData: CreateProductionLine) => {
     createLine({ ...formData, published: false })
   }
 
