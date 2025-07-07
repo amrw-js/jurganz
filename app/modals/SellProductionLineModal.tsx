@@ -12,6 +12,7 @@ import {
   Textarea,
 } from '@heroui/react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import type { CreateProductionLine, ProductionLineFormData, ProductionLineMedia } from '@/types/production-line.types'
 
@@ -50,6 +51,8 @@ const defaultValues: ProductionLineFormData = {
 }
 
 export default function ProductionLineModal({ isOpen, isPending, onClose, onSubmit }: ProductionLineModalProps) {
+  const { t } = useTranslation(['default', 'lines'])
+
   const {
     handleSubmit,
     control,
@@ -74,7 +77,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
       reset()
       onClose()
     } catch (error) {
-      console.error('Error submitting production line:', error)
+      console.error(t('lines:error_submitting_production_line'), error)
     }
   }
 
@@ -97,26 +100,26 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
     >
       <ModalContent>
         <ModalHeader className='flex flex-col gap-1'>
-          <h3 className='text-lg font-medium text-gray-900'>Submit Production Line for Sale</h3>
+          <h3 className='text-lg font-medium text-gray-900'>{t('lines:submit_production_line_for_sale')}</h3>
         </ModalHeader>
         <ModalBody className='py-6'>
           <form onSubmit={handleSubmit(onSubmitForm)} className='space-y-8'>
             {/* Personal Information */}
             <div>
-              <h4 className='text-md mb-4 font-medium text-gray-900'>Personal Information</h4>
+              <h4 className='text-md mb-4 font-medium text-gray-900'>{t('lines:personal_information')}</h4>
               <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                 <Controller
                   name='companyName'
                   control={control}
                   rules={{
-                    required: 'Company name is required',
-                    minLength: { value: 2, message: 'Company name must be at least 2 characters' },
+                    required: t('lines:company_name_required'),
+                    minLength: { value: 2, message: t('lines:company_name_min_length') },
                   }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Company Name'
-                      placeholder='Enter company name'
+                      label={t('lines:company_name')}
+                      placeholder={t('lines:enter_company_name')}
                       isRequired
                       isInvalid={!!errors.companyName}
                       errorMessage={errors.companyName?.message}
@@ -131,14 +134,14 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                   name='fullName'
                   control={control}
                   rules={{
-                    required: 'Full name is required',
-                    minLength: { value: 2, message: 'Full name must be at least 2 characters' },
+                    required: t('lines:full_name_required'),
+                    minLength: { value: 2, message: t('lines:full_name_min_length') },
                   }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Full Name'
-                      placeholder='Enter full name'
+                      label={t('lines:full_name')}
+                      placeholder={t('lines:enter_full_name')}
                       isRequired
                       isInvalid={!!errors.fullName}
                       errorMessage={errors.fullName?.message}
@@ -153,18 +156,18 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                   name='emailAddress'
                   control={control}
                   rules={{
-                    required: 'Email address is required',
+                    required: t('lines:email_address_required'),
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Invalid email address',
+                      message: t('lines:invalid_email_address'),
                     },
                   }}
                   render={({ field }) => (
                     <Input
                       {...field}
                       type='email'
-                      label='Email Address'
-                      placeholder='Enter email address'
+                      label={t('lines:email_address')}
+                      placeholder={t('lines:enter_email_address')}
                       isRequired
                       isInvalid={!!errors.emailAddress}
                       errorMessage={errors.emailAddress?.message}
@@ -179,15 +182,15 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                   name='phoneNumber'
                   control={control}
                   rules={{
-                    required: 'Phone number is required',
-                    minLength: { value: 10, message: 'Phone number must be at least 10 digits' },
+                    required: t('lines:phone_number_required'),
+                    minLength: { value: 10, message: t('lines:phone_number_min_length') },
                   }}
                   render={({ field }) => (
                     <Input
                       {...field}
                       type='tel'
-                      label='Phone Number'
-                      placeholder='Enter phone number'
+                      label={t('lines:phone_number')}
+                      placeholder={t('lines:enter_phone_number')}
                       isRequired
                       isInvalid={!!errors.phoneNumber}
                       errorMessage={errors.phoneNumber?.message}
@@ -203,17 +206,17 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
 
             {/* Production Line Information */}
             <div>
-              <h4 className='text-md mb-4 font-medium text-gray-900'>Production Line Information</h4>
+              <h4 className='text-md mb-4 font-medium text-gray-900'>{t('lines:production_line_information')}</h4>
               <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                 <Controller
                   name='productType'
                   control={control}
-                  rules={{ required: 'Product type is required' }}
+                  rules={{ required: t('lines:product_type_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Product Type'
-                      placeholder='Enter product type'
+                      label={t('lines:product_type')}
+                      placeholder={t('lines:enter_product_type')}
                       isRequired
                       isInvalid={!!errors.productType}
                       errorMessage={errors.productType?.message}
@@ -227,12 +230,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='containerType'
                   control={control}
-                  rules={{ required: 'Container type is required' }}
+                  rules={{ required: t('lines:container_type_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Container Type'
-                      placeholder='Enter container type'
+                      label={t('lines:container_type')}
+                      placeholder={t('lines:enter_container_type')}
                       isRequired
                       isInvalid={!!errors.containerType}
                       errorMessage={errors.containerType?.message}
@@ -246,12 +249,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='capacity'
                   control={control}
-                  rules={{ required: 'Capacity is required' }}
+                  rules={{ required: t('lines:capacity_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Capacity'
-                      placeholder='Enter capacity'
+                      label={t('lines:capacity')}
+                      placeholder={t('lines:enter_capacity')}
                       isRequired
                       isInvalid={!!errors.capacity}
                       errorMessage={errors.capacity?.message}
@@ -266,16 +269,16 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                   name='yearOfManufacturing'
                   control={control}
                   rules={{
-                    required: 'Year of manufacturing is required',
-                    min: { value: 1900, message: 'Year must be after 1900' },
-                    max: { value: new Date().getFullYear(), message: 'Year cannot be in the future' },
+                    required: t('lines:year_of_manufacturing_required'),
+                    min: { value: 1900, message: t('lines:year_must_be_after_1900') },
+                    max: { value: new Date().getFullYear(), message: t('lines:year_cannot_be_future') },
                   }}
                   render={({ field }) => (
                     <Input
                       {...field}
                       type='number'
-                      label='Year of Manufacturing'
-                      placeholder='Enter year'
+                      label={t('lines:year_of_manufacturing')}
+                      placeholder={t('lines:enter_year')}
                       isRequired
                       isInvalid={!!errors.yearOfManufacturing}
                       errorMessage={errors.yearOfManufacturing?.message}
@@ -291,12 +294,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='fillingProcess'
                   control={control}
-                  rules={{ required: 'Filling process is required' }}
+                  rules={{ required: t('lines:filling_process_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Filling Process'
-                      placeholder='Enter filling process'
+                      label={t('lines:filling_process')}
+                      placeholder={t('lines:enter_filling_process')}
                       isRequired
                       isInvalid={!!errors.fillingProcess}
                       errorMessage={errors.fillingProcess?.message}
@@ -310,12 +313,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='fillingType'
                   control={control}
-                  rules={{ required: 'Filling type is required' }}
+                  rules={{ required: t('lines:filling_type_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Filling Type'
-                      placeholder='Enter filling type'
+                      label={t('lines:filling_type')}
+                      placeholder={t('lines:enter_filling_type')}
                       isRequired
                       isInvalid={!!errors.fillingType}
                       errorMessage={errors.fillingType?.message}
@@ -329,12 +332,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='controlPLC'
                   control={control}
-                  rules={{ required: 'Control PLC is required' }}
+                  rules={{ required: t('lines:control_plc_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Control PLC'
-                      placeholder='Enter control PLC'
+                      label={t('lines:control_plc')}
+                      placeholder={t('lines:enter_control_plc')}
                       isRequired
                       isInvalid={!!errors.controlPLC}
                       errorMessage={errors.controlPLC?.message}
@@ -348,12 +351,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='approximateWorkingTime'
                   control={control}
-                  rules={{ required: 'Approximate working time is required' }}
+                  rules={{ required: t('lines:approximate_working_time_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Approximate Working Time'
-                      placeholder='Enter working time'
+                      label={t('lines:approximate_working_time')}
+                      placeholder={t('lines:enter_working_time')}
                       isRequired
                       isInvalid={!!errors.approximateWorkingTime}
                       errorMessage={errors.approximateWorkingTime?.message}
@@ -367,12 +370,12 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                 <Controller
                   name='localCurrency'
                   control={control}
-                  rules={{ required: 'Local currency is required' }}
+                  rules={{ required: t('lines:local_currency_required') }}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      label='Local Currency'
-                      placeholder='Enter currency (e.g., USD)'
+                      label={t('lines:local_currency')}
+                      placeholder={t('lines:enter_currency_placeholder')}
                       isRequired
                       isInvalid={!!errors.localCurrency}
                       errorMessage={errors.localCurrency?.message}
@@ -387,16 +390,16 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                   name='price'
                   control={control}
                   rules={{
-                    required: 'Price is required',
-                    min: { value: 0, message: 'Price must be greater than 0' },
+                    required: t('lines:price_required'),
+                    min: { value: 0, message: t('lines:price_must_be_greater_than_zero') },
                   }}
                   render={({ field }) => (
                     <Input
                       {...field}
                       type='number'
                       step='0.01'
-                      label='Price (USD)'
-                      placeholder='Enter price in USD'
+                      label={t('lines:price_usd')}
+                      placeholder={t('lines:enter_price_usd')}
                       isRequired
                       isInvalid={!!errors.price}
                       errorMessage={errors.price?.message}
@@ -416,14 +419,14 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                   name='lineMachines'
                   control={control}
                   rules={{
-                    required: 'Line machines description is required',
-                    minLength: { value: 10, message: 'Description must be at least 10 characters' },
+                    required: t('lines:line_machines_required'),
+                    minLength: { value: 10, message: t('lines:description_min_length') },
                   }}
                   render={({ field }) => (
                     <Textarea
                       {...field}
-                      label='Line Machines'
-                      placeholder='Describe the machines included in the production line...'
+                      label={t('lines:line_machines')}
+                      placeholder={t('lines:line_machines_placeholder')}
                       isRequired
                       isInvalid={!!errors.lineMachines}
                       errorMessage={errors.lineMachines?.message}
@@ -440,7 +443,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
 
             {/* Availability and Options */}
             <div>
-              <h4 className='text-md mb-4 font-medium text-gray-900'>Availability & Options</h4>
+              <h4 className='text-md mb-4 font-medium text-gray-900'>{t('lines:availability_options')}</h4>
               <div className='space-y-4'>
                 <div className='flex flex-wrap gap-6'>
                   <Controller
@@ -454,7 +457,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                           wrapper: 'before:border-[#155E75] after:bg-[#155E75]',
                         }}
                       >
-                        Price is negotiable
+                        {t('lines:price_is_negotiable')}
                       </Checkbox>
                     )}
                   />
@@ -469,7 +472,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                           wrapper: 'before:border-[#155E75] after:bg-[#155E75]',
                         }}
                       >
-                        Available now
+                        {t('lines:available_now')}
                       </Checkbox>
                     )}
                   />
@@ -480,15 +483,13 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
                     name='expectedAvailableDate'
                     control={control}
                     rules={{
-                      required: !watchIsAvailableNow
-                        ? 'Expected available date is required when not available now'
-                        : false,
+                      required: !watchIsAvailableNow ? t('lines:expected_available_date_required') : false,
                     }}
                     render={({ field }) => (
                       <Input
                         {...field}
                         type='date'
-                        label='Expected Available Date'
+                        label={t('lines:expected_available_date')}
                         isRequired
                         isInvalid={!!errors.expectedAvailableDate}
                         errorMessage={errors.expectedAvailableDate?.message}
@@ -505,7 +506,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
 
             {/* Media Upload */}
             <div>
-              <h4 className='text-md mb-4 font-medium text-gray-900'>Media</h4>
+              <h4 className='text-md mb-4 font-medium text-gray-900'>{t('lines:media')}</h4>
               <Controller
                 name='media'
                 control={control}
@@ -537,7 +538,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
         </ModalBody>
         <ModalFooter>
           <Button variant='bordered' onPress={handleClose}>
-            Cancel
+            {t('lines:cancel')}
           </Button>
           <Button
             style={{ backgroundColor: '#155E75' }}
@@ -545,7 +546,7 @@ export default function ProductionLineModal({ isOpen, isPending, onClose, onSubm
             onPress={() => handleSubmit(onSubmitForm)()}
             isLoading={isSubmitting || isPending}
           >
-            {isSubmitting || isPending ? 'Submitting...' : 'Submit Production Line'}
+            {isSubmitting || isPending ? t('lines:submitting') : t('lines:submit_production_line')}
           </Button>
         </ModalFooter>
       </ModalContent>

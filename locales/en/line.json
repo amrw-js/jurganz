@@ -54,5 +54,89 @@
   "cancel": "Cancel",
   "sendInquiry": "Send Inquiry",
   "inquirySentSuccess": "Your inquiry has been sent successfully!",
-  "inquirySentError": "Failed to send inquiry. Please try again."
+  "inquirySentError": "Failed to send inquiry. Please try again.",
+  "name": "English",
+  "code": "en",
+  "rtl": false,
+  
+  "submit_production_line_for_sale": "Submit Production Line for Sale",
+  "personal_information": "Personal Information",
+  "production_line_information": "Production Line Information",
+  "availability_options": "Availability & Options",
+  "media": "Media",
+  
+  "company_name": "Company Name",
+  "enter_company_name": "Enter company name",
+  "full_name": "Full Name",
+  "enter_full_name": "Enter full name",
+  "email_address": "Email Address",
+  "enter_email_address": "Enter email address",
+  "phone_number": "Phone Number",
+  "enter_phone_number": "Enter phone number",
+
+  "product_type": "Product Type",
+  "enter_product_type": "Enter product type",
+  "container_type": "Container Type",
+  "enter_container_type": "Enter container type",
+  "enter_capacity": "Enter capacity",
+  "year_of_manufacturing": "Year of Manufacturing",
+  "enter_year": "Enter year",
+  "filling_process": "Filling Process",
+  "enter_filling_process": "Enter filling process",
+  "filling_type": "Filling Type",
+  "enter_filling_type": "Enter filling type",
+
+  "enter_control_plc": "Enter control PLC",
+  "approximate_working_time": "Approximate Working Time",
+  "enter_working_time": "Enter working time",
+  "local_currency": "Local Currency",
+  "enter_currency_placeholder": "Enter currency (e.g., USD)",
+  "price_usd": "Price (USD)",
+  "enter_price_usd": "Enter price in USD",
+
+  "line_machines_placeholder": "Describe the machines included in the production line...",
+  "expected_available_date": "Expected Available Date",
+
+  "price_is_negotiable": "Price is negotiable",
+
+  "submit_production_line": "Submit Production Line",
+  "submitting": "Submitting...",
+
+  "company_name_required": "Company name is required",
+  "full_name_required": "Full name is required",
+  "email_address_required": "Email address is required",
+  "phone_number_required": "Phone number is required",
+  "product_type_required": "Product type is required",
+  "container_type_required": "Container type is required",
+  "capacity_required": "Capacity is required",
+  "year_of_manufacturing_required": "Year of manufacturing is required",
+  "filling_process_required": "Filling process is required",
+  "filling_type_required": "Filling type is required",
+  "control_plc_required": "Control PLC is required",
+  "approximate_working_time_required": "Approximate working time is required",
+  "local_currency_required": "Local currency is required",
+  "price_required": "Price is required",
+  "line_machines_required": "Line machines description is required",
+  "expected_available_date_required": "Expected available date is required when not available now",
+
+  "company_name_min_length": "Company name must be at least 2 characters",
+  "full_name_min_length": "Full name must be at least 2 characters",
+  "phone_number_min_length": "Phone number must be at least 10 digits",
+  "description_min_length": "Description must be at least 10 characters",
+
+  "invalid_email_address": "Invalid email address",
+
+  "year_must_be_after_1900": "Year must be after 1900",
+  "price_must_be_greater_than_zero": "Price must be greater than 0",
+
+  "year_cannot_be_future": "Year cannot be in the future",
+
+  "error_submitting_production_line": "Error submitting production line:",
+
+  "production_line_image_alt": "{{productType}} Production Line",
+  "production_line_title": "{{productType}} Line",
+  "id_label": "ID",
+  "plc_label": "PLC",
+  "photos_count": "{{count}} photos",
+  "negotiable": "Negotiable"
 }

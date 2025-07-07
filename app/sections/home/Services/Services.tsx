@@ -2,6 +2,7 @@
 
 import { Button } from '@heroui/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 
 import { SERVICES } from '@/app/utils/constants'
@@ -16,7 +17,9 @@ export const Services = () => {
           <p className='text-center text-2xl font-semibold leading-10 sm:text-4xl lg:!text-left'>
             {t('services_heading')}
           </p>
-          <Button color='primary'>{t('default:contact_us')}</Button>
+          <Button as={Link} href='#contact-us' color='primary'>
+            {t('default:contact_us')}
+          </Button>
         </div>
         <div className='flex flex-wrap gap-y-5 lg:gap-x-11 lg:gap-y-5'>
           {SERVICES.map(({ i18nKey }, index) => (

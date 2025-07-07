@@ -21,7 +21,7 @@ export const Hero = () => {
             <p className='mb-5 text-3xl font-semibold leading-9 lg:mb-10 lg:text-7xl lg:leading-none'>
               {t('home:hero_heading')}
             </p>
-            <Link className='mb-5 flex items-center gap-1 font-semibold lg:gap-2' href='#'>
+            <Link className='mb-5 flex items-center gap-1 font-semibold lg:gap-2' href='/production-lines'>
               <span className='text-base underline underline-offset-4 lg:text-xl'>
                 {t('home:hero_heading_production_line')}
               </span>

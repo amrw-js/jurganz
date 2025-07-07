@@ -59,7 +59,7 @@ export const Header = () => {
         </li>
 
         <li className='shrink-0 basis-auto'>
-          <NavbarBrand>
+          <NavbarBrand as={Link} href='/'>
             <Image className='shrink-0' src='/images/logo.png' alt='gbs logo' width={154} height={40} />
           </NavbarBrand>
         </li>
