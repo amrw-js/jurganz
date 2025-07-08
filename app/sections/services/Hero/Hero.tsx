@@ -6,6 +6,7 @@ import { IComponent } from '@/app/global.interface'
 
 export const Hero: FC<IComponent> = (props) => {
   const { t } = props
+
   return (
     <div className='relative flex h-[35.625rem] items-center bg-white bg-servicesHero bg-cover bg-fixed bg-center bg-no-repeat px-10 lg:h-[34.5rem]'>
       <div className='absolute inset-0 z-0 bg-black/70' />
@@ -15,7 +16,7 @@ export const Hero: FC<IComponent> = (props) => {
           {t('services_title')}
         </h3>
         <Link className='flex items-center gap-1 font-semibold lg:gap-2' href='#'>
-          <span className='text-base underline underline-offset-4 lg:text-xl'>{t('default:contact_us')}</span>
+          <span className='text-base underline underline-offset-4 lg:text-xl'>{t('contact_us')}</span>
           <ArrowUpRightIcon className='h-4 w-4 lg:h-6 lg:w-6' />
         </Link>
       </div>

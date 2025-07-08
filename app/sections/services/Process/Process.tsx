@@ -8,6 +8,7 @@ import { PROJECTS_SECTION } from '@/app/utils/constants'
 
 export const Process: FC<IComponent> = (props) => {
   const { t } = props
+
   return (
     <Section className='flex flex-col !items-start justify-between gap-6 bg-slate-50 lg:flex-row lg:gap-[94]'>
       <div className='flex flex-col !items-start gap-2 lg:max-w-[650px] lg:gap-5'>

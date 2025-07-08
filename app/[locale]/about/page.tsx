@@ -11,7 +11,7 @@ import { getTranslation } from '@/lib/i18n-server'
 const About: FC<IPage> = async (props) => {
   const { params } = props
   const { locale } = await params
-  const { t } = await getTranslation(locale, ['default', 'about'])
+  const { t } = await getTranslation(locale)
 
   return (
     <div>

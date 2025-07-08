@@ -6,12 +6,10 @@ import { Process } from '@/app/sections/services/Process/Process'
 import { ServicesSection } from '@/app/sections/services/Services/ServicesSection'
 import { getTranslation } from '@/lib/i18n-server'
 
-const namespaces = ['services', 'default']
-
 const Services: FC<IPage> = async (props) => {
   const { params } = props
   const { locale } = await params
-  const { t } = await getTranslation(locale, namespaces)
+  const { t } = await getTranslation(locale)
 
   return (
     <div>

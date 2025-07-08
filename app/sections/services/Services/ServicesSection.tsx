@@ -8,6 +8,7 @@ import { SERVICES_SECTION } from '@/app/utils/constants'
 
 export const ServicesSection: FC<IComponent> = (props) => {
   const { t } = props
+
   return (
     <Section className='flex flex-col !items-start gap-2 lg:gap-5'>
       <p className='text-xl font-medium leading-7 lg:leading-none'>{t('services_section_title')}</p>

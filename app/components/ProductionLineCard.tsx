@@ -4,13 +4,14 @@ import { Chip, Divider } from '@heroui/react'
 import { ArrowUpRight, Calendar, Clock, Container, Factory, Settings, Zap } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import type { ProductionLine } from '@/types/production-line.types'
+
+import { useTranslations } from '../hooks/useTranslations'
 
 // Import Swiper styles
 import 'swiper/css'
@@ -22,7 +23,7 @@ interface ProductionLineCardProps {
 
 export const ProductionLineCard = ({ productionLine, showDivider = true }: ProductionLineCardProps) => {
   const router = useRouter()
-  const { t } = useTranslation(['default', 'line'])
+  const { t } = useTranslations()
   const hasMedia = productionLine.media && productionLine.media.length > 0
 
   const handleProductionLineClick = () => {
@@ -69,7 +70,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                         <div className='relative h-full w-full'>
                           <Image
                             src={media.url || '/placeholder.svg'}
-                            alt={t('line:production_line_image_alt', { productType: productionLine.productType })}
+                            alt={t('production_line_image_alt', { productType: productionLine.productType })}
                             fill
                             className='object-cover'
                             sizes='(max-width: 1024px) 100vw, 480px'
@@ -92,7 +93,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
               <div className='flex h-full w-full items-center justify-center rounded-2xl bg-gray-100'>
                 <div className='text-center'>
                   <Factory className='mx-auto h-16 w-16 text-gray-400' />
-                  <p className='mt-4 text-sm text-gray-500'>{t('line:no_images_available')}</p>
+                  <p className='mt-4 text-sm text-gray-500'>{t('no_images_available')}</p>
                 </div>
               </div>
             )}
@@ -105,7 +106,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
               <div className='space-y-4'>
                 <div className='flex items-start justify-between'>
                   <h2 className='text-3xl font-bold text-gray-900 lg:text-4xl'>
-                    {t('line:production_line_title', { productType: productionLine.productType })}
+                    {t('production_line_title', { productType: productionLine.productType })}
                   </h2>
                   <ArrowUpRight className='h-6 w-6 text-gray-400 transition-colors group-hover:text-gray-600' />
                 </div>
@@ -120,11 +121,11 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                         : 'border border-orange-200 bg-orange-50 text-orange-700'
                     }`}
                   >
-                    {productionLine.isAvailableNow ? t('line:available_now') : t('line:coming_soon')}
+                    {productionLine.isAvailableNow ? t('available_now') : t('coming_soon')}
                   </Chip>
                   {productionLine.negotiable && (
                     <Chip variant='flat' size='md' className='border border-blue-200 bg-blue-50 text-blue-700'>
-                      {t('line:negotiable')}
+                      {t('negotiable')}
                     </Chip>
                   )}
                 </div>
@@ -135,7 +136,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
                     <Container className='h-4 w-4 text-gray-500' />
-                    <span className='text-sm font-medium text-gray-500'>{t('line:container')}</span>
+                    <span className='text-sm font-medium text-gray-500'>{t('container')}</span>
                   </div>
                   <p className='font-semibold text-gray-900'>{productionLine.containerType}</p>
                 </div>
@@ -143,7 +144,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
                     <Zap className='h-4 w-4 text-gray-500' />
-                    <span className='text-sm font-medium text-gray-500'>{t('line:capacity')}</span>
+                    <span className='text-sm font-medium text-gray-500'>{t('capacity')}</span>
                   </div>
                   <p className='font-semibold text-gray-900'>{productionLine.capacity}</p>
                 </div>
@@ -151,7 +152,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
                     <Calendar className='h-4 w-4 text-gray-500' />
-                    <span className='text-sm font-medium text-gray-500'>{t('line:year')}</span>
+                    <span className='text-sm font-medium text-gray-500'>{t('year')}</span>
                   </div>
                   <p className='font-semibold text-gray-900'>{productionLine.yearOfManufacturing}</p>
                 </div>
@@ -159,7 +160,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
                     <Settings className='h-4 w-4 text-gray-500' />
-                    <span className='text-sm font-medium text-gray-500'>{t('line:process')}</span>
+                    <span className='text-sm font-medium text-gray-500'>{t('process')}</span>
                   </div>
                   <p className='font-semibold text-gray-900'>{productionLine.fillingProcess}</p>
                 </div>
@@ -167,7 +168,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
                     <Factory className='h-4 w-4 text-gray-500' />
-                    <span className='text-sm font-medium text-gray-500'>{t('line:type')}</span>
+                    <span className='text-sm font-medium text-gray-500'>{t('type')}</span>
                   </div>
                   <p className='font-semibold text-gray-900'>{productionLine.fillingType}</p>
                 </div>
@@ -175,7 +176,7 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
                 <div className='space-y-2'>
                   <div className='flex items-center gap-2'>
                     <Clock className='h-4 w-4 text-gray-500' />
-                    <span className='text-sm font-medium text-gray-500'>{t('line:working_time')}</span>
+                    <span className='text-sm font-medium text-gray-500'>{t('working_time')}</span>
                   </div>
                   <p className='font-semibold text-gray-900'>{productionLine.approximateWorkingTime}</p>
                 </div>
@@ -186,16 +187,16 @@ export const ProductionLineCard = ({ productionLine, showDivider = true }: Produ
             <div className='mt-8 flex items-center justify-between border-t border-gray-100 pt-6'>
               <div className='flex items-center gap-6 text-sm text-gray-500'>
                 <span>
-                  {t('line:id_label')}: {productionLine.id.slice(0, 8)}
+                  {t('id_label')}: {productionLine.id.slice(0, 8)}
                 </span>
                 <span>•</span>
                 <span>
-                  {t('line:plc_label')}: {productionLine.controlPLC}
+                  {t('plc_label')}: {productionLine.controlPLC}
                 </span>
                 {hasMedia && (
                   <>
                     <span>•</span>
-                    <span>{t('line:photos_count', { count: productionLine.media!.length })}</span>
+                    <span>{t('photos_count', { count: productionLine.media!.length })}</span>
                   </>
                 )}
               </div>

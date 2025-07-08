@@ -4,8 +4,8 @@ import { Chip, Image } from '@heroui/react'
 import { formatDistanceToNow } from 'date-fns'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
 
+import { useTranslations } from '@/app/hooks/useTranslations'
 import type { Blog } from '@/types/blog.types'
 
 interface BlogCardProps {
@@ -14,7 +14,7 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ blog, featured = false }: BlogCardProps) {
-  const { t } = useTranslation('blogs')
+  const { t } = useTranslations()
 
   const formatDate = (date: Date | string) => {
     return formatDistanceToNow(new Date(date), { addSuffix: true })

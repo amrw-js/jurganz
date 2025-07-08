@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBlog } from '@/app/hooks/useBlogs'
+import { useTranslations } from '@/app/hooks/useTranslations'
 import ShareModal from '@/app/modals/ShareModal'
 import { Blog, BlogMedia } from '@/types/blog.types'
 
@@ -35,7 +36,7 @@ const getBlogDisplayImage = (blog: Blog) => {
 }
 
 export default function BlogPostClient({ id }: BlogPostClientProps) {
-  const { t } = useTranslation('blog')
+  const { t } = useTranslations()
   const { data: blog, isLoading, error, refetch, isRefetching } = useBlog(id)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
@@ -56,11 +57,11 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
       <div className='flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 p-4 dark:from-slate-900 dark:to-slate-800'>
         <div className='rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-xl dark:border-slate-700 dark:bg-slate-800'>
           <AlertCircle className='mx-auto mb-4 h-16 w-16 text-red-500' />
-          <h3 className='mb-2 text-xl font-bold text-slate-900 dark:text-white'>{t('blog:somethingWentWrong')}</h3>
-          <p className='mb-6 text-slate-600 dark:text-slate-400'>{t('blog:couldNotLoadPost')}</p>
+          <h3 className='mb-2 text-xl font-bold text-slate-900 dark:text-white'>{t('somethingWentWrong')}</h3>
+          <p className='mb-6 text-slate-600 dark:text-slate-400'>{t('couldNotLoadPost')}</p>
           <div className='flex justify-center gap-3'>
             <Button as={Link} href='/blogs' variant='bordered' startContent={<ArrowLeft className='h-4 w-4' />}>
-              {t('blog:backToBlog')}
+              {t('backToBlog')}
             </Button>
             <Button
               onPress={() => refetch()}
@@ -68,7 +69,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
               color='primary'
               startContent={<RefreshCw className='h-4 w-4' />}
             >
-              {t('blog:tryAgain')}
+              {t('tryAgain')}
             </Button>
           </div>
         </div>
@@ -83,10 +84,10 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
           <div className='mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700'>
             <Eye className='h-12 w-12 text-slate-400' />
           </div>
-          <h1 className='mb-4 text-2xl font-bold text-slate-900 dark:text-white'>{t('blog:articleNotFound')}</h1>
-          <p className='mb-8 text-slate-600 dark:text-slate-400'>{t('blog:articleNotFoundDescription')}</p>
+          <h1 className='mb-4 text-2xl font-bold text-slate-900 dark:text-white'>{t('articleNotFound')}</h1>
+          <p className='mb-8 text-slate-600 dark:text-slate-400'>{t('articleNotFoundDescription')}</p>
           <Button as={Link} href='/blogs' color='primary' size='lg' startContent={<ArrowLeft className='h-4 w-4' />}>
-            {t('blog:backToBlog')}
+            {t('backToBlog')}
           </Button>
         </div>
       </div>
@@ -133,7 +134,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
               startContent={<ArrowLeft className='h-4 w-4' />}
               className='font-medium'
             >
-              {t('blog:backToBlog')}
+              {t('backToBlog')}
             </Button>
 
             <div className='flex items-center gap-2'>
@@ -165,7 +166,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
                   <span>•</span>
                   <Clock className='h-4 w-4' />
                   <span>
-                    {t('blog:updated')} {formatRelativeDate(blog.updatedAt)}
+                    {t('updated')} {formatRelativeDate(blog.updatedAt)}
                   </span>
                 </>
               )}
@@ -178,12 +179,12 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
             <div className='mb-8 flex items-center justify-center gap-2'>
               {blog.featureImage && (
                 <Chip variant='flat' color='primary' size='sm'>
-                  {t('blog:featured')}
+                  {t('featured')}
                 </Chip>
               )}
               {blog.media && blog.media.length > 0 && (
                 <Chip variant='flat' color='secondary' size='sm'>
-                  {blog.media.length} {blog.media.length > 1 ? t('blog:images') : t('blog:image')}
+                  {blog.media.length} {blog.media.length > 1 ? t('images') : t('image')}
                 </Chip>
               )}
             </div>
@@ -209,16 +210,14 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
           {/* Additional Media Gallery */}
           {galleryMedia && galleryMedia.length > 0 && (
             <div className='mt-16'>
-              <h3 className='mb-8 text-center text-2xl font-bold text-slate-900 dark:text-white'>
-                {t('blog:gallery')}
-              </h3>
+              <h3 className='mb-8 text-center text-2xl font-bold text-slate-900 dark:text-white'>{t('gallery')}</h3>
               <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
                 {galleryMedia.map((media: BlogMedia, index: number) => (
                   <div key={index} className='group'>
                     <div className='aspect-square overflow-hidden rounded-xl shadow-lg transition-all duration-300 group-hover:shadow-xl'>
                       <Image
                         src={media.url || '/placeholder.svg'}
-                        alt={`${t('blog:galleryImageAlt')} ${index + 1}`}
+                        alt={`${t('galleryImageAlt')} ${index + 1}`}
                         className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
                       />
                     </div>
@@ -238,7 +237,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
               startContent={<ArrowLeft className='h-4 w-4' />}
               className='font-medium'
             >
-              {t('blog:backToAllArticles')}
+              {t('backToAllArticles')}
             </Button>
           </footer>
         </div>

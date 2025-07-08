@@ -3,14 +3,14 @@
 import { animated, useSpring } from '@react-spring/web'
 import Image from 'next/image'
 import { FC, useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { ScrollableCards } from '@/app/components/ui/ScrollableCards/ScrollableCards'
 import { ILogo } from '@/app/global.interface'
+import { useTranslations } from '@/app/hooks/useTranslations'
 import { LOGOS } from '@/app/utils/constants'
 
 export const Logos: FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslations()
 
   // State to track if the section is in the viewport
   const [inView, setInView] = useState(false)
@@ -36,11 +36,11 @@ export const Logos: FC = () => {
     config: { duration: 500 },
   })
 
-  const Transparency = `<span class="text-primary font-bold">${t('home:transparency')}</span>`
-  const Obligation = `<span class="text-primary font-bold">${t('home:obligation')}</span>`
-  const Development = `<span class="text-primary font-bold">${t('home:development')}</span>`
+  const Transparency = `<span class="text-primary font-bold">${t('transparency')}</span>`
+  const Obligation = `<span class="text-primary font-bold">${t('obligation')}</span>`
+  const Development = `<span class="text-primary font-bold">${t('development')}</span>`
 
-  const objectiveText = t('home:objective', {
+  const objectiveText = t('objective', {
     Transparency,
     Obligation,
     Development,

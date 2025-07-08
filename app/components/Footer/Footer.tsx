@@ -3,9 +3,9 @@
 import cn from 'clsx'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
 
 import { useLanguageToggle } from '@/app/hooks/useLanguageToggle'
+import { useTranslations } from '@/app/hooks/useTranslations'
 import { NAVBAR_ITEMS, OFFICE_LOCATIONS } from '@/app/utils/constants'
 
 import { ContactUsForm } from '../ContactUsForm/ContactUsForm'
@@ -13,7 +13,7 @@ import { FacebookIcon } from '../ui/icons/FacebookIcon'
 import { LinkedInIcon } from '../ui/icons/LinkedInIcon'
 
 export const Footer = () => {
-  const { t } = useTranslation(['default', 'home'])
+  const { t } = useTranslations()
   const { isArabic } = useLanguageToggle()
 
   return (
@@ -21,15 +21,15 @@ export const Footer = () => {
       <div className='flex flex-1 flex-col gap-8 lg:flex-row lg:gap-[3.75rem]'>
         {/* Contact Us Section */}
         <div className={cn('flex flex-col gap-3 text-center', isArabic ? 'lg:text-right' : 'lg:text-left')}>
-          <h3 className='text-2xl font-semibold leading-8 sm:text-4xl sm:leading-10'>{t('home:contact_us_heading')}</h3>
-          <p className='text-sm font-medium leading-5 sm:text-lg sm:leading-7'>{t('home:contact_us_desc')}</p>
+          <h3 className='text-2xl font-semibold leading-8 sm:text-4xl sm:leading-10'>{t('contact_us_heading')}</h3>
+          <p className='text-sm font-medium leading-5 sm:text-lg sm:leading-7'>{t('contact_us_desc')}</p>
 
           <div className='flex-1'>
             <h4
               className={cn('mb-4 text-center text-lg font-semibold', isArabic ? 'lg:text-right' : 'lg:text-left')}
               style={{ color: '#155E75' }}
             >
-              {t('home:ourOffices')}
+              {t('ourOffices')}
             </h4>
             <div className='mb-8 grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3'>
               {OFFICE_LOCATIONS.map((office, index) => (

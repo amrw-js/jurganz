@@ -4,7 +4,6 @@ import { Divider } from '@heroui/react'
 import { ArrowUpRight, Building2, Clock, Factory, MapPin } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useTranslation } from 'react-i18next'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
@@ -13,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import type { Project } from '@/types/project.types'
 
 import { useLanguageToggle } from '../hooks/useLanguageToggle'
+import { useTranslations } from '../hooks/useTranslations'
 
 import 'swiper/css'
 
@@ -23,7 +23,7 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) => {
   const router = useRouter()
-  const { t } = useTranslation()
+  const { t } = useTranslations()
   const { isArabic } = useLanguageToggle()
 
   const hasMedia = project.media && project.media.length > 0
@@ -112,7 +112,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
 
                 {project.media!.length > 1 && (
                   <div className='absolute right-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm'>
-                    {project.media!.length} {t('projects:photos')}
+                    {project.media!.length} {t('photos')}
                   </div>
                 )}
               </Swiper>
@@ -129,7 +129,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
               <div className='absolute inset-0 flex items-center justify-center'>
                 <div className='text-center'>
                   <Building2 className='mx-auto h-12 w-12 text-gray-400' />
-                  <p className='mt-2 text-sm text-gray-500'>{t('projects:no_media')}</p>
+                  <p className='mt-2 text-sm text-gray-500'>{t('no_media')}</p>
                 </div>
               </div>
             </div>
@@ -155,9 +155,9 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
                   <Building2 className='h-5 w-5 text-gray-600' />
                 </div>
                 <div className='min-w-0 flex-1'>
-                  <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('projects:company')}</p>
+                  <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('company')}</p>
                   <p className='truncate text-sm font-semibold text-gray-900 lg:text-base'>
-                    {project.companyName || t('projects:not_specified')}
+                    {project.companyName || t('not_specified')}
                   </p>
                 </div>
               </div>
@@ -168,9 +168,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
                     <MapPin className='h-5 w-5 text-gray-600' />
                   </div>
                   <div className='min-w-0 flex-1'>
-                    <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>
-                      {t('projects:location')}
-                    </p>
+                    <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('location')}</p>
                     <p className='truncate text-sm font-semibold text-gray-900 lg:text-base'>{project.location}</p>
                   </div>
                 </div>
@@ -181,7 +179,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
                   <Factory className='h-5 w-5 text-gray-600' />
                 </div>
                 <div className='min-w-0 flex-1'>
-                  <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('projects:capacity')}</p>
+                  <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('capacity')}</p>
                   <p className='truncate text-sm font-semibold text-gray-900 lg:text-base'>{project.capacity}</p>
                 </div>
               </div>
@@ -191,7 +189,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
                   <Clock className='h-5 w-5 text-gray-600' />
                 </div>
                 <div className='min-w-0 flex-1'>
-                  <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('projects:duration')}</p>
+                  <p className='text-xs font-medium uppercase tracking-wide text-gray-500'>{t('duration')}</p>
                   <p className='truncate text-sm font-semibold text-gray-900 lg:text-base'>{project.time}</p>
                 </div>
               </div>

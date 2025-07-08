@@ -3,20 +3,20 @@
 import { Button } from '@heroui/react'
 import Link from 'next/link'
 import { type FC, useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { useProjects } from '@/app/hooks/useProjects'
+import { useTranslations } from '@/app/hooks/useTranslations'
 import { Project } from '@/types/project.types'
 
 // Import Swiper styles
 import 'swiper/css'
 
 export const Projects: FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslations()
   const { data: projects, isLoading } = useProjects()
 
   const [inView, setInView] = useState(false)
@@ -29,19 +29,19 @@ export const Projects: FC = () => {
             <p className='text-xl font-semibold leading-7'>{project.name}</p>
             <div className='space-y-1'>
               <p className='flex items-center gap-1'>
-                <span className='font-semibold text-gray-700'>{t('home:project_company')}:</span>
+                <span className='font-semibold text-gray-700'>{t('project_company')}:</span>
                 <span className='text-gray-600'>{project.companyName}</span>
               </p>
               <p className='flex items-center gap-1'>
-                <span className='font-semibold text-gray-700'>{t('home:project_capacity')}:</span>
+                <span className='font-semibold text-gray-700'>{t('project_capacity')}:</span>
                 <span className='text-gray-600'>{project.capacity}</span>
               </p>
               <p className='flex items-center gap-1'>
-                <span className='font-semibold text-gray-700'>{t('home:project_duration')}:</span>
+                <span className='font-semibold text-gray-700'>{t('project_duration')}:</span>
                 <span className='text-gray-600'>{project.time}</span>
               </p>
               <p className='flex items-center gap-1'>
-                <span className='font-semibold text-gray-700'>{t('home:project_location')}:</span>
+                <span className='font-semibold text-gray-700'>{t('project_location')}:</span>
                 <span className='text-gray-600'>{project.location}</span>
               </p>
             </div>
@@ -49,7 +49,7 @@ export const Projects: FC = () => {
           </div>
           <div className='ml-4 flex flex-col items-end justify-between'>
             <Button as={Link} href={`projects/${project.id}`} className='mt-auto' color='primary'>
-              {t('home:view_details')}
+              {t('view_details')}
             </Button>
           </div>
         </div>
@@ -102,8 +102,8 @@ export const Projects: FC = () => {
   return (
     <div className='flex flex-col gap-7 px-[0.875rem] py-10 sm:px-10 lg:gap-10 lg:py-20' id='projects-section'>
       <div className='flex w-full flex-col items-center justify-center gap-3 text-center lg:text-left'>
-        <p className='text-2xl font-semibold leading-8 lg:text-4xl lg:leading-10'>{t('home:projects_heading')}</p>
-        <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>{t('home:projects_desc')}</p>
+        <p className='text-2xl font-semibold leading-8 lg:text-4xl lg:leading-10'>{t('projects_heading')}</p>
+        <p className='text-sm font-medium leading-5 text-gray-500 lg:text-lg lg:leading-7'>{t('projects_desc')}</p>
       </div>
 
       <div
@@ -123,7 +123,7 @@ export const Projects: FC = () => {
               e.currentTarget.style.color = '#155E75'
             }}
           >
-            {t('home:see_all_projects')}
+            {t('see_all_projects')}
           </Link>
         </div>
 
@@ -186,8 +186,8 @@ export const Projects: FC = () => {
                   />
                 </svg>
               </div>
-              <p className='mb-2 text-lg font-medium text-gray-900'>{t('home:no_projects_found')}</p>
-              <p className='text-gray-500'>{t('home:no_projects_hint')}</p>
+              <p className='mb-2 text-lg font-medium text-gray-900'>{t('no_projects_found')}</p>
+              <p className='text-gray-500'>{t('no_projects_hint')}</p>
             </div>
           )}
 

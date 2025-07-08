@@ -3,15 +3,15 @@
 import { Button } from '@heroui/react'
 import { AlertCircle, RefreshCw, Search } from 'lucide-react'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useBlogs } from '@/app/hooks/useBlogs'
+import { useTranslations } from '@/app/hooks/useTranslations'
 
 import BlogCard from './BlogCard'
 import BlogCardSkeleton from './BlogCardSkeleton'
 
 export default function BlogsListClient() {
-  const { t } = useTranslation('blogs')
+  const { t } = useTranslations()
   const { data: blogs, isLoading, error, refetch, isRefetching } = useBlogs()
   const [searchTerm, setSearchTerm] = useState('')
 

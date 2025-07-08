@@ -3,15 +3,15 @@
 import { Button } from '@heroui/react'
 import { Factory, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { ProductionLineCard } from '@/app/components/ProductionLineCard'
 import { useCreateProductionLine, useProductionLines } from '@/app/hooks/useProductionLines'
+import { useTranslations } from '@/app/hooks/useTranslations'
 import ProductionLineModal from '@/app/modals/SellProductionLineModal'
 import { CreateProductionLine } from '@/types/production-line.types'
 
 export default function ProductionLinesPage() {
-  const { t } = useTranslation()
+  const { t } = useTranslations()
   const { data: productionLines = [], isLoading, error } = useProductionLines()
   const { mutate: createLine, isPending: isPending } = useCreateProductionLine()
 
@@ -34,8 +34,8 @@ export default function ProductionLinesPage() {
             </div>
           </div>
           <div className='text-center'>
-            <p className='text-2xl font-semibold text-gray-800'>{t('lines:loading_production_lines')}</p>
-            <p className='mt-2 text-gray-600'>{t('lines:please_wait_fetch_info')}</p>
+            <p className='text-2xl font-semibold text-gray-800'>{t('loading_production_lines')}</p>
+            <p className='mt-2 text-gray-600'>{t('please_wait_fetch_info')}</p>
           </div>
         </div>
       </div>
@@ -47,8 +47,8 @@ export default function ProductionLinesPage() {
       <div className='flex min-h-screen items-center justify-center bg-gray-50'>
         <div className='text-center'>
           <Factory className='mx-auto h-16 w-16 text-gray-400' />
-          <h3 className='mt-4 text-2xl font-bold text-gray-800'>{t('lines:error_loading_production_lines')}</h3>
-          <p className='mt-2 text-gray-600'>{t('lines:please_try_again_later')}</p>
+          <h3 className='mt-4 text-2xl font-bold text-gray-800'>{t('error_loading_production_lines')}</h3>
+          <p className='mt-2 text-gray-600'>{t('please_try_again_later')}</p>
         </div>
       </div>
     )
@@ -60,11 +60,11 @@ export default function ProductionLinesPage() {
       <div className='border-b border-gray-200 bg-white'>
         <div className='mx-auto px-6 py-12'>
           <div className='text-center'>
-            <h1 className='text-4xl font-bold text-gray-900 lg:text-5xl'>{t('lines:production_lines')}</h1>
-            <p className='mt-4 text-xl text-gray-600'>{t('lines:find_perfect_production_line')}</p>
+            <h1 className='text-4xl font-bold text-gray-900 lg:text-5xl'>{t('production_lines')}</h1>
+            <p className='mt-4 text-xl text-gray-600'>{t('find_perfect_production_line')}</p>
             <div className='mt-8 flex items-center justify-center gap-4'>
               <Button onPress={() => setIsModalOpen(true)} color='primary' startContent={<Plus className='h-4 w-4' />}>
-                {t('lines:list_your_line')}
+                {t('list_your_line')}
               </Button>
             </div>
           </div>
@@ -87,13 +87,13 @@ export default function ProductionLinesPage() {
           <div className='flex min-h-[400px] items-center justify-center'>
             <div className='text-center'>
               <Factory className='mx-auto h-16 w-16 text-gray-400' />
-              <h3 className='mt-4 text-xl font-semibold text-gray-800'>{t('lines:no_production_lines_found')}</h3>
-              <p className='mt-2 text-gray-600'>{t('lines:be_first_to_list')}</p>
+              <h3 className='mt-4 text-xl font-semibold text-gray-800'>{t('no_production_lines_found')}</h3>
+              <p className='mt-2 text-gray-600'>{t('be_first_to_list')}</p>
               <Button
                 className='mt-6 bg-gray-900 text-white hover:bg-gray-800'
                 startContent={<Plus className='h-4 w-4' />}
               >
-                {t('lines:list_your_line')}
+                {t('list_your_line')}
               </Button>
             </div>
           </div>

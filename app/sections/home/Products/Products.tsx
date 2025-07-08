@@ -5,7 +5,6 @@ import { type MotionProps, motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { type FC, type HTMLAttributes, useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
@@ -13,12 +12,13 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { ContactModal } from '@/app/components/ContactModal'
 import { useProductionLines } from '@/app/hooks/useProductionLines'
+import { useTranslations } from '@/app/hooks/useTranslations'
 import { ProductionLine } from '@/types/production-line.types'
 
 import 'swiper/css'
 
 export const Products: FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslations()
   const { data: productionLines, isLoading } = useProductionLines()
 
   const [isContactModalOpen, setIsContactModalOpen] = useState(false)
@@ -60,12 +60,12 @@ export const Products: FC = () => {
 
             {!product.isAvailableNow && (
               <div className='absolute right-3 top-3 rounded-full bg-red-500 px-3 py-1 text-xs font-medium text-white'>
-                {t('home:not_available')}
+                {t('not_available')}
               </div>
             )}
             {product.negotiable && product.isAvailableNow && (
               <div className='absolute right-3 top-3 rounded-full bg-green-500 px-3 py-1 text-xs font-medium text-white'>
-                {t('home:available')}
+                {t('available')}
               </div>
             )}
           </div>
@@ -78,19 +78,19 @@ export const Products: FC = () => {
 
             <div className='mb-4 space-y-2'>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>{t('home:container_type')}:</span>
+                <span className='text-gray-500'>{t('container_type')}:</span>
                 <span className='font-medium text-gray-700'>{product.containerType}</span>
               </div>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>{t('home:capacity')}:</span>
+                <span className='text-gray-500'>{t('capacity')}:</span>
                 <span className='font-medium text-gray-700'>{product.capacity}</span>
               </div>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>{t('home:year')}:</span>
+                <span className='text-gray-500'>{t('year')}:</span>
                 <span className='font-medium text-gray-700'>{product.yearOfManufacturing}</span>
               </div>
               <div className='flex items-center justify-between text-sm'>
-                <span className='text-gray-500'>{t('home:process')}:</span>
+                <span className='text-gray-500'>{t('process')}:</span>
                 <span className='font-medium text-gray-700'>{product.fillingProcess}</span>
               </div>
             </div>
@@ -98,7 +98,7 @@ export const Products: FC = () => {
             {!product.isAvailableNow && product.expectedAvailableDate && (
               <div className='mb-4 rounded-lg border border-orange-200 bg-orange-50 p-3'>
                 <p className='text-sm text-orange-700'>
-                  <span className='font-medium'>{t('home:expected_available')}:</span>{' '}
+                  <span className='font-medium'>{t('expected_available')}:</span>{' '}
                   {new Date(product.expectedAvailableDate).toLocaleDateString()}
                 </p>
               </div>
@@ -111,10 +111,10 @@ export const Products: FC = () => {
                 className='flex-1 border-2 hover:bg-gray-50'
                 variant='light'
               >
-                {t('home:more_details')}
+                {t('more_details')}
               </Button>
               <Button color='primary' className='flex-1' onPress={() => handleContactClick(product)}>
-                {t('home:contact_us')}
+                {t('contact_us')}
               </Button>
             </div>
           </div>
@@ -178,7 +178,7 @@ export const Products: FC = () => {
           viewport={{ once: false }}
           transition={{ delay: 0.1, duration: 0.6, ease: 'easeInOut' }}
         >
-          {t('home:products_heading')}
+          {t('products_heading')}
         </MotionH3>
         <MotionP
           className='text-sm font-medium leading-5 sm:text-lg sm:leading-7'
@@ -187,7 +187,7 @@ export const Products: FC = () => {
           viewport={{ once: false }}
           transition={{ delay: 0.2, duration: 0.6, ease: 'easeInOut' }}
         >
-          {t('home:products_desc')}
+          {t('products_desc')}
         </MotionP>
       </div>
 
@@ -197,7 +197,7 @@ export const Products: FC = () => {
             href='/production-lines'
             className='text-lg font-semibold text-white underline transition-colors hover:text-gray-300'
           >
-            {t('home:see_all_production_lines')}
+            {t('see_all_production_lines')}
           </Link>
         </div>
 
@@ -280,8 +280,8 @@ export const Products: FC = () => {
                   />
                 </svg>
               </div>
-              <p className='mb-2 text-lg font-medium text-white'>{t('home:no_products_found')}</p>
-              <p className='text-gray-300'>{t('home:no_products_hint')}</p>
+              <p className='mb-2 text-lg font-medium text-white'>{t('no_products_found')}</p>
+              <p className='text-gray-300'>{t('no_products_hint')}</p>
             </div>
           )}
         </div>

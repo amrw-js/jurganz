@@ -6,7 +6,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
@@ -17,12 +16,13 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { ContactModal } from '@/app/components/ContactModal'
 import { useProductionLine } from '@/app/hooks/useProductionLines'
+import { useTranslations } from '@/app/hooks/useTranslations'
 
 // Import Swiper styles
 import 'swiper/css'
 
 export default function ProductionLineDetailPage() {
-  const { t } = useTranslation()
+  const { t } = useTranslations()
   const { id } = useParams()
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null)
   const [isContactModalOpen, setIsContactModalOpen] = useState(false)
@@ -40,8 +40,8 @@ export default function ProductionLineDetailPage() {
             </div>
           </div>
           <div className='text-center'>
-            <p className='text-2xl font-semibold text-gray-800'>{t('line:loading_production_line')}</p>
-            <p className='mt-2 text-gray-600'>{t('line:please_wait_fetch_info')}</p>
+            <p className='text-2xl font-semibold text-gray-800'>{t('loading_production_line')}</p>
+            <p className='mt-2 text-gray-600'>{t('please_wait_fetch_info')}</p>
           </div>
         </div>
       </div>
@@ -56,10 +56,8 @@ export default function ProductionLineDetailPage() {
             <div className='mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100'>
               <ArrowLeftIcon className='h-10 w-10 text-gray-600' />
             </div>
-            <h3 className='mb-4 text-3xl font-bold text-gray-800'>{t('line:production_line_not_found')}</h3>
-            <p className='mb-8 text-lg leading-relaxed text-gray-600'>
-              {t('line:production_line_not_found_description')}
-            </p>
+            <h3 className='mb-4 text-3xl font-bold text-gray-800'>{t('production_line_not_found')}</h3>
+            <p className='mb-8 text-lg leading-relaxed text-gray-600'>{t('production_line_not_found_description')}</p>
             <Button
               as={Link}
               href='/production-lines'
@@ -67,7 +65,7 @@ export default function ProductionLineDetailPage() {
               size='lg'
               className='w-full bg-gray-900 font-semibold text-white hover:bg-gray-800'
             >
-              {t('line:back_to_production_lines')}
+              {t('back_to_production_lines')}
             </Button>
           </CardBody>
         </Card>
@@ -93,7 +91,7 @@ export default function ProductionLineDetailPage() {
               <div>
                 <div className='mb-2 flex items-center gap-4'>
                   <h1 className='text-3xl font-bold text-gray-900 lg:text-4xl'>
-                    {productionLine.productType} {t('line:production_line')}
+                    {productionLine.productType} {t('production_line')}
                   </h1>
                   <Chip
                     variant='flat'
@@ -104,7 +102,7 @@ export default function ProductionLineDetailPage() {
                         : 'border border-orange-200 bg-orange-50 text-orange-700'
                     }`}
                   >
-                    {productionLine.isAvailableNow ? t('line:available_now') : t('line:coming_soon')}
+                    {productionLine.isAvailableNow ? t('available_now') : t('coming_soon')}
                   </Chip>
                 </div>
               </div>
@@ -115,7 +113,7 @@ export default function ProductionLineDetailPage() {
               startContent={<Mail className='h-4 w-4' />}
               onPress={() => setIsContactModalOpen(true)}
             >
-              {t('line:get_in_touch')}
+              {t('get_in_touch')}
             </Button>
           </div>
         </div>
@@ -226,7 +224,7 @@ export default function ProductionLineDetailPage() {
                   <div className='flex items-center gap-2'>
                     <Camera className='h-4 w-4' />
                     <span>
-                      {imageCount} {t('line:photos')}
+                      {imageCount} {t('photos')}
                     </span>
                   </div>
                   {videoCount > 0 && (
@@ -235,7 +233,7 @@ export default function ProductionLineDetailPage() {
                       <div className='flex items-center gap-2'>
                         <Play className='h-4 w-4' />
                         <span>
-                          {videoCount} {t('line:videos')}
+                          {videoCount} {t('videos')}
                         </span>
                       </div>
                     </>
@@ -246,7 +244,7 @@ export default function ProductionLineDetailPage() {
               <div className='flex h-[500px] items-center justify-center rounded-2xl bg-gray-100'>
                 <div className='text-center'>
                   <Factory className='mx-auto h-16 w-16 text-gray-400' />
-                  <p className='mt-4 text-gray-500'>{t('line:no_images_available')}</p>
+                  <p className='mt-4 text-gray-500'>{t('no_images_available')}</p>
                 </div>
               </div>
             )}
@@ -257,12 +255,12 @@ export default function ProductionLineDetailPage() {
             {/* Quick Specs */}
             <Card className='border border-gray-200'>
               <CardBody className='p-6'>
-                <h3 className='mb-6 text-lg font-semibold text-gray-900'>{t('line:specifications')}</h3>
+                <h3 className='mb-6 text-lg font-semibold text-gray-900'>{t('specifications')}</h3>
                 <div className='space-y-4'>
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <Container className='h-4 w-4 text-gray-500' />
-                      <span className='text-sm text-gray-600'>{t('line:container')}</span>
+                      <span className='text-sm text-gray-600'>{t('container')}</span>
                     </div>
                     <span className='font-semibold text-gray-900'>{productionLine.containerType}</span>
                   </div>
@@ -270,7 +268,7 @@ export default function ProductionLineDetailPage() {
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <Zap className='h-4 w-4 text-gray-500' />
-                      <span className='text-sm text-gray-600'>{t('line:capacity')}</span>
+                      <span className='text-sm text-gray-600'>{t('capacity')}</span>
                     </div>
                     <span className='font-semibold text-gray-900'>{productionLine.capacity}</span>
                   </div>
@@ -278,7 +276,7 @@ export default function ProductionLineDetailPage() {
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <Calendar className='h-4 w-4 text-gray-500' />
-                      <span className='text-sm text-gray-600'>{t('line:year')}</span>
+                      <span className='text-sm text-gray-600'>{t('year')}</span>
                     </div>
                     <span className='font-semibold text-gray-900'>{productionLine.yearOfManufacturing}</span>
                   </div>
@@ -286,7 +284,7 @@ export default function ProductionLineDetailPage() {
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <Settings className='h-4 w-4 text-gray-500' />
-                      <span className='text-sm text-gray-600'>{t('line:process')}</span>
+                      <span className='text-sm text-gray-600'>{t('process')}</span>
                     </div>
                     <span className='font-semibold text-gray-900'>{productionLine.fillingProcess}</span>
                   </div>
@@ -294,7 +292,7 @@ export default function ProductionLineDetailPage() {
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <Factory className='h-4 w-4 text-gray-500' />
-                      <span className='text-sm text-gray-600'>{t('line:type')}</span>
+                      <span className='text-sm text-gray-600'>{t('type')}</span>
                     </div>
                     <span className='font-semibold text-gray-900'>{productionLine.fillingType}</span>
                   </div>
@@ -302,7 +300,7 @@ export default function ProductionLineDetailPage() {
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center gap-2'>
                       <Clock className='h-4 w-4 text-gray-500' />
-                      <span className='text-sm text-gray-600'>{t('line:working_time')}</span>
+                      <span className='text-sm text-gray-600'>{t('working_time')}</span>
                     </div>
                     <span className='font-semibold text-gray-900'>{productionLine.approximateWorkingTime}</span>
                   </div>
@@ -313,14 +311,14 @@ export default function ProductionLineDetailPage() {
             {/* Technical Details */}
             <Card className='border border-gray-200'>
               <CardBody className='p-6'>
-                <h3 className='mb-4 text-lg font-semibold text-gray-900'>{t('line:technical_details')}</h3>
+                <h3 className='mb-4 text-lg font-semibold text-gray-900'>{t('technical_details')}</h3>
                 <div className='space-y-3'>
                   <div>
-                    <p className='text-sm font-medium text-gray-600'>{t('line:control_plc')}</p>
+                    <p className='text-sm font-medium text-gray-600'>{t('control_plc')}</p>
                     <p className='text-gray-900'>{productionLine.controlPLC}</p>
                   </div>
                   <div>
-                    <p className='text-sm font-medium text-gray-600'>{t('line:line_machines')}</p>
+                    <p className='text-sm font-medium text-gray-600'>{t('line_machines')}</p>
                     <p className='text-gray-900'>{productionLine.lineMachines}</p>
                   </div>
                 </div>
@@ -330,14 +328,14 @@ export default function ProductionLineDetailPage() {
             {/* Contact CTA */}
             <Card className='border border-gray-900 bg-gray-900'>
               <CardBody className='p-6 text-center'>
-                <h3 className='mb-2 text-lg font-semibold text-white'>{t('line:interested_in_this_line')}</h3>
-                <p className='mb-4 text-sm text-gray-300'>{t('line:interested_in_this_line_description')}</p>
+                <h3 className='mb-2 text-lg font-semibold text-white'>{t('interested_in_this_line')}</h3>
+                <p className='mb-4 text-sm text-gray-300'>{t('interested_in_this_line_description')}</p>
                 <Button
                   className='w-full bg-white font-semibold text-gray-900 hover:bg-gray-100'
                   startContent={<Mail className='h-4 w-4' />}
                   onPress={() => setIsContactModalOpen(true)}
                 >
-                  {t('line:get_in_touch')}
+                  {t('get_in_touch')}
                 </Button>
               </CardBody>
             </Card>

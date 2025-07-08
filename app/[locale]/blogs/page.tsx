@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 const BlogsPage = async (props: IPage) => {
   const { params } = props
   const { locale } = await params
-  const { t } = await getTranslation(locale, ['default', 'blogs'])
+  const { t } = await getTranslation(locale)
 
   return (
     <div className='min-h-screen bg-background'>
       <div className='container mx-auto px-4 py-8'>
         <div className='mx-auto'>
           <div className='mb-12 text-center'>
-            <h1 className='mb-4 text-4xl font-bold tracking-tight'>{t('blogs:heading')}</h1>
-            <p className='mx-auto text-xl text-foreground-500'>{t('blogs:subtitle')}</p>
+            <h1 className='mb-4 text-4xl font-bold tracking-tight'>{t('heading')}</h1>
+            <p className='mx-auto text-xl text-foreground-500'>{t('subtitle')}</p>
           </div>
           <BlogsListClient />
         </div>

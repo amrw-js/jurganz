@@ -17,12 +17,13 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { useLanguageToggle } from '@/app/hooks/useLanguageToggle'
 import { useProject } from '@/app/hooks/useProjects'
+import { useTranslations } from '@/app/hooks/useTranslations'
 
 // Import Swiper styles
 import 'swiper/css'
 
 export default function ProjectDetailPage() {
-  const { t } = useTranslation('project')
+  const { t } = useTranslations()
   const { id } = useParams()
   const { data: project, isLoading, error } = useProject(id as string)
   const { isArabic } = useLanguageToggle()
