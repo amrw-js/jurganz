@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Chip, Divider, Drawer, DrawerBody, DrawerContent, DrawerHeader } from '@heroui/react'
-import { BookOpen, ChevronRight, Factory, FolderOpen } from 'lucide-react'
+import { BookOpen, ChevronRight, Factory, FolderOpen, Languages } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import type { FC } from 'react'
 
@@ -37,6 +37,14 @@ export const SideBar: FC<SideBar> = ({ isOpen, onOpenChange }) => {
       icon: Factory,
       href: '/dashboard/lines',
       description: 'Manage production workflows',
+      available: true,
+    },
+    {
+      id: 'localization',
+      label: 'Localization',
+      icon: Languages,
+      href: '/dashboard/locale',
+      description: 'Manage content localization',
       available: true,
     },
   ]
