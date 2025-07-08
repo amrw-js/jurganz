@@ -12,11 +12,7 @@ export type Locale = (typeof locales)[number]
 const customBackend = {
   type: 'backend' as const,
 
-  init: function (services: any, backendOptions: any, i18nextOptions: any) {
-    // Initialization if needed
-  },
-
-  read: async function (language: string, namespace: string, callback: (err: any, data?: any) => void) {
+  read: async function (language: string, namespace: string, callback: (err: unknown, data?: unknown) => void) {
     try {
       // If namespace is provided and not 'default', you could potentially filter by namespace
       // For now, we'll fetch all translations for the language
@@ -45,13 +41,6 @@ const customBackend = {
       console.error(`Failed to load translations for ${language}/${namespace}:`, error)
       callback(error, {})
     }
-  },
-
-  save: function (language: string, namespace: string, data: any, callback?: (err?: any) => void) {
-    // Optional: implement saving back to backend
-    // This would be useful for in-app translation editing
-    console.log('Save not implemented')
-    callback?.()
   },
 }
 

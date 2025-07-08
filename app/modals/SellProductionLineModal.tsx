@@ -12,7 +12,6 @@ import {
   Textarea,
 } from '@heroui/react'
 import { Controller, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 
 import type { CreateProductionLine, ProductionLineFormData, ProductionLineMedia } from '@/types/production-line.types'
 

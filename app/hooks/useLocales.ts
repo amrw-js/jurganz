@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { localesApi } from '@/apis/locales.api'
@@ -105,7 +106,7 @@ export const useCreateBulkLocales = () => {
 
   return useMutation({
     mutationFn: (data: BulkCreateLocale) => localesApi.createBulkLocales(data),
-    onSuccess: (newLocales) => {
+    onSuccess: () => {
       // Invalidate all locale-related queries since bulk operations are complex
       queryClient.invalidateQueries({ queryKey: localesKeys.all })
     },
@@ -173,51 +174,6 @@ export const useUpdateLocale = () => {
       }
 
       // Invalidate byKeys queries that might include this key
-      queryClient.invalidateQueries({ queryKey: localesKeys.byKeys() })
-    },
-  })
-}
-
-// Delete locale mutation
-export const useDeleteLocale = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: (key: string) => localesApi.deleteLocale(key),
-    onSuccess: (_, deletedKey) => {
-      // Remove from cache
-      queryClient.removeQueries({ queryKey: localesKeys.detail(deletedKey) })
-
-      // Remove from all lists
-      queryClient.setQueryData<Locale[]>(localesKeys.list(), (old) => {
-        if (!old) return []
-        return old.filter((locale) => locale.key !== deletedKey)
-      })
-
-      queryClient.setQueryData<Locale[]>(localesKeys.list('en'), (old) => {
-        if (!old) return []
-        return old.filter((locale) => locale.key !== deletedKey)
-      })
-
-      queryClient.setQueryData<Locale[]>(localesKeys.list('ar'), (old) => {
-        if (!old) return []
-        return old.filter((locale) => locale.key !== deletedKey)
-      })
-
-      // Remove from translations
-      queryClient.setQueryData<LocaleTranslations>(localesKeys.translation('en'), (old) => {
-        if (!old) return {}
-        const { [deletedKey]: removed, ...rest } = old
-        return rest
-      })
-
-      queryClient.setQueryData<LocaleTranslations>(localesKeys.translation('ar'), (old) => {
-        if (!old) return {}
-        const { [deletedKey]: removed, ...rest } = old
-        return rest
-      })
-
-      // Invalidate byKeys queries
       queryClient.invalidateQueries({ queryKey: localesKeys.byKeys() })
     },
   })

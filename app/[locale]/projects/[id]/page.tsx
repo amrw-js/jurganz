@@ -1,12 +1,11 @@
 'use client'
 
 import { Button, Card, CardBody, CardHeader, Chip } from '@heroui/react'
-import { ArrowLeftIcon, Building2, Camera, Clock, Edit3, Factory, MapPin, Play } from 'lucide-react'
+import { ArrowLeftIcon, Building2, Camera, Clock, Factory, MapPin, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'

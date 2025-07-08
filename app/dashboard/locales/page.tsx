@@ -326,7 +326,7 @@ export default function TranslationsPage() {
           <div className='flex items-center justify-between'>
             <h2 className='text-lg font-semibold'>Translation Keys</h2>
             {filteredLocales.length === 0 && searchQuery && (
-              <div className='text-sm text-gray-500'>No translations found for "{searchQuery}"</div>
+              <div className='text-sm text-gray-500'>No translations found for &quot;{searchQuery}&quot;</div>
             )}
           </div>
         </CardHeader>

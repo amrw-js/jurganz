@@ -8,11 +8,7 @@ export type Locale = 'en' | 'ar'
 const customServerBackend = {
   type: 'backend' as const,
 
-  init: function (services: any, backendOptions: any, i18nextOptions: any) {
-    // Initialization if needed
-  },
-
-  read: async function (language: string, namespace: string, callback: (err: any, data?: any) => void) {
+  read: async function (language: string, namespace: string, callback: (err: unknown, data?: unknown) => void) {
     try {
       const translations = await localesApi.getTranslations(language as Locale)
 

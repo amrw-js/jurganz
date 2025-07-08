@@ -5,7 +5,6 @@ import { format, formatDistanceToNow } from 'date-fns'
 import { AlertCircle, ArrowLeft, Calendar, Clock, Eye, RefreshCw, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useBlog } from '@/app/hooks/useBlogs'
 import { useTranslations } from '@/app/hooks/useTranslations'
