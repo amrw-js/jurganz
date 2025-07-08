@@ -12,6 +12,9 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Pagination,
+  Select,
+  SelectItem,
   Spinner,
   Table,
   TableBody,
@@ -22,13 +25,32 @@ import {
   useDisclosure,
 } from '@heroui/react'
 import { Edit, Globe, Languages, Save, Search, X } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { useLocales, useUpdateLocale } from '@/app/hooks/useLocales'
 import type { Locale, UpdateLocale } from '@/types/locales.types'
 
+// Status filter options
+const statusOptions = [
+  { key: 'all', label: 'All Status' },
+  { key: 'complete', label: 'Complete' },
+  { key: 'partial', label: 'Partial' },
+  { key: 'missing', label: 'Missing' },
+]
+
+// Items per page options
+const itemsPerPageOptions = [
+  { key: '10', label: '10' },
+  { key: '25', label: '25' },
+  { key: '50', label: '50' },
+  { key: '100', label: '100' },
+]
+
 export default function TranslationsPage() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(25)
   const [editingKey, setEditingKey] = useState<string | null>(null)
   const [editValues, setEditValues] = useState<{ en?: string; ar?: string }>({})
 
@@ -39,49 +61,121 @@ export default function TranslationsPage() {
   const { data: locales, isLoading, error } = useLocales()
   const updateLocaleMutation = useUpdateLocale()
 
-  // Filter locales based on search
-  const filteredLocales =
-    locales?.filter(
+  // Memoized filtered and paginated data
+  const { filteredLocales, paginatedLocales, totalPages, stats } = useMemo(() => {
+    if (!locales)
+      return {
+        filteredLocales: [],
+        paginatedLocales: [],
+        totalPages: 0,
+        stats: { total: 0, complete: 0, partial: 0, missing: 0 },
+      }
+
+    // Filter by search query
+    let filtered = locales.filter(
       (locale) =>
         locale.key.toLowerCase().includes(searchQuery.toLowerCase()) ||
         locale.en?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         locale.ar?.toLowerCase().includes(searchQuery.toLowerCase()),
-    ) || []
+    )
 
-  const handleEdit = (locale: Locale) => {
+    // Filter by status
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter((locale) => {
+        const hasEn = !!locale.en
+        const hasAr = !!locale.ar
+
+        switch (statusFilter) {
+          case 'complete':
+            return hasEn && hasAr
+          case 'partial':
+            return (hasEn && !hasAr) || (!hasEn && hasAr)
+          case 'missing':
+            return !hasEn && !hasAr
+          default:
+            return true
+        }
+      })
+    }
+
+    // Calculate pagination
+    const totalPages = Math.ceil(filtered.length / itemsPerPage)
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginated = filtered.slice(startIndex, endIndex)
+
+    // Calculate stats
+    const stats = {
+      total: locales.length,
+      complete: locales.filter((l) => l.en && l.ar).length,
+      partial: locales.filter((l) => (l.en && !l.ar) || (!l.en && l.ar)).length,
+      missing: locales.filter((l) => !l.en && !l.ar).length,
+    }
+
+    return {
+      filteredLocales: filtered,
+      paginatedLocales: paginated,
+      totalPages,
+      stats,
+    }
+  }, [locales, searchQuery, statusFilter, currentPage, itemsPerPage])
+
+  // Reset to first page when filters change
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value)
+    setCurrentPage(1)
+  }, [])
+
+  const handleStatusFilterChange = useCallback((value: string) => {
+    setStatusFilter(value)
+    setCurrentPage(1)
+  }, [])
+
+  const handleItemsPerPageChange = useCallback((value: string) => {
+    setItemsPerPage(Number(value))
+    setCurrentPage(1)
+  }, [])
+
+  const handleEdit = useCallback((locale: Locale) => {
     setEditingKey(locale.key)
     setEditValues({
       en: locale.en || '',
       ar: locale.ar || '',
     })
-  }
+  }, [])
 
-  const handleSave = async (key: string) => {
-    try {
-      const updateData: UpdateLocale = {
-        en: editValues.en || undefined,
-        ar: editValues.ar || undefined,
+  const handleSave = useCallback(
+    async (key: string) => {
+      try {
+        const updateData: UpdateLocale = {
+          en: editValues.en || undefined,
+          ar: editValues.ar || undefined,
+        }
+
+        await updateLocaleMutation.mutateAsync({ key, data: updateData })
+        setEditingKey(null)
+        setEditValues({})
+      } catch (error) {
+        console.error('Failed to update locale:', error)
       }
+    },
+    [editValues, updateLocaleMutation],
+  )
 
-      await updateLocaleMutation.mutateAsync({ key, data: updateData })
-      setEditingKey(null)
-      setEditValues({})
-    } catch (error) {
-      console.error('Failed to update locale:', error)
-    }
-  }
-
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setEditingKey(null)
     setEditValues({})
-  }
+  }, [])
 
-  const openDetailModal = (locale: Locale) => {
-    setSelectedLocale(locale)
-    onOpen()
-  }
+  const openDetailModal = useCallback(
+    (locale: Locale) => {
+      setSelectedLocale(locale)
+      onOpen()
+    },
+    [onOpen],
+  )
 
-  const getStatusChip = (locale: Locale) => {
+  const getStatusChip = useCallback((locale: Locale) => {
     const hasEn = !!locale.en
     const hasAr = !!locale.ar
 
@@ -104,7 +198,7 @@ export default function TranslationsPage() {
         </Chip>
       )
     }
-  }
+  }, [])
 
   if (isLoading) {
     return (
@@ -141,38 +235,85 @@ export default function TranslationsPage() {
         </div>
       </div>
 
-      {/* Search and Stats */}
+      {/* Search, Filters and Stats */}
       <Card className='mb-6'>
         <CardBody>
-          <div className='flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
-            <div className='max-w-md flex-1'>
-              <Input
-                placeholder='Search translations...'
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                startContent={<Search className='h-4 w-4 text-gray-400' />}
-                classNames={{
-                  input: 'focus:ring-[#155E75]',
-                  inputWrapper: 'focus-within:border-[#155E75]',
-                }}
-              />
+          <div className='flex flex-col gap-4'>
+            {/* Search and Filters Row */}
+            <div className='flex flex-col items-start justify-between gap-4 md:flex-row md:items-center'>
+              <div className='flex flex-1 gap-3'>
+                <div className='max-w-md flex-1'>
+                  <Input
+                    placeholder='Search translations...'
+                    value={searchQuery}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    startContent={<Search className='h-4 w-4 text-gray-400' />}
+                    classNames={{
+                      input: 'focus:ring-[#155E75]',
+                      inputWrapper: 'focus-within:border-[#155E75]',
+                    }}
+                  />
+                </div>
+                <Select
+                  placeholder='Filter by status'
+                  selectedKeys={[statusFilter]}
+                  onSelectionChange={(keys) => handleStatusFilterChange(Array.from(keys)[0] as string)}
+                  className='w-48'
+                  classNames={{
+                    trigger: 'focus:border-[#155E75]',
+                  }}
+                >
+                  {statusOptions.map((option) => (
+                    <SelectItem key={option.key}>{option.label}</SelectItem>
+                  ))}
+                </Select>
+              </div>
+
+              {/* Items per page selector */}
+              <div className='flex items-center gap-2'>
+                <span className='text-sm text-gray-600'>Items per page:</span>
+                <Select
+                  selectedKeys={[itemsPerPage.toString()]}
+                  onSelectionChange={(keys) => handleItemsPerPageChange(Array.from(keys)[0] as string)}
+                  className='w-20'
+                  classNames={{
+                    trigger: 'focus:border-[#155E75]',
+                  }}
+                >
+                  {itemsPerPageOptions.map((option) => (
+                    <SelectItem key={option.key}>{option.label}</SelectItem>
+                  ))}
+                </Select>
+              </div>
             </div>
-            <div className='flex gap-4 text-sm'>
-              <div className='text-center'>
-                <div className='font-semibold text-gray-900'>{locales?.length || 0}</div>
-                <div className='text-gray-500'>Total Keys</div>
-              </div>
-              <div className='text-center'>
-                <div className='font-semibold' style={{ color: '#155E75' }}>
-                  {locales?.filter((l) => l.en && l.ar).length || 0}
+
+            {/* Stats Row */}
+            <div className='flex justify-between'>
+              <div className='flex gap-6 text-sm'>
+                <div className='text-center'>
+                  <div className='font-semibold text-gray-900'>{stats.total}</div>
+                  <div className='text-gray-500'>Total Keys</div>
                 </div>
-                <div className='text-gray-500'>Complete</div>
-              </div>
-              <div className='text-center'>
-                <div className='font-semibold text-orange-600'>
-                  {locales?.filter((l) => (l.en && !l.ar) || (!l.en && l.ar)).length || 0}
+                <div className='text-center'>
+                  <div className='font-semibold' style={{ color: '#155E75' }}>
+                    {stats.complete}
+                  </div>
+                  <div className='text-gray-500'>Complete</div>
                 </div>
-                <div className='text-gray-500'>Partial</div>
+                <div className='text-center'>
+                  <div className='font-semibold text-orange-600'>{stats.partial}</div>
+                  <div className='text-gray-500'>Partial</div>
+                </div>
+                <div className='text-center'>
+                  <div className='font-semibold text-red-600'>{stats.missing}</div>
+                  <div className='text-gray-500'>Missing</div>
+                </div>
+              </div>
+
+              {/* Results info */}
+              <div className='text-sm text-gray-600'>
+                Showing {filteredLocales.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{' '}
+                {Math.min(currentPage * itemsPerPage, filteredLocales.length)} of {filteredLocales.length} results
               </div>
             </div>
           </div>
@@ -182,7 +323,12 @@ export default function TranslationsPage() {
       {/* Translations Table */}
       <Card>
         <CardHeader>
-          <h2 className='text-lg font-semibold'>Translation Keys</h2>
+          <div className='flex items-center justify-between'>
+            <h2 className='text-lg font-semibold'>Translation Keys</h2>
+            {filteredLocales.length === 0 && searchQuery && (
+              <div className='text-sm text-gray-500'>No translations found for "{searchQuery}"</div>
+            )}
+          </div>
         </CardHeader>
         <CardBody className='p-0'>
           <Table aria-label='Translations table'>
@@ -193,8 +339,8 @@ export default function TranslationsPage() {
               <TableColumn>STATUS</TableColumn>
               <TableColumn>ACTIONS</TableColumn>
             </TableHeader>
-            <TableBody>
-              {filteredLocales.map((locale) => (
+            <TableBody emptyContent={searchQuery ? 'No translations found' : 'No translations available'}>
+              {paginatedLocales.map((locale) => (
                 <TableRow key={locale.key}>
                   <TableCell>
                     <div className='max-w-xs truncate font-mono text-sm text-gray-600'>{locale.key}</div>
@@ -279,6 +425,22 @@ export default function TranslationsPage() {
           </Table>
         </CardBody>
       </Card>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className='mt-6 flex justify-center'>
+          <Pagination
+            total={totalPages}
+            page={currentPage}
+            onChange={setCurrentPage}
+            showControls
+            showShadow
+            classNames={{
+              cursor: 'bg-[#155E75] text-white',
+            }}
+          />
+        </div>
+      )}
 
       {/* Detail Modal */}
       <Modal isOpen={isOpen} onClose={onClose} size='2xl'>
