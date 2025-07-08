@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 import BlogPostClient from '@/app/components/blogs/BlogPostClient'
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,10 +15,11 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { id } = await params
   return (
     <div className='min-h-screen bg-background'>
-      <BlogPostClient id={params.id} />
+      <BlogPostClient id={id} />
     </div>
   )
 }

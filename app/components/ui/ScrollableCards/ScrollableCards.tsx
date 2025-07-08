@@ -4,6 +4,7 @@ import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from '@heroicons/react/24/o
 import cn from 'clsx'
 import AutoScroll from 'embla-carousel-auto-scroll'
 import useEmblaCarousel from 'embla-carousel-react'
+import { ReactNode } from 'react'
 
 import '../../../embla.css'
 
@@ -14,8 +15,8 @@ type ScrollableCardsProps<T> = {
   slideClassName?: string
   arrows?: boolean
   autoPlay?: boolean
-  renderItem: (item: T, index: number) => JSX.Element
-  renderLeftContent?: () => JSX.Element
+  renderItem: (item: T, index: number) => ReactNode
+  renderLeftContent?: () => ReactNode
 }
 
 const EMBLA_OPTS = {

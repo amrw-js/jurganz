@@ -1,7 +1,6 @@
 'use client'
 
 import { Button, Input, Textarea } from '@heroui/react'
-import { animated, useSpring } from '@react-spring/web'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
@@ -43,15 +42,9 @@ export const ContactUsForm = () => {
   const { submitForm, isLoading, isSuccess, isError, error, reset } = useContactForm()
 
   // Hook to observe when the form is in view
-  const { ref, inView } = useInView({
+  const { ref: inViewRef } = useInView({
     triggerOnce: false,
     threshold: 0.25,
-  })
-
-  const animationStyles = useSpring({
-    opacity: inView ? 1 : 0,
-    transform: inView ? 'translateY(0)' : 'translateY(50px)',
-    config: { tension: 200, friction: 30 },
   })
 
   // Handle success
@@ -162,118 +155,118 @@ export const ContactUsForm = () => {
   }
 
   return (
-    <animated.form
-      ref={ref}
-      style={animationStyles}
-      onSubmit={handleSubmit}
+    <div
+      ref={inViewRef}
       className='flex flex-1 shrink-0 basis-1/2 flex-col gap-5 rounded-[1.25rem] bg-white px-5 py-8 shadow-md lg:px-10 lg:py-[1.625rem]'
     >
-      <Input
-        value={formData.name}
-        onValueChange={handleInputChange('name')}
-        placeholder={t('contact_form_name')}
-        classNames={{
-          inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
-        }}
-        variant='bordered'
-        className='w-full'
-        isRequired
-        isInvalid={!!errors.name}
-        errorMessage={errors.name}
-        disabled={isLoading}
-      />
+      <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
+        <Input
+          value={formData.name}
+          onValueChange={handleInputChange('name')}
+          placeholder={t('contact_form_name')}
+          classNames={{
+            inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
+          }}
+          variant='bordered'
+          className='w-full'
+          isRequired
+          isInvalid={!!errors.name}
+          errorMessage={errors.name}
+          disabled={isLoading}
+        />
 
-      <Input
-        value={formData.email}
-        onValueChange={handleInputChange('email')}
-        placeholder={t('contact_form_email')}
-        type='email'
-        classNames={{
-          inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
-        }}
-        variant='bordered'
-        className='w-full'
-        isRequired
-        isInvalid={!!errors.email}
-        errorMessage={errors.email}
-        disabled={isLoading}
-      />
+        <Input
+          value={formData.email}
+          onValueChange={handleInputChange('email')}
+          placeholder={t('contact_form_email')}
+          type='email'
+          classNames={{
+            inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
+          }}
+          variant='bordered'
+          className='w-full'
+          isRequired
+          isInvalid={!!errors.email}
+          errorMessage={errors.email}
+          disabled={isLoading}
+        />
 
-      <Input
-        value={formData.phone}
-        onValueChange={handleInputChange('phone')}
-        placeholder={t('contact_form_phone')}
-        type='tel'
-        classNames={{
-          inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
-          input: 'text-left [&:not(:placeholder-shown)]:text-left',
-        }}
-        variant='bordered'
-        className='w-full'
-        isInvalid={!!errors.phone}
-        errorMessage={errors.phone}
-        disabled={isLoading}
-        onKeyPress={(e) => {
-          // Only allow numbers, +, -, (, ), and spaces
-          const allowedChars = /[0-9+\-() ]/
-          if (!allowedChars.test(e.key)) {
-            e.preventDefault()
-          }
-        }}
-      />
+        <Input
+          value={formData.phone}
+          onValueChange={handleInputChange('phone')}
+          placeholder={t('contact_form_phone')}
+          type='tel'
+          classNames={{
+            inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
+            input: 'text-left [&:not(:placeholder-shown)]:text-left',
+          }}
+          variant='bordered'
+          className='w-full'
+          isInvalid={!!errors.phone}
+          errorMessage={errors.phone}
+          disabled={isLoading}
+          onKeyPress={(e) => {
+            // Only allow numbers, +, -, (, ), and spaces
+            const allowedChars = /[0-9+\-() ]/
+            if (!allowedChars.test(e.key)) {
+              e.preventDefault()
+            }
+          }}
+        />
 
-      <Input
-        value={formData.company}
-        onValueChange={handleInputChange('company')}
-        placeholder={t('contact_form_company')}
-        classNames={{
-          inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
-        }}
-        variant='bordered'
-        className='w-full'
-        isInvalid={!!errors.company}
-        errorMessage={errors.company}
-        disabled={isLoading}
-      />
+        <Input
+          value={formData.company}
+          onValueChange={handleInputChange('company')}
+          placeholder={t('contact_form_company')}
+          classNames={{
+            inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
+          }}
+          variant='bordered'
+          className='w-full'
+          isInvalid={!!errors.company}
+          errorMessage={errors.company}
+          disabled={isLoading}
+        />
 
-      <Input
-        value={formData.subject}
-        onValueChange={handleInputChange('subject')}
-        placeholder={t('contact_form_subject')}
-        classNames={{
-          inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
-        }}
-        variant='bordered'
-        className='w-full'
-        isInvalid={!!errors.subject}
-        errorMessage={errors.subject}
-        disabled={isLoading}
-      />
+        <Input
+          value={formData.subject}
+          onValueChange={handleInputChange('subject')}
+          placeholder={t('contact_form_subject')}
+          classNames={{
+            inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
+          }}
+          variant='bordered'
+          className='w-full'
+          isInvalid={!!errors.subject}
+          errorMessage={errors.subject}
+          disabled={isLoading}
+        />
 
-      <Textarea
-        value={formData.message}
-        onValueChange={handleInputChange('message')}
-        placeholder={t('contact_form_message')}
-        variant='bordered'
-        classNames={{
-          inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
-        }}
-        isRequired
-        isInvalid={!!errors.message}
-        errorMessage={errors.message}
-        disabled={isLoading}
-      />
+        <Textarea
+          value={formData.message}
+          onValueChange={handleInputChange('message')}
+          placeholder={t('contact_form_message')}
+          variant='bordered'
+          classNames={{
+            inputWrapper: 'rounded-[0.313rem] px-8 py-[1.188rem] h-auto',
+          }}
+          isRequired
+          isInvalid={!!errors.message}
+          errorMessage={errors.message}
+          disabled={isLoading}
+        />
 
-      <Button
-        type='submit'
-        size='lg'
-        color='primary'
-        className='min-w-40 self-center lg:self-end'
-        isLoading={isLoading}
-        disabled={isLoading}
-      >
-        {isLoading ? t('sending_label') : t('send_label')}
-      </Button>
-    </animated.form>
+        <Button
+          type='submit'
+          size='lg'
+          color='primary'
+          className='min-w-40 self-center lg:self-end'
+          isLoading={isLoading}
+          disabled={isLoading}
+        >
+          {isLoading ? t('sending_label') : t('send_label')}
+        </Button>
+      </form>
+    </div>
   )
 }
