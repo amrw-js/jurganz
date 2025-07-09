@@ -2,6 +2,8 @@ export interface Blog {
   id: string
   title: string
   content: string
+  arTitle?: string
+  arContent?: string
   featureImage?: string
   media?: BlogMedia[]
   createdAt: string
@@ -20,6 +22,8 @@ export interface BlogMedia {
 export interface CreateBlog {
   title: string
   content: string
+  arTitle?: string
+  arContent?: string
   featureImage?: string
   media?: BlogMedia[]
 }
@@ -27,6 +31,8 @@ export interface CreateBlog {
 export interface BlogFormData {
   title: string
   content: string
+  arTitle?: string
+  arContent?: string
   featureImage?: string
   media?: BlogMedia[]
 }

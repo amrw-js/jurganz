@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Card, CardBody, CardFooter, Image, Input } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, Image, Input, Switch } from '@heroui/react'
 import { ImageIcon, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -22,6 +22,7 @@ export default function BlogForm({ blog }: BlogFormProps) {
   const updateBlogMutation = useUpdateBlog()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [featureImageUrl, setFeatureImageUrl] = useState<string | null>(blog?.featureImage || null)
+  const [enableArabic, setEnableArabic] = useState(Boolean(blog?.arTitle || blog?.arContent))
 
   const {
     register,
@@ -33,6 +34,8 @@ export default function BlogForm({ blog }: BlogFormProps) {
     defaultValues: {
       title: blog?.title || '',
       content: blog?.content || '',
+      arTitle: blog?.arTitle || '',
+      arContent: blog?.arContent || '',
       featureImage: blog?.featureImage || '',
       media: blog?.media || [],
     },
@@ -72,26 +75,25 @@ export default function BlogForm({ blog }: BlogFormProps) {
   const onSubmit = async (data: BlogFormData) => {
     setIsSubmitting(true)
     try {
+      const blogData = {
+        title: data.title,
+        content: data.content,
+        arTitle: enableArabic ? data.arTitle : undefined,
+        arContent: enableArabic ? data.arContent : undefined,
+        featureImage: data.featureImage,
+        media: data.media,
+      }
+
       if (blog) {
         // Update existing blog
         await updateBlogMutation.mutateAsync({
           id: blog.id,
-          data: {
-            title: data.title,
-            content: data.content,
-            featureImage: data.featureImage,
-            media: data.media,
-          },
+          data: blogData,
         })
         router.push(`/dashboard/blogs/${blog.id}`)
       } else {
         // Create new blog
-        const newBlog = await createBlogMutation.mutateAsync({
-          title: data.title,
-          content: data.content,
-          featureImage: data.featureImage,
-          media: data.media,
-        })
+        const newBlog = await createBlogMutation.mutateAsync(blogData)
         router.push(`/dashboard/blogs/${newBlog.id}`)
       }
     } catch (error) {
@@ -105,9 +107,17 @@ export default function BlogForm({ blog }: BlogFormProps) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card>
         <CardBody className='gap-6'>
-          {/* Title */}
+          {/* Arabic Content Toggle */}
+          <div className='flex items-center gap-3'>
+            <Switch isSelected={enableArabic} onValueChange={setEnableArabic} color='primary'>
+              Enable Arabic Content
+            </Switch>
+            <span className='text-sm text-gray-600'>Add Arabic translations for your blog</span>
+          </div>
+
+          {/* English Title */}
           <Input
-            label='Blog Title'
+            label='Blog Title (English)'
             placeholder='Enter your blog title...'
             isRequired
             {...register('title', {
@@ -117,6 +127,20 @@ export default function BlogForm({ blog }: BlogFormProps) {
             isInvalid={!!errors.title}
             errorMessage={errors.title?.message}
           />
+
+          {/* Arabic Title */}
+          {enableArabic && (
+            <Input
+              label='Blog Title (Arabic)'
+              placeholder='أدخل عنوان المدونة...'
+              dir='rtl'
+              {...register('arTitle', {
+                minLength: { value: 3, message: 'Arabic title must be at least 3 characters' },
+              })}
+              isInvalid={!!errors.arTitle}
+              errorMessage={errors.arTitle?.message}
+            />
+          )}
 
           {/* Feature Image */}
           <div>
@@ -172,9 +196,9 @@ export default function BlogForm({ blog }: BlogFormProps) {
             {featureImageUpload.error && <p className='mt-1 text-sm text-danger'>{featureImageUpload.error}</p>}
           </div>
 
-          {/* Content Editor */}
+          {/* English Content Editor */}
           <div>
-            <label className='mb-2 block text-sm font-medium'>Content</label>
+            <label className='mb-2 block text-sm font-medium'>Content (English)</label>
             <Controller
               name='content'
               control={control}
@@ -186,6 +210,22 @@ export default function BlogForm({ blog }: BlogFormProps) {
             />
             {errors.content && <p className='mt-1 text-sm text-danger'>{errors.content.message}</p>}
           </div>
+
+          {/* Arabic Content Editor */}
+          {enableArabic && (
+            <div>
+              <label className='mb-2 block text-sm font-medium'>Content (Arabic)</label>
+              <Controller
+                name='arContent'
+                control={control}
+                rules={{
+                  minLength: { value: 10, message: 'Arabic content must be at least 10 characters' },
+                }}
+                render={({ field }) => <RichTextEditor content={field.value ?? ''} onChange={field.onChange} />}
+              />
+              {errors.arContent && <p className='mt-1 text-sm text-danger'>{errors.arContent.message}</p>}
+            </div>
+          )}
         </CardBody>
 
         <CardFooter className='justify-end gap-3'>

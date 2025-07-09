@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 import { useBlog } from '@/app/hooks/useBlogs'
+import { useLanguageToggle } from '@/app/hooks/useLanguageToggle'
 import { useTranslations } from '@/app/hooks/useTranslations'
 import ShareModal from '@/app/modals/ShareModal'
 import { Blog, BlogMedia } from '@/types/blog.types'
@@ -39,6 +40,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
   const { data: blog, isLoading, error, refetch, isRefetching } = useBlog(id)
   const [isShareModalOpen, setIsShareModalOpen] = useState(false)
   const [currentUrl, setCurrentUrl] = useState('')
+  const { isArabic } = useLanguageToggle()
 
   // Get current URL for sharing
   useEffect(() => {
@@ -102,6 +104,8 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
   }
 
   const displayImage = getBlogDisplayImage(blog)
+  const displayTitle = isArabic && blog.arTitle ? blog.arTitle : blog.title
+  const displayContent = isArabic && blog.arContent ? blog.arContent : blog.content
 
   const galleryMedia = blog.media
     ? blog.media.filter((_, index: number) => {
@@ -175,7 +179,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
             </div>
 
             <h1 className='mb-6 text-4xl font-bold leading-tight text-slate-900 dark:text-white md:text-5xl lg:text-6xl'>
-              {blog.title}
+              {displayTitle}
             </h1>
 
             <div className='mb-8 flex items-center justify-center gap-2'>
@@ -205,7 +209,7 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
           <div className='mb-12'>
             <div
               className='tiptap-content prose prose-lg md:prose-xl dark:prose-invert prose-headings:text-slate-900 dark:prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight prose-h1:text-4xl prose-h1:mb-8 prose-h1:mt-12 first:prose-h1:mt-0 prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-10 first:prose-h2:mt-0 prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-8 first:prose-h3:mt-0 prose-p:text-slate-700 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-6 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:font-medium prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-slate-600 dark:prose-blockquote:text-slate-400 prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:text-slate-800 dark:prose-code:text-slate-200 prose-pre:bg-slate-900 dark:prose-pre:bg-slate-950 prose-pre:text-slate-100 prose-pre:rounded-xl prose-pre:p-6 prose-pre:overflow-x-auto prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-6 prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-6 prose-li:mb-2 prose-li:text-slate-700 dark:prose-li:text-slate-300 prose-img:rounded-xl prose-img:shadow-lg prose-img:my-8 max-w-none'
-              dangerouslySetInnerHTML={{ __html: blog.content }}
+              dangerouslySetInnerHTML={{ __html: displayContent }}
             />
           </div>
 
@@ -249,9 +253,9 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
       <ShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
-        title={blog.title}
+        title={displayTitle}
         url={currentUrl}
-        description={getShareDescription(blog.content)}
+        description={getShareDescription(displayContent)}
       />
     </div>
   )

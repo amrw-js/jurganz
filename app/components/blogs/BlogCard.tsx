@@ -5,6 +5,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { ArrowRight, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 
+import { useLanguageToggle } from '@/app/hooks/useLanguageToggle'
 import { useTranslations } from '@/app/hooks/useTranslations'
 import type { Blog } from '@/types/blog.types'
 
@@ -15,35 +16,18 @@ interface BlogCardProps {
 
 export default function BlogCard({ blog, featured = false }: BlogCardProps) {
   const { t } = useTranslations()
+  const { isArabic } = useLanguageToggle()
 
   const formatDate = (date: Date | string) => {
     return formatDistanceToNow(new Date(date), { addSuffix: true })
   }
 
-  const getExcerpt = (content: string, maxLength = featured ? 200 : 120) => {
+  const getExcerpt = (maxLength = featured ? 200 : 120) => {
+    const content = isArabic && blog.arContent ? blog.arContent : blog.content
     const plainText = content.replace(/<[^>]*>/g, '')
     if (plainText.length <= maxLength) return plainText
     return plainText.substring(0, maxLength).trim() + '...'
   }
-
-  // Helper function to get the display image for a blog
-  const getBlogDisplayImage = (blog: Blog) => {
-    // Priority: feature image first, then first media image, then null
-    if (blog.featureImage) {
-      return blog.featureImage
-    }
-
-    if (blog.media && blog.media.length > 0) {
-      const firstImage = blog.media.find((item) => item.type === 'image')
-      if (firstImage) {
-        return firstImage.url
-      }
-    }
-
-    return null
-  }
-
-  const displayImage = getBlogDisplayImage(blog)
 
   if (featured) {
     return (
@@ -52,19 +36,17 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
           <div className='grid min-h-[500px] grid-cols-1 lg:grid-cols-2'>
             {/* Image */}
             <div className='relative overflow-hidden'>
-              {displayImage ? (
+              {blog.featureImage ? (
                 <>
                   <Image
-                    src={displayImage}
+                    src={blog.featureImage}
                     alt={blog.title}
                     className='h-full w-full object-cover transition-transform duration-700 group-hover:scale-110'
                   />
                   {/* Featured badge for feature images */}
-                  {blog.featureImage && (
-                    <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
-                      {t('featured')}
-                    </Chip>
-                  )}
+                  <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
+                    {t('featured')}
+                  </Chip>
                 </>
               ) : (
                 <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600'>
@@ -82,12 +64,10 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
               </div>
 
               <h2 className='mb-4 text-3xl font-bold leading-tight text-slate-900 transition-colors duration-300 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 lg:text-4xl'>
-                {blog.title}
+                {isArabic && blog.arTitle ? blog.arTitle : blog.title}
               </h2>
 
-              <p className='mb-6 text-lg leading-relaxed text-slate-600 dark:text-slate-300'>
-                {getExcerpt(blog.content)}
-              </p>
+              <p className='mb-6 text-lg leading-relaxed text-slate-600 dark:text-slate-300'>{getExcerpt()}</p>
 
               <div className='flex items-center font-semibold text-blue-600 transition-all duration-300 group-hover:gap-3 dark:text-blue-400'>
                 <span>{t('readFullArticle')}</span>
@@ -105,19 +85,16 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
       <article className='h-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800'>
         {/* Image */}
         <div className='relative aspect-[16/10] overflow-hidden'>
-          {displayImage ? (
+          {blog.featureImage ? (
             <>
               <Image
-                src={displayImage}
+                src={blog.featureImage}
                 alt={blog.title}
                 className='h-full w-full object-cover transition-transform duration-500 group-hover:scale-105'
               />
-              {/* Featured badge for feature images */}
-              {blog.featureImage && (
-                <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
-                  {t('featured')}
-                </Chip>
-              )}
+              <Chip size='sm' color='primary' variant='solid' className='absolute left-4 top-4'>
+                {t('featured')}
+              </Chip>
             </>
           ) : (
             <div className='flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800'>
@@ -145,9 +122,7 @@ export default function BlogCard({ blog, featured = false }: BlogCardProps) {
             {blog.title}
           </h3>
 
-          <p className='mb-4 line-clamp-3 leading-relaxed text-slate-600 dark:text-slate-300'>
-            {getExcerpt(blog.content)}
-          </p>
+          <p className='mb-4 line-clamp-3 leading-relaxed text-slate-600 dark:text-slate-300'>{getExcerpt()}</p>
 
           <div className='flex items-center justify-between'>
             {blog.media?.length ? (
