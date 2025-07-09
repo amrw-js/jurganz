@@ -1,6 +1,6 @@
 'use client'
 
-import { SignOutButton, useUser } from '@clerk/nextjs'
+import { SignOutButton, useClerk, useUser } from '@clerk/nextjs'
 import {
   Button,
   Dropdown,
@@ -25,6 +25,7 @@ type TopBar = {
 
 export const TopBar: FC<TopBar> = ({ onOpenChange }) => {
   const { user, isLoaded } = useUser()
+  const { signOut } = useClerk()
 
   return (
     <Navbar maxWidth='full' className='border-b border-gray-200 bg-white/80 backdrop-blur-md'>
@@ -59,10 +60,8 @@ export const TopBar: FC<TopBar> = ({ onOpenChange }) => {
                     <p className='font-bold'>Signed in as</p>
                     <p className='font-bold'>{user.primaryEmailAddress?.emailAddress}</p>
                   </DropdownItem>
-                  <DropdownItem key='logout' color='danger'>
-                    <SignOutButton>
-                      <span className='w-full text-left'>Log Out</span>
-                    </SignOutButton>
+                  <DropdownItem onPress={() => signOut()} key='logout' color='danger'>
+                    Log Out
                   </DropdownItem>
                 </DropdownMenu>
               </Dropdown>

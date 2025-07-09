@@ -36,11 +36,11 @@ export const Services = () => {
 
       <div className='h-full flex-1'>
         <Image
-          src='/images/service-image.jpg'
+          src='/images/image-1.jpg'
           alt='welding'
           width={1960}
           height={2213}
-          className='max-h-[18rem] w-full rounded-lg object-cover shadow-lg sm:max-h-[22rem] md:max-h-[28rem] lg:max-h-[40rem]'
+          className='max-h-[18rem] w-full rounded-lg object-cover object-left-bottom shadow-lg sm:max-h-[22rem] md:max-h-[28rem] lg:max-h-[40rem]'
         />
       </div>
     </div>

@@ -85,7 +85,7 @@ export const ProjectCard = ({ project, showDivider = true }: ProjectCardProps) =
                           src={media.url || '/placeholder.svg'}
                           alt={media.name || project.name}
                           fill
-                          className='object-cover transition-transform duration-500 group-hover:scale-105'
+                          className='object-cover transition-transform duration-500'
                           sizes='(max-width: 1024px) 100vw, 520px'
                         />
                         <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent' />

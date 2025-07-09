@@ -17,8 +17,8 @@ module.exports = {
         },
       },
       backgroundImage: {
-        factory: "url('/images/factory.jpg')",
-        aboutHero: "url('/images/interior-factory.jpg')",
+        factory: "url('/images/image-3.jpg')",
+        aboutHero: "url('/images/image-5.jpg')",
         servicesHero: "url('/images/worker-image.jpg')",
         ourProcess: "url('/images/our-process.jpg')",
       },

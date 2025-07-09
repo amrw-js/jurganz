@@ -28,6 +28,8 @@ export const Products: FC = () => {
   const MotionH3 = motion.h3 as FC<HTMLAttributes<HTMLHeadingElement> & MotionProps>
   const MotionP = motion.p as FC<HTMLAttributes<HTMLParagraphElement> & MotionProps>
 
+  const filteredProductionLines = productionLines?.filter((product) => product.published)
+
   const handleContactClick = useCallback((product: ProductionLine) => {
     setSelectedProduct(product)
     setIsContactModalOpen(true)
@@ -221,7 +223,7 @@ export const Products: FC = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
-          ) : productionLines && productionLines.length > 0 ? (
+          ) : filteredProductionLines && filteredProductionLines.length > 0 ? (
             <>
               <Swiper
                 modules={[Navigation, Pagination, Autoplay]}
@@ -248,7 +250,7 @@ export const Products: FC = () => {
                 }}
                 className='!pb-12'
               >
-                {productionLines.map((product) => (
+                {filteredProductionLines.map((product) => (
                   <SwiperSlide key={product.id} className='h-auto'>
                     {renderProductCard(product)}
                   </SwiperSlide>

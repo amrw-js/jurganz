@@ -38,7 +38,7 @@ export const Hero = () => {
         </div>
         <Image
           className='max-h-[47.5rem] min-h-[33.1rem] w-full rounded-xl object-cover'
-          src='/images/welding.webp'
+          src='/images/image-4.jpg'
           alt='man welding'
           width={3840}
           height={2560}

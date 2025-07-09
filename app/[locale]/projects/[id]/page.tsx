@@ -194,7 +194,7 @@ export default function ProjectDetailPage() {
                                 src={media.url || '/placeholder.svg'}
                                 alt={media.name}
                                 fill
-                                className='object-cover transition-transform duration-700 group-hover:scale-105'
+                                className='object-cover transition-transform duration-700'
                                 sizes='1200px'
                                 priority={index === 0}
                               />
