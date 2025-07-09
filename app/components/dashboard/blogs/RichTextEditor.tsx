@@ -483,19 +483,8 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     (alignment: 'left' | 'center' | 'right' | 'justify') => {
       if (!editor) return
 
-      const { from, to } = editor.state.selection
-      const { schema } = editor.state
-
-      // Get the current node type (paragraph or heading)
-      const currentNode = editor.state.doc.nodeAt(from)
-      const nodeType = currentNode?.type || schema.nodes.paragraph
-
-      // Only apply to the current block, not everything below
-      editor.view.dispatch(
-        editor.view.state.tr
-          .setBlockType(from, to, nodeType, { textAlign: alignment })
-          .setMeta('preventDispatch', false),
-      )
+      // Use the built-in TextAlign extension command instead of manual transaction
+      editor.chain().focus().setTextAlign(alignment).run()
     },
     [editor],
   )

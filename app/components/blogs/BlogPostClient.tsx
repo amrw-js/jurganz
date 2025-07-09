@@ -121,7 +121,10 @@ export default function BlogPostClient({ id }: BlogPostClientProps) {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800'>
+    <div
+      dir='ltr'
+      className='min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800'
+    >
       {/* Header */}
       <header className='sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80'>
         <div className='container mx-auto px-4 py-4'>
