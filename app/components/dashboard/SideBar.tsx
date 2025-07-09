@@ -43,7 +43,7 @@ export const SideBar: FC<SideBar> = ({ isOpen, onOpenChange }) => {
       id: 'localization',
       label: 'Localization',
       icon: Languages,
-      href: '/dashboard/locale',
+      href: '/dashboard/locales',
       description: 'Manage content localization',
       available: true,
     },
