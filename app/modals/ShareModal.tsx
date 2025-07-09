@@ -3,7 +3,8 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
 import { Copy, Facebook, Linkedin, Mail, MessageCircle, Share2, Twitter } from 'lucide-react'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+
+import { useTranslations } from '../hooks/useTranslations'
 
 interface ShareModalProps {
   isOpen: boolean
@@ -14,12 +15,12 @@ interface ShareModalProps {
 }
 
 export default function ShareModal({ isOpen, onClose, title, url, description = '' }: ShareModalProps) {
-  const { t } = useTranslation('blog')
+  const { t } = useTranslations()
   const [copied, setCopied] = useState(false)
 
   const shareUrl = url
   const shareTitle = title
-  const shareDescription = description || `Check out this article from GBS: ${title}`
+  const shareDescription = description || t('defaultShareDescription', { title })
 
   // Share handlers
   const shareToFacebook = () => {
@@ -67,31 +68,31 @@ export default function ShareModal({ isOpen, onClose, title, url, description = 
 
   const shareOptions = [
     {
-      name: 'Facebook',
+      name: t('facebook'),
       icon: Facebook,
       onClick: shareToFacebook,
       color: 'bg-blue-600 hover:bg-blue-700',
     },
     {
-      name: 'Twitter',
+      name: t('twitter'),
       icon: Twitter,
       onClick: shareToTwitter,
       color: 'bg-sky-500 hover:bg-sky-600',
     },
     {
-      name: 'LinkedIn',
+      name: t('linkedin'),
       icon: Linkedin,
       onClick: shareToLinkedIn,
       color: 'bg-blue-700 hover:bg-blue-800',
     },
     {
-      name: 'WhatsApp',
+      name: t('whatsapp'),
       icon: MessageCircle,
       onClick: shareToWhatsApp,
       color: 'bg-green-500 hover:bg-green-600',
     },
     {
-      name: 'Email',
+      name: t('email'),
       icon: Mail,
       onClick: shareViaEmail,
       color: 'bg-gray-600 hover:bg-gray-700',
@@ -134,7 +135,7 @@ export default function ShareModal({ isOpen, onClose, title, url, description = 
 
                 {/* Social Media Share Buttons */}
                 <div>
-                  <h5 className='mb-3 text-sm font-medium text-gray-700'>{t('blog:shareOnSocialMedia')}</h5>
+                  <h5 className='mb-3 text-sm font-medium text-gray-700'>{t('shareOnSocialMedia')}</h5>
                   <div className='grid grid-cols-2 gap-3'>
                     {shareOptions.map((option) => {
                       const IconComponent = option.icon

@@ -216,24 +216,10 @@ export const API_BASE_URL =
 
 export const OFFICE_LOCATIONS = [
   {
-    country: 'United States',
-    city: 'New York',
-    address: '123 Business Ave, Suite 100',
-    phone: '+1 (555) 123-4567',
-    email: 'usa@gbs.com',
-  },
-  {
-    country: 'United Kingdom',
-    city: 'London',
-    address: '456 Corporate St, Floor 5',
-    phone: '+44 20 1234 5678',
-    email: 'uk@gbs.com',
-  },
-  {
-    country: 'Germany',
-    city: 'Berlin',
-    address: '789 Industrial Blvd, Building A',
-    phone: '+49 30 12345678',
-    email: 'germany@gbs.com',
+    country: 'Egypt',
+    city: 'Cairo',
+    address: '67 N 90th Street - Service Ln, New Cairo 1, Cairo Governorate, Egypt',
+    phone: '+201020125080',
+    email: 'Info.gbs@gbs.agency',
   },
 ]
