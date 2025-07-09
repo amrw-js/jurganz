@@ -219,7 +219,7 @@ export const OFFICE_LOCATIONS = [
     country: 'Egypt',
     city: 'Cairo',
     address: '67 N 90th Street - Service Ln, New Cairo 1, Cairo Governorate, Egypt',
-    phone: '+201020125080',
+    phone: '+20 2 25371326',
     email: 'Info.gbs@gbs.agency',
   },
 ]
